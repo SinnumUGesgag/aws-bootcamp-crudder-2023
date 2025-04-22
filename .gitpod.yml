@@ -13,7 +13,7 @@ tasks:
     init: |
       curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresqul.gpg
       echo "deb http://apt.postgresql.org/pub/repos/apt/ 	`lsb_release -cs` -pgdg main" |sudo tee /etc/apt/sources.list.d/pgdp.list
-      sudo apt updated
+      sudo apt update
       sudo apt install -y postgresql-client-13 libpg-dev 
 
 vscode:
