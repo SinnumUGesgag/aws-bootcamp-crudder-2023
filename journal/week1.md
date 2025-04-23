@@ -1,11 +1,13 @@
 # Week 1 — App Containerization
 
-__1: DOCKER CONTAINERS, General video Review, & Notes Taken__
+**1st] DOCKER CONTAINERS, General video Review, & Notes Taken**
+
 I reviewed all the videos for Week 1; then I went back to the Container Video and typed out notes as I followed along, attempting to peice together what needed to be done to get the solution; I am not providing all my notes that I took, seeing how there were alot, however here's the summary:
 
 After having followed along with Andrew, James, & Edith I have come to a refined list of steps; much of it was cleaver ways to teach the studnets more about how GITPOD, BASH, or DOCKER worked; here are All of the ACTUAL Steps that need to be completed:
 
-A:  /workspace/aws-bootcamp-cruddur-2023/backend-flask
+*A:  /workspace/aws-bootcamp-cruddur-2023/backend-flask*
+
 Create "dockerfile" and input this code:
 ```
 FROM python:3.10-slim-buster
@@ -23,13 +25,13 @@ EXPOSE ${PORT}
 
 CMD [ "python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=4567"]	
 ```
-------------------------------------------------------------------
-B:	/workspace/aws-bootcamp-cruddur-2023/frontend-react-js $ npm i
+
+*B:	/workspace/aws-bootcamp-cruddur-2023/frontend-react-js $ npm i*
 
 installing NPM
 further into my notes below, you'll see this step is important later on; fail to do this now and it messes up the Compose Up later
-------------------------------------------------------------------
-C: /workspace/aws-bootcamp-cruddur-2023/frontend-react-js
+
+*C: /workspace/aws-bootcamp-cruddur-2023/frontend-react-js*
 Create "dockerfile" and input this code:
 ```
 FROM node:16.18
@@ -42,8 +44,9 @@ RUN npm install
 EXPOSE ${PORT}
 CMD {"npm", "start"}
 ```
-------------------------------------------------------------------
-D: /workspace/aws-bootcamp-cruddur-2023
+
+*D: /workspace/aws-bootcamp-cruddur-2023*
+
  Create "docker-compose.yml" and input this code:
 
 I removed ```version: "3.8"``` because I noticed a message in the logs "...version is obselete..."; turns out that Docker-Compose files no longer require specifying the version; in fact if you do, it'll tell you if it's obselete, then ignore the version you listed, and reference the latest updated version instead.
@@ -76,20 +79,16 @@ networks:
 ```
  NOTE: I had some typos I had to fix
 
-------------------------------------------------------------------
-E:	``` /workspace/aws-bootcamp-cruddur-2023 $ docker compose up ```
+*E: /workspace/aws-bootcamp-cruddur-2023 $ docker compose up *
 It'll take some time to download all the files needed from the registry 
 
-------------------------------------------------------------------
-F:	Make sure the Ports are open & Servered
+*F:	Make sure the Ports are open & Servered*
 
 If you see any Ports saying "Not Servered", you likely failed to install NPM in /Frontend-react-js prior to Compose Up
 
-------------------------------------------------------------------
-G: Open a Ports; click the link (or past the URL into a browser tab) for the Front-End; then troubleshoot if it doesn't work; once the ports were fixed, it worked fine
+*G: Open a Ports; click the link (or past the URL into a browser tab) for the Front-End; then troubleshoot if it doesn't work; once the ports were fixed, it worked fine*
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+----------------------------------------
 What I actually did...
 
 1. Setup an account on Docker Hub
@@ -113,16 +112,15 @@ What I actually did...
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-__2: Add code in the API for the Notifications acitivity for the CRUDDUR application__
+**2nd] Add code in the API for the Notifications acitivity for the CRUDDUR application**
 
 ![Screenshot 2025-04-21 113327](https://github.com/user-attachments/assets/d04b1a92-3684-48cc-bbd8-fae74d87124a)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-__3: Add code & built the DyanmoDB (local) & Postgres for the CRUDDUR application__
+**3rd] Add code & built the DyanmoDB (local) & Postgres for the CRUDDUR application**
 
-----------------
-1st: He's got you adding code to:  docker-compose.yml file, at the end of the "services" 
+*A: He's got you adding code to:  docker-compose.yml file, at the end of the "services"*
 
 ```
 dynamodb-local:
@@ -139,8 +137,9 @@ dynamodb-local:
 	working_dir: /home/dynamodblocal
 ```
 
-2nd: added code again into Services right below our 1st modification 
-this code is modified with my changes; read further to find out what I altered
+*B: added code again into Services right below our 1st modification 
+this code is modified with my changes; read further to find out what I altered*
+
 ```
 db:
 	image: postgres:13-alpine
@@ -154,8 +153,8 @@ db:
 		- db:/var/lib/postgresql/data
 ```
 
--------------------------------------------------
-3rd: added code again at the bottom of our YML file, below the Networks we had already defined:
+*C: added code again at the bottom of our YML file, below the Networks we had already defined:*
+
 ```
 volumes:
 	db:
@@ -165,9 +164,10 @@ volumes:
 
 ------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
-Setting up for Postgres
 
-__I: Attempted to Create a Table__
+**4th] Setting up for Postgres**
+
+*A: Attempted to Create a Table*
 
 input
 ```
@@ -262,7 +262,8 @@ result lines were generated by AWS CLI in GITPOD terminal:
 ```
 then exited with Q
 
-__II: Attempted to Create an Item__
+*B: Attempted to Create an Item*
+
 input
 ```
 aws dynamodb put-item \
@@ -282,7 +283,8 @@ result
 }
 ```
 
-__III: list tables__
+*C: list tables*
+
 input
 ```
 aws dynamodb list-tables --endpoint-url http://localhost:8000
@@ -296,7 +298,7 @@ result
 }
 ```
 
-__IV: Get Records__
+*D: Get Records*
 
 input
 ```
@@ -319,7 +321,7 @@ result
 ]
 ```
 
-__V: ProgreSQL directory__
+*E: ProgreSQL directory*
 
 added to my gipod.yml file:
 ```
@@ -350,13 +352,14 @@ Err:3 http://apt.postgresql.org/pub/repos/apt jammy Release
  E: Unable to locate package postgresql-client-13
  "
  
- __Conclusion: Something has changed syntaically and/or PostgreSQL has changed in how you interact with their directory__
+ **The Problem:** Something has changed syntaically and/or PostgreSQL has changed in how you interact with their directory
  
- __Research dicoveries:__
+ **The Solution:**
  I just went to PostgreSQL sit to look up how to download the Directory into an Ubuntu Linux server
  https://www.postgresql.org/download/linux/ubuntu/#apt
  
 So I changed the code to this:
+
 ```
 sudo apt install curl ca-certificates
 sudo install -d /usr/share/postgresql-common/pgdg
@@ -369,17 +372,17 @@ sudo apt -y install postgresql
 
 Download was successful
 
-__VI: Setup the Connection via the PostgreSQL Extension; setup a connection to the Local Postgress Container__
+*F: Setup the Connection via the PostgreSQL Extension; setup a connection to the Local Postgress Container*
 
 
-__VII: then I accessed PostgreSQL Successfully__
+*G: then I accessed PostgreSQL Successfully*
 ```
 psql --host localhost -U postgres
 ```
 and then manually typed in the password
 and PostreSQL was accessible
 
-__VIII: Add my PostgreSQL Explorer to my gitpod YML file__
+*H: Add my PostgreSQL Explorer to my gitpod YML file*
 ```
 - ric-v.postgres-explorer
 ```
