@@ -25,6 +25,7 @@ CMD [ "python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
 ------------------------------------------------------------------
 B:	/workspace/aws-bootcamp-cruddur-2023/frontend-react-js $ npm i
+
 installing NPM
 further into my notes below, you'll see this step is important later on; fail to do this now and it messes up the Compose Up later
 ------------------------------------------------------------------
