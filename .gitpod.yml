@@ -11,11 +11,15 @@ tasks:
 
   - name: postgres
     init: |
-      curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresqul.gpg
-      echo "deb http://apt.postgresql.org/pub/repos/apt/ 	`lsb_release -cs` -pgdg main" |sudo tee /etc/apt/sources.list.d/pgdg.list
+      sudo apt install curl ca-certificates
+      sudo install -d /usr/share/postgresql-common/pgdg
+      sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+      . /etc/os-release
+      sudo sh -c "echo 'deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $VERSION_CODENAME-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
       sudo apt update
-      sudo apt install -y postgresql-client-13 libpg-dev 
+      sudo apt -y install postgresql
 
 vscode:
   extensions:
     - 42Crunch.vscode-openapi
+    - ric-v.postgres-explorer
