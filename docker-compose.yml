@@ -5,10 +5,16 @@ services:
     environment:
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST_ID}"
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST_ID}"
-      OTEL_SERVICE_NAME: "backend-flask"
-      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-      OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
-      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
+      # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
+      # OTEL_SERVICE_NAME: "backend-flask"
+      # OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      # OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
+      # OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
+      # < ---
+      # Define XRay's URLPath & the Daemon's Address --->
+      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-deamon: 2000"
+      # <---		
     build: ./backend-flask
     ports:
       - "4567:4567"
@@ -45,6 +51,19 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+
+  # Creates the XRay Daemon as a Docker Container w/in the Environment --->
+  xray-daemon:
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}}
+      AWS_REGION: "${MY_AWS_REGION}"
+    command:
+      - "xray -o -b xray-daemon: 2000"
+    ports:
+      - 2000:2000/udp
+  # <---		
 
 networks:
   internal-network:
