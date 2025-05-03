@@ -6,10 +6,10 @@ services:
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST_ID}"
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST_ID}"
       # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
-      #   OTEL_SERVICE_NAME: "backend-flask"
-      #   OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-      #   OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
-      #   OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
+      #OTEL_SERVICE_NAME: "backend-flask"
+      #OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      #OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
+      #OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
       # < ---
       # Define XRay's URLPath & the Daemon's Address --->
       AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST_ID}*"
