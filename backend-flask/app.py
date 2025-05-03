@@ -44,9 +44,9 @@ from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 app = Flask(__name__)
 
 # Honeycomb ------->
-FlaskInstrumentor().instrument_app(app)
-RequestsInstrumentor().instrument()
-provider.add_span_processor(processor)
+#FlaskInstrumentor().instrument_app(app)
+#RequestsInstrumentor().instrument()
+#provider.add_span_processor(processor)
 # <---
 
 
