@@ -12,8 +12,9 @@ services:
       #OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
       # < ---
       # Define XRay's URLPath & the Daemon's Address --->
+      FLASK_ADDRESS: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
-      AWS_XRAY_DAEMON_ADDRESS: "xray-deamon:2000"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
       # <---		
     build: ./backend-flask
     ports:

@@ -15,12 +15,12 @@ from services.create_message import *
 from services.show_activity import *
 
 # Honeycomb, Telemetry ------->
-#from opentelemetry import trace
-#from opentelemetry.instrumentation.flask import FlaskInstrumentor
-#from opentelemetry.instrumentation.requests import RequestsInstrumentor
-#from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-#from opentelemetry.sdk.trace import TracerProvider
-#from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 # <---
 
 # XRay --->
@@ -52,7 +52,9 @@ app = Flask(__name__)
 
 # XRay to Configure the XRay Recorder & Middleware --->
 xray_url = os.getenv("AWS_XRAY_URL")
-xray_recorder.configure( service='backend-flask', dynamic_naming=xray_url)
+xray_daemon_address = os.getenv("AWS_XRAY_DAEMON_ADDRESS")
+
+xray_recorder.configure( service='backend-flask', daemon_address=xray_daemon_address, dynamic_naming=xray_url)
 XRayMiddleware(app, xray_recorder)
 #  <---
 
