@@ -52,9 +52,8 @@ app = Flask(__name__)
 
 # XRay to Configure the XRay Recorder & Middleware --->
 xray_url = os.getenv("AWS_XRAY_URL")
-xray_daemon_address = os.getenv("AWS_XRAY_DAEMON_ADDRESS")
 
-xray_recorder.configure( service='backend-flask', daemon_address=xray_daemon_address, dynamic_naming=xray_url)
+xray_recorder.configure( service='backend-flask', dynamic_naming=xray_url)
 XRayMiddleware(app, xray_recorder)
 #  <---
 
