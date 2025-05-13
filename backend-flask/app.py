@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request
+from flask import Request
 from flask_cors import CORS, cross_origin
 import os
 
@@ -42,13 +42,13 @@ from flask import got_request_exception
 # <---
 
 # Configuring Logger to use Cloudwatch --->
-LOGGER = logging.getLogger(__name__)
-LOGGER.setlevel(logging.DEBUG)
-console_handler = logging.StreamHandler()
-cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
-LOGGER.addHandler(console_handler)
-LOGGER.addHandler(cw_handler)
-LOGGER.info("test log")
+#LOGGER = logging.getLogger(__name__)
+#LOGGER.setLevel(logging.DEBUG)
+#console_handler = logging.StreamHandler()
+#cw_handler = watchtower.CloudWatchLogHandler(log_group='Cruddur')
+#LOGGER.addHandler(console_handler)
+#LOGGER.addHandler(cw_handler)
+#LOGGER.info("test log")
 # <---
 
 # Honeycomb, Tracing ------->
@@ -94,21 +94,19 @@ cors = CORS(
 
 
 # Rollbar --->
-rollbar_access_token = os.getnev('ROLLBAR_ACCESS_TOKEN')
-@app.before_first_request
+rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
+@app.before_serving
 def init_rollbar():
-	"""init rollbar module"""
-	rollbar.init(
-		# access token
-		rollbar_access_token,
-		# enviroment name
-		'development',
-		# server root directory, makes tracebacks prettier
-    root = os.path.dirname(os.path.realpath(__file__)),
-		# flask already sets up logging
-		allow_logging_basic_config=False)
-	# send exceptions from 'app' to rollbar, using flask signal system.
-	got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+  """init rollbar module"""
+  rollbar.init(
+    rollbar_access_token,
+    'development',
+    # server root directory, makes tracebacks prettier
+    root=os.path.dirname(os.path.realpath(__file__)),
+    # flask already sets up logging
+    allow_logging_basic_config=False)
+  # send exceptions from 'app' to rollbar, using flask signal system.
+got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 # <---
 
 
