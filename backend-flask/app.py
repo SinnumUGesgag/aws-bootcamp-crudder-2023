@@ -34,6 +34,13 @@ import	logging
 from time import	strftime
 # <---
 
+#  Rollbar --->
+import os
+import rollbar
+import rollbar.contrib.flask
+from flask import got_request_exception
+# <---
+
 # Configuring Logger to use Cloudwatch --->
 LOGGER = logging.getLogger(__name__)
 LOGGER.setlevel(logging.DEBUG)
@@ -53,9 +60,10 @@ LOGGER.info("test log")
 #tracer = trace.get_tracer(__name__)
 # <---
 
-#
 
 app = Flask(__name__)
+
+
 
 # Honeycomb ------->
 #FlaskInstrumentor().instrument_app(app)
@@ -83,6 +91,26 @@ cors = CORS(
   allow_headers="content-type,if-modified-since",
   methods="OPTIONS,GET,HEAD,POST"
 )
+
+
+# Rollbar --->
+rollbar_access_token = os.getnev('ROLLBAR_ACCESS_TOKEN')
+@app.before_first_request
+def init_rollbar():
+	"""init rollbar module"""
+	rollbar.init(
+		# access token
+		rollbar_access_token,
+		# enviroment name
+		'development',
+		# server root directory, makes tracebacks prettier
+    root = os.path.dirname(os.path.realpath(__file__)),
+		# flask already sets up logging
+		allow_logging_basic_config=False)
+	# send exceptions from 'app' to rollbar, using flask signal system.
+	got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+# <---
+
 
 # When an Error occurs, this will create a Report/Log -->
 @app.after_request
@@ -187,5 +215,15 @@ def data_activities_reply(activity_uuid):
     return model['data'], 200
   return
 
+# Test Rollbar --->
+@app.route('/rollbar/test')
+def rollbar_test():
+	rollbar.report_message('Hello World!', 'warning')
+	return "Hello Rollbar!"
+# <---
+
+
+
 if __name__ == "__main__":
   app.run(debug=True)
+
