@@ -13,15 +13,19 @@ export default function SigninPage() {
   const [errors, setErrors] = React.useState('');
 
   const onsubmit = async (event) => {
-    event.preventDefault();
     setErrors('')
-    console.log('onsubmit')
-    if (Cookies.get('user.email') === email && Cookies.get('user.password') === password){
-      Cookies.set('user.logged_in', true)
+    event.preventDefault();
+    Auth.signIn(email, password)  // here we're using the email as the 'username' for the function, since the API calls email entries 'username'
+    .then(user => {
+      localStorage.setItem("access_token", user.signInUserSession.access_token.jwtT)
       window.location.href = "/"
-    } else {
-      setErrors("Email and password is incorrect or account doesn't exist")
-    }
+    })
+    .catch(errors => {
+        if(errors.code === 'UserNotConfirmedException') {
+          window.location.href = "/confirm"
+        }
+      setErrors(errors.message)
+    })
     return false
   }
 
