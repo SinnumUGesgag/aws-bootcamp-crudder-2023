@@ -3,8 +3,9 @@ import React from "react";
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 import { Link } from "react-router-dom";
 
-// [TODO] Authenication
-import Cookies from 'js-cookie'
+// Cognito --->
+import { Auth } from 'aws-amplify';
+// <---
 
 export default function SignupPage() {
 
@@ -16,17 +17,29 @@ export default function SignupPage() {
   const [errors, setErrors] = React.useState('');
 
   const onsubmit = async (event) => {
+    setErrors('')
     event.preventDefault();
-    console.log('SignupPage.onsubmit')
-    // [TODO] Authenication
-    Cookies.set('user.name', name)
-    Cookies.set('user.username', username)
-    Cookies.set('user.email', email)
-    Cookies.set('user.password', password)
-    Cookies.set('user.confirmation_code',1234)
-    window.location.href = `/confirm?email=${email}`
-    return false
+    try {
+      const { user } = await Auth.signUp({
+      username: email,
+      password: password,
+      attributes: {
+        email: email,
+        username: username,
+        preferred_username: name,
+        name: name,
+        },
+      autoSignIn: {
+        // optional - enables auto sign in after user is confirmed
+        enabled: true
+      }
+      });
+    console.log(user);
+    } catch (error) {
+      console.log('error signing up:', error);
+    }
   }
+  // <---
 
   const name_onchange = (event) => {
     setName(event.target.value);

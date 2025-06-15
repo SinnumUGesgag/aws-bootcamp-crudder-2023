@@ -7,8 +7,9 @@ import ActivityFeed from '../components/ActivityFeed';
 import ActivityForm from '../components/ActivityForm';
 import ReplyForm from '../components/ReplyForm';
 
-// [TODO] Authenication
-import Cookies from 'js-cookie'
+// Cognito --->
+import { Auth } from 'aws-amplify';
+// <---
 
 export default function HomeFeedPage() {
   const [activities, setActivities] = React.useState([]);
@@ -35,16 +36,25 @@ export default function HomeFeedPage() {
     }
   };
 
+  // Cognito for the User Name & Preferred Name that'll be displayed --->
+      // check if we are authenicated
   const checkAuth = async () => {
-    console.log('checkAuth')
-    // [TODO] Authenication
-    if (Cookies.get('user.logged_in')) {
+    Auth.currentAuthenticatedUser({
+      //optional, by default is false.
+      //if set to true, this call will send a 
+      //request to Cognito to get the latest user data
+      bypassCache: false
+    }).then((user)=>{
+      console.log('user',user);
+      return Auth.currentAuthenticatedUser()
+    }).then((cognito_user) => {
       setUser({
-        display_name: Cookies.get('user.name'),
-        handle: Cookies.get('user.username')
+        display_name: cognito_user.attributes.name,
+        handle: cognito_user.attributes.preferred_name
       })
-    }
+    }).catch((err) => console.log(err));
   };
+  // <---
 
   React.useEffect(()=>{
     //prevents double call

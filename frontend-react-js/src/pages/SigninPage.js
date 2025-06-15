@@ -3,8 +3,9 @@ import React from "react";
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 import { Link } from "react-router-dom";
 
-// [TODO] Authenication
-import Cookies from 'js-cookie'
+// Cognito --->
+import { Auth } from 'aws-amplify';
+// <---
 
 export default function SigninPage() {
 
@@ -12,18 +13,23 @@ export default function SigninPage() {
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState('');
 
+  // Cognito --->
   const onsubmit = async (event) => {
-    event.preventDefault();
     setErrors('')
-    console.log('onsubmit')
-    if (Cookies.get('user.email') === email && Cookies.get('user.password') === password){
-      Cookies.set('user.logged_in', true)
+    event.preventDefault();
+    Auth.signIn(email, password)  // here we're using the email as the 'username' for the function, since the API calls email entries 'username'
+    .then(user => {
+      localStorage.setItem("access_token", user.signInUserSession.access_token.jwtT)
       window.location.href = "/"
-    } else {
-      setErrors("Email and password is incorrect or account doesn't exist")
-    }
+    }).catch(errors => {
+      if(errors.code === 'UserNotConfirmedException') {
+        window.location.href = "/confirm"
+      }
+      setErrors(errors.message)
+    })
     return false
   }
+  // <---
 
   const email_onchange = (event) => {
     setEmail(event.target.value);
