@@ -16,11 +16,12 @@ export default function SignupPage() {
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState('');
 
+  // Congito --->
   const onsubmit = async (event) => {
     setErrors('')
     event.preventDefault();
-    try {
-      const { user } = await Auth.signUp({
+
+    Auth.signUp({
       username: email,
       password: password,
       attributes: {
@@ -33,11 +34,16 @@ export default function SignupPage() {
         // optional - enables auto sign in after user is confirmed
         enabled: true
       }
-      });
-    console.log(user);
-    } catch (error) {
-      console.log('error signing up:', error);
-    }
+      })
+    .then(user => {
+      console.log(user);
+      console.log('no error; user registration successful');
+      window.location.href = "/confirm"
+    })
+    .catch(errors => {
+      console.log('error signing up:', errors);
+      setErrors(errors.code + " : " + errors.message)
+    });
   }
   // <---
 

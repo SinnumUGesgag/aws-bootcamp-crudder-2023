@@ -25,13 +25,32 @@ export default function ConfirmationPage() {
     // [TODO] Authenication
   }
   
-
+  // Cognito --->
   const onsubmit = async (event) => {
+    setErrors('')
     event.preventDefault();
-    console.log('ConfirmationPage.onsubmit')
-    Auth.confirmSignUp(email,code);
-    //return false
+
+    console.log('ConfirmationPage.onsubmit');
+
+    Auth.confirmSignUp(email,code)
+    .then(user => {
+		  //localStorage.setItem("access_token", user.signInUserSession.access_token.jwtT)
+		  window.location.href = "/"
+      console.log('redirect: ', errors);
+      //setErrors('redirect: ' + errors)
+	  })
+    .catch(errors => {
+      console.log('confirmation invalid:', errors);
+      setErrors(errors.code + " : " + errors.message)
+    })
   }
+  // < ---
+
+ 
+
+function listenToAutoSignInEvent() {
+
+}
 
   let el_errors;
   if (errors){
