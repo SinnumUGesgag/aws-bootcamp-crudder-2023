@@ -3,7 +3,9 @@ import React from "react";
 import { useParams } from 'react-router-dom';
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 
+// Cognito --->
 import { Auth } from 'aws-amplify';
+// <---
 
 export default function ConfirmationPage() {
   const [email, setEmail] = React.useState('');
@@ -20,10 +22,25 @@ export default function ConfirmationPage() {
     setEmail(event.target.value);
   }
 
+  // Cognito --->
   const resend_code = async (event) => {
-    console.log('resend_code')
-    // [TODO] Authenication
+    setErrors("")
+    try {
+      await Auth.resendSignUp(email);
+      console.log('code resent successfully');
+      sentCodeSent(true)
+    } catch (err) {
+      // does not return a code
+      console.log(err)
+      if (err.message === "Username cannot be empty"){
+        setErrors("You need to provide an email in order to send Resend Activation Code")
+      } else if (err.message === "Username/client id cobination not found."){
+        setErrors("Email is invalid or cannot be found.")
+      }
+    }
   }
+
+  // <---
   
   // Cognito --->
   const onsubmit = async (event) => {

@@ -38,7 +38,7 @@ export default function SignupPage() {
     .then(user => {
       console.log(user);
       console.log('no error; user registration successful');
-      window.location.href = "/confirm"
+      window.location.href = "/confirm?email=${email}"
     })
     .catch(errors => {
       console.log('error signing up:', errors);
