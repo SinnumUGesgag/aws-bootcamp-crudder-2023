@@ -21,6 +21,13 @@ services:
       # Rollbar --->
       # ROLLBAR_ACCESS_TOKEN: "${ROLLBAR_ACCESS_TOKEN}"
       # <---
+      # Cognito --->
+      AWS_COGNITO_DOMAIN: "${AWS_COGNITO_DOMAIN}"
+      AWS_COGNITO_USER_POOL_ID: "${MY_COGNITO_USER_POOLS_ID}"
+      AWS_COGNITO_USER_POOL_CLIENT_ID: "${MY_COGNITO_CLIENT_ID}"
+      # AWS_COGNITO_USER_POOL_CLIENT_SECRET: `myuserpoolsclientsecret
+      AWS_COGNITO_REDIRECT_URL: "${AWS_COGNITO_REDIRECT_URL}"
+      # <---
     build: ./backend-flask
     ports:
       - "4567:4567"

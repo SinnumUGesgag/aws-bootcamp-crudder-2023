@@ -1,6 +1,10 @@
 flask
 flask-cors
 
+# Cognito --->
+Flask-AWSCognito
+# <---
+
 # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
 opentelemetry-api
 opentelemetry-sdk
