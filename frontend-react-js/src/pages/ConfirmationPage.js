@@ -1,6 +1,6 @@
 import './ConfirmationPage.css';
 import React from "react";
-import { useParams } from 'react-router-dom';
+//import { useParams } from 'react-router-dom';
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 
 // Cognito --->
@@ -11,9 +11,9 @@ export default function ConfirmationPage() {
   const [email, setEmail] = React.useState('');
   const [code, setCode] = React.useState('');
   const [errors, setErrors] = React.useState('');
-  const [codeSent, setCodeSent] = React.useState(false);
+  const [codeSent, CodeResent] = React.useState(false);
 
-  const params = useParams();
+  //const params = useParams();
 
   const code_onchange = (event) => {
     setCode(event.target.value);
@@ -28,7 +28,7 @@ export default function ConfirmationPage() {
     try {
       await Auth.resendSignUp(email);
       console.log('code resent successfully');
-      sentCodeSent(true)
+      CodeResent(true)
     } catch (err) {
       // does not return a code
       console.log(err)
@@ -64,10 +64,11 @@ export default function ConfirmationPage() {
   // < ---
 
  
-
+/* for when the correct confirmation code is enterd; I'll add this after i've finished fixing & troubleshooting the JWST token issues
 function listenToAutoSignInEvent() {
 
 }
+*/
 
   let el_errors;
   if (errors){
@@ -82,11 +83,13 @@ function listenToAutoSignInEvent() {
     code_button = <button className="resend" onClick={resend_code}>Resend Activation Code</button>;
   }
 
+  /* Use of this code is unclear for now, so I am commenting it out
   React.useEffect(()=>{
     if (params.email) {
       setEmail(params.email)
     }
   }, [])
+  */
 
   return (
     <article className="confirm-article">
