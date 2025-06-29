@@ -19,14 +19,16 @@ export default function SigninPage() {
     event.preventDefault();
     Auth.signIn(email, password)  // here we're using the email as the 'username' for the function, since the API calls email entries 'username'
     .then(user => {
-      localStorage.setItem("access_token", user.signInUserSession.access_token.jwtT)
+      console.log('user', user)
+      localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken)
       window.location.href = "/"
-    }).catch(errors => {
-      if(errors.code === 'UserNotConfirmedException') {
+    })
+    .catch(errors => {
+      if(errors.code == 'UserNotConfirmedException') {
         window.location.href = "/confirm"
       }
-      setErrors(errors.message)
-    })
+      setErrors("Error Message 1: " + errors.message + "; Error Code : " + errors.code)
+    });
     return false
   }
   // <---

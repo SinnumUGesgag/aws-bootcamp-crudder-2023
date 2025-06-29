@@ -31,8 +31,8 @@ export default function HomeFeedPage() {
       } else {
         console.log(res)
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -45,7 +45,7 @@ export default function HomeFeedPage() {
       //request to Cognito to get the latest user data
       bypassCache: false
     }).then((user)=>{
-      console.log('user',user);
+      console.log('user', user);
       return Auth.currentAuthenticatedUser()
     }).then((cognito_user) => {
       setUser({

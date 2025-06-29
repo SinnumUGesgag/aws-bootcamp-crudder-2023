@@ -180,16 +180,15 @@ def data_create_message():
 #@aws_auth.authentication_required
 def data_home():
   access_token = extract_access_token(request.headers)
-  app.logger.debug("!!!!! -------- request header: " , request , "-------- !!!!!!")
   try:
-      claims = CogitoTokenVerification.verify(request.headers)
+      claims = CogitoTokenVerification.verify(access_token)
       # authenticated request
-      app.logger.debug("Authenticated")
-      app.logger.debug("claims", claims)
+      app.logger.info("Authenticated")
+      app.logger.info(claims)
   except TokenVerifyError as e:
       # unauthenticated request
-      app.logger.debug("Unauthenticated")
-      app.logger.debug("claims", claims)
+      app.logger.info(e)
+      app.logger.info("Unauthenticated")
   data = HomeActivites.run()
   return data, 200
 
