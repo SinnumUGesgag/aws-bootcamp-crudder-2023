@@ -76,12 +76,14 @@ __6th] Once the Docker was up and running__
 Access the Frontend via port 3000 URL, and was able to log into the application just fine
 Accessed the Backend via port 4567 URL at .../api/activities/home ; I did not see data
 Then I checked Docker container logs for Backend and saw...
+
 "
 Failed to export batch code: 401, reason: !missing 'x-honeycomb-team' header
 "
 
 I had a typo in the Header; called it HEADER instead of HEARDS, I was 
 missing the S; fixed that and got a new error message:
+
 "
 Failed to export batch code: 401, reason: =unknown API key - check your credentials, region, and API URL
 "
@@ -94,6 +96,7 @@ my KEY again...and it WORKED
 [25/Apr/2025 17:33:12] "GET / HTTP/1.1" 404 -
 [25/Apr/2025 17:33:19] "GET /api/activities/home HTTP/1.1" 200 -
 "
+
 Checked Honeycomb, and I am getting data
 
 Now the question is, WHY did ${HONEYCOMB_API_KEY} fail to read the API Key that I had as an Environmental Variable?
@@ -114,12 +117,14 @@ Checked, nothing was altered
 Then I accessed the backend via 4567 URL /api/activities/home
 to see if I could send data just fine
 AND...
+
 "
 190.x.x.x - - [25/Apr/2025 17:49:18] "GET / HTTP/1.1" 404 -
 Failed to export batch code: 401, reason: =unknown API key - check your credentials, region, and API URL
 190.x.x.x - - [25/Apr/2025 17:49:23] "GET /api/activities/home HTTP/1.1" 200 -
 Failed to export batch code: 401, reason: =unknown API key - check your credentials, region, and API URL
 "
+
 Checked the Environmental Variables to find...
 Nothing had changed, they were not altered
 Yet when I checked my Gitpod account’s Variable I say that HONEYCOMB_API_KEY was correct
