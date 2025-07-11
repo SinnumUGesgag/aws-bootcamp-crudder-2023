@@ -1,8 +1,8 @@
 # Week 3 — Decentralized Authentication
 
-Cognito & Amplify for Decentralized Authentication
-JWT Server Side Verify
-Corrections
+	Cognito & Amplify for Decentralized Authentication
+	JWT Server Side Verify
+	Corrections
 
 
 __Cognito & Amplify for Decentralized Authentication__
