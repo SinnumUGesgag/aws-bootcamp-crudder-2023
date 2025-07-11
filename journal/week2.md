@@ -115,9 +115,9 @@ Then I accessed the backend via 4567 URL /api/activities/home
 to see if I could send data just fine
 AND...
 "
-192.168.23.138 - - [25/Apr/2025 17:49:18] "GET / HTTP/1.1" 404 -
+190.x.x.x - - [25/Apr/2025 17:49:18] "GET / HTTP/1.1" 404 -
 Failed to export batch code: 401, reason: =unknown API key - check your credentials, region, and API URL
-192.168.23.138 - - [25/Apr/2025 17:49:23] "GET /api/activities/home HTTP/1.1" 200 -
+190.x.x.x - - [25/Apr/2025 17:49:23] "GET /api/activities/home HTTP/1.1" 200 -
 Failed to export batch code: 401, reason: =unknown API key - check your credentials, region, and API URL
 "
 Checked the Environmental Variables to find...
@@ -157,9 +157,9 @@ Results...
 IT WORKED!!!
 
 "
-192.168.144.202 - - [25/Apr/2025 19:18:23] "GET / HTTP/1.1" 404 -
-192.168.144.202 - - [25/Apr/2025 19:18:24] "GET /favicon.ico HTTP/1.1" 404 -
-192.168.144.202 - - [25/Apr/2025 19:18:42] "GET /api/activities/home HTTP/1.1" 200 -
+190.x.x.x - - [25/Apr/2025 19:18:23] "GET / HTTP/1.1" 404 -
+190.x.x.x - - [25/Apr/2025 19:18:24] "GET /favicon.ico HTTP/1.1" 404 -
+190.x.x.x - - [25/Apr/2025 19:18:42] "GET /api/activities/home HTTP/1.1" 200 -
 "
 
 FINALLY!!! Something was up with GITPOD; it was allowing me to change the 
