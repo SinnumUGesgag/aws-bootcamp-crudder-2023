@@ -1,6 +1,11 @@
 flask
 flask-cors
 
+# Postgress RDS --->
+psycopg[binary]
+psycopg[pool]
+# <---
+
 # Cognito --->
 Flask-AWSCognito
 # <---
