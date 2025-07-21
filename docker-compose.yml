@@ -27,6 +27,9 @@ services:
       AWS_COGNITO_USER_POOL_CLIENT_ID: "${MY_COGNITO_CLIENT_ID}"
       AWS_COGNITO_REDIRECT_URL: "${AWS_COGNITO_REDIRECT_URL}"
       # <---
+      # PSQL & AWS RDS --->
+      PSQL_CRUDDUER_DB_URL: "${PSQL_CRUDDUER_DB_URL}"
+      #<---
     build: ./backend-flask
     ports:
       - "4567:4567"
