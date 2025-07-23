@@ -11,7 +11,7 @@ else
 	CON_URL=$PSQL_CRUDDUER_DB_URL
 fi
 
-psql $SEED_URL cruddur < $schema_path
+psql $CON_URL cruddur < $schema_path
 
 NO_DB_URL=$(sed 's/\/cruddur//g' <<<"$CON_URL")
 psql $NO_DB_URL -c "select pid as process_id. \

@@ -9,7 +9,7 @@ schema_path="$(realpath .)/db/schema.sql"
 
 echo "db-schema-load"
 
-psql $PSQL_CRUDDUER_DB_URL cruddur < $schema_path
+#psql $PSQL_CRUDDUER_DB_URL cruddur < $schema_path
 
 
 if [ "$1" = "prod" ]; then

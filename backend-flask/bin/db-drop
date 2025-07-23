@@ -7,5 +7,6 @@ printf "${LABEL}${NO_COLOR}\n"
 
 echo "db-drop"
 
-NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<<"$PSQL_CRUDDUER_DB_URL")
+NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<< "$PSQL_CRUDDUER_DB_URL")
+echo $NO_DB_CONNECTION_URL
 psql $NO_DB_CONNECTION_URL -c "drop database cruddur;"
