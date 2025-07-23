@@ -5,15 +5,15 @@ NO_COLOR='\033[0m'
 LABEL="db-sessions"
 printf "${LABEL}${NO_COLOR}\n"
 
-if ["$1" = "prod" ]; then
+if [ "$1" = "prod" ]; then
 	CON_URL=$PROD_CONNECTION_URL
 else
-	CON_URL=$CONNTECTION_URL
+	CON_URL=$PSQL_CRUDDUER_DB_URL
 fi
 
-psql $SEED_URL [dbname] < $schema_path
+psql $SEED_URL cruddur < $schema_path
 
-NO_DB_URL=$(sed 's/\/[dbname]//g' <<<"$CON_URL")
+NO_DB_URL=$(sed 's/\/cruddur//g' <<<"$CON_URL")
 psql $NO_DB_URL -c "select pid as process_id. \
 	username as user, \
 	datname as db, \

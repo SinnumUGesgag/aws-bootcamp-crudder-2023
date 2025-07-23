@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+
 # PSQL --->
 from lib.db import pool, query_wrap_array
 # <---
@@ -30,3 +31,4 @@ class HomeActivities:
         json = cur.fetchone()
     return json[0]
     return results
+    

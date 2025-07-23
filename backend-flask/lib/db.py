@@ -15,6 +15,6 @@ def query_wrap_array(template):
 	) array_row);
 	'''
 
-connection_url = os.getenv("CONNECTION_URL")
+connection_url = os.getenv("PSQL_CRUDDUER_DB_URL")
 pool = ConnectionPool(connection_url)
 
