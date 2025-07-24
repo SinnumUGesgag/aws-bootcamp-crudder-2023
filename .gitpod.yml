@@ -22,4 +22,4 @@ tasks:
 vscode:
   extensions:
     - 42Crunch.vscode-openapi
-    - ric-v.postgres-explorer
+    - cweijan.vscode-mysql-client2
