@@ -1,11 +1,12 @@
 
-INSERT INTO public.users (user_uuid, display_name, handle, email, cognito_user_id, created_at)
+INSERT INTO public.users (uuid, display_name, handle, email, cognito_user_id, created_at) 
 VALUES (uuid_generate_v4(), "Mock User", "mockuser", "mockUser@mock.com", "Mock", current_timestamp);
+
 
 /* 
 User Schema is set to require the followering per entry: 
 {
-user_uuid (UUID),
+uuid (UUID),
 display_name (text),
 handle (text),
 email (text),
