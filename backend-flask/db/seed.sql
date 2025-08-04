@@ -1,6 +1,8 @@
 
-INSERT INTO public.users (uuid, display_name, handle, email, cognito_user_id, created_at) 
-VALUES (uuid_generate_v4(), "Mock User", "mockuser", "mockUser@mock.com", "Mock", current_timestamp);
+INSERT INTO public.users (display_name, handle, email, cognito_user_id) 
+VALUES
+	('Primer User', 'primeruser', 'primeruser@mock.com', 'MockA'),
+	('Mock User', 'mockuser', 'mockUser@mock.com', 'MockB');
 
 
 /* 
@@ -15,14 +17,15 @@ created_at T(current_timestamp)
 }
 */
 
-INSERT INTO public.activities (user_uuid, message, expires_at, created_at)
+
+INSERT INTO public.activities (user_uuid, message, expires_at)
 VALUES
 	(
-		(SELECT uuid from public.users WHERE users.handle = 'mockuser' LIMIT 1),
+		(SELECT entry_uuid from public.users WHERE users.handle = 'mockuser' LIMIT 1),
 		'Imported as Test Seed Data!',
-		current_timestamp + interval '10 day',
-		current_timestamp
+		current_timestamp + interval '10 day'
 	);
+
 
 /*
 Activities' Schema is set to require the followering per entry: 
