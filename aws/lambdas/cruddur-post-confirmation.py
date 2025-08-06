@@ -1,0 +1,42 @@
+import json
+import psycopg2
+
+def lambda_handler(event, context):
+	user = event['request']['userAttributes']
+	
+	user_displlay_name =user['user']
+	user_email = user['email']
+	user_handle = user['prefered_username']
+	user_cognito_id = user['sub']
+	
+	try:
+		sql = f"""
+			"INSERT INTO public.users (
+				display_name,
+				email,
+				handle, 
+				cognito_user_id
+			) 
+			VALUES (
+				{user_displlay_name},
+				{user_email},
+				{user_handle},
+				{user_cognito_id}
+			)"
+		"""
+		
+		conn = psycopg2.connect(os.getnev('CONNECTION_URL'))
+		cur = conn.cursor()
+		cur.execute(sql)
+		conn.commit()
+	
+	except (Exceptioon, psycopg2.DatabaseError) as error:
+		print(error)
+	
+	finally:
+		if conn is not None:
+			cur.close()
+			conn.close()
+			print('Database connection closed.')
+	
+return event
