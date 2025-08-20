@@ -5,7 +5,7 @@ def lambda_handler(event, context):
 	user = event['request']['userAttributes']
 	
 	user_display_name =user['name']
-	user_handle = user['prefered_username']
+	user_handle = user['preferred_username']
 	user_email = user['email']
 	user_cognito_id = user['sub']
 	

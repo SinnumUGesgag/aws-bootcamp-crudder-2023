@@ -12,7 +12,7 @@ export default function SignupPage() {
   // Username is Eamil
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [username, setUsername] = React.useState('');
+  const [preferred_username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState('');
 
@@ -26,9 +26,8 @@ export default function SignupPage() {
       password: password,
       attributes: {
         email: email,
-        username: username,
-        preferred_username: name,
-        name: name,
+        preferred_username: preferred_username,
+        name: name
         },
       autoSignIn: {
         // optional - enables auto sign in after user is confirmed
@@ -99,7 +98,7 @@ export default function SignupPage() {
               <label>Username</label>
               <input
                 type="text"
-                value={username}
+                value={preferred_username}
                 onChange={username_onchange} 
               />
             </div>
