@@ -4,7 +4,7 @@ import psycopg2
 def lambda_handler(event, context):
 	user = event['request']['userAttributes']
 	
-	user_displlay_name =user['user']
+	user_display_name =user['user']
 	user_email = user['email']
 	user_handle = user['prefered_username']
 	user_cognito_id = user['sub']
@@ -18,7 +18,7 @@ def lambda_handler(event, context):
 				cognito_user_id
 			) 
 			VALUES (
-				{user_displlay_name},
+				{user_display_name},
 				{user_email},
 				{user_handle},
 				{user_cognito_id}
