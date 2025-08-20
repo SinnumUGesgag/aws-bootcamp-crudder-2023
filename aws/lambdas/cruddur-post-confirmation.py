@@ -4,23 +4,23 @@ import psycopg2
 def lambda_handler(event, context):
 	user = event['request']['userAttributes']
 	
-	user_display_name =user['user']
-	user_email = user['email']
+	user_display_name =user['name']
 	user_handle = user['prefered_username']
+	user_email = user['email']
 	user_cognito_id = user['sub']
 	
 	try:
 		sql = f"""
 			"INSERT INTO public.users (
 				display_name,
-				email,
-				handle, 
+				handle,
+				email, 
 				cognito_user_id
 			) 
 			VALUES (
 				{user_display_name},
-				{user_email},
 				{user_handle},
+				{user_email},
 				{user_cognito_id}
 			)"
 		"""
