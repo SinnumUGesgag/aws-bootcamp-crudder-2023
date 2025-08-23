@@ -15,8 +15,8 @@ services:
       OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
       # < ---
       # Define XRay's URLPath & the Daemon's Address --->
-      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
-      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+      # AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      # AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
       # <---		
       # Rollbar --->
       # ROLLBAR_ACCESS_TOKEN: "${ROLLBAR_ACCESS_TOKEN}"
@@ -74,16 +74,16 @@ services:
       - db:/var/lib/postgresql/data
 
   # Creates the XRay Daemon as a Docker Container w/in the Environment --->
-  xray-daemon:
-    image: "amazon/aws-xray-daemon"
-    environment:
-      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      AWS_REGION: "${MY_AWS_REGION}"
-    command:
-      - "xray -o -b xray-daemon:2000"
-    ports:
-      - "2000:2000/udp"
+  # xray-daemon:
+  #   image: "amazon/aws-xray-daemon"
+  #   environment:
+  #     AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+  #     AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+  #     AWS_REGION: "${MY_AWS_REGION}"
+  #   command:
+  #     - "xray -o -b xray-daemon:2000"
+  #   ports:
+  #     - "2000:2000/udp"
   # <---		
 
 networks:
