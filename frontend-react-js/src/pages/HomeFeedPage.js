@@ -50,7 +50,7 @@ export default function HomeFeedPage() {
     }).then((cognito_user) => {
       setUser({
         display_name: cognito_user.attributes.name,
-        handle: cognito_user.attributes.preferred_name
+        handle: cognito_user.attributes.preferred_username
       })
     }).catch((err) => console.log(err));
   };

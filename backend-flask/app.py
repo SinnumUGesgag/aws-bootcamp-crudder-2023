@@ -69,9 +69,6 @@ LOGGER.info("test log")
 app = Flask(__name__)
 
 # Cognito --->
-#app.config['AWS_COGNITO_USER_POOL_ID'] = os.getenv("AWS_COGNITO_USER_POOL_ID")
-#app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID")
-#app.config['AWS_DEFAULT_REGION'] = os.getenv("AWS_DEFAULT_REGION")
 
 cognitoToken = CogitoTokenVerification(
   user_pool_id= os.getenv("AWS_COGNITO_USER_POOL_ID"),
@@ -79,7 +76,6 @@ cognitoToken = CogitoTokenVerification(
   region= os.getenv("AWS_DEFAULT_REGION")
 )
 
-#aws_auth = AWSCognitoAuthentication(app)
 # <---
 
 
