@@ -29,8 +29,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 # <---
 
 # XRay --->
-from aws_xray_sdk.core import xray_recorder
-from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+# from aws_xray_sdk.core import xray_recorder
+# from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 # <---
 
 # For Cloudwatch Logs --->
@@ -88,10 +88,10 @@ cognitoToken = CogitoTokenVerification(
 
 
 # XRay to Configure the XRay Recorder & Middleware --->
-xray_url = os.getenv("AWS_XRAY_URL")
+# xray_url = os.getenv("AWS_XRAY_URL")
 
-xray_recorder.configure( service='backend-flask', dynamic_naming=xray_url)
-XRayMiddleware(app, xray_recorder)
+# xray_recorder.configure( service='backend-flask', dynamic_naming=xray_url)
+# XRayMiddleware(app, xray_recorder)
 #  <---
 
 
@@ -127,13 +127,13 @@ Cors = CORS(
 
 
 # When an Error occurs, this will create a Report/Log for Cloudwatch-->
-@app.after_request
-@xray_recorder.capture('Error Testing')
-def after_request( response ):
-  timestamp = strftime('[%Y-%b-%d %H:%M]')
-  LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
-  LOGGER.error( response )
-  return response
+# @app.after_request
+# @xray_recorder.capture('Error Testing')
+# def after_request( response ):
+#   timestamp = strftime('[%Y-%b-%d %H:%M]')
+#   LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+#   LOGGER.error( response )
+#   return response
 # <---
 
 
