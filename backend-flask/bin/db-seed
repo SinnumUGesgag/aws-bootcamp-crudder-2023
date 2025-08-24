@@ -13,7 +13,10 @@ echo $seed_path
 if [ "$1" = "prod" ]; then
 	SEED_URL=$PROD_CONNECTION_URL
 else
-	SEED_URL=$PSQL_CRUDDUER_DB_URL
+	# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
+
+	DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
+	SEED_URL=$DB_URL
 fi
 
 psql $SEED_URL cruddur < $seed_path

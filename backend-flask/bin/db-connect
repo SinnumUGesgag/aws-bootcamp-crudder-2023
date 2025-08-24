@@ -5,4 +5,7 @@ NO_COLOR='\033[0m'
 LABEL="db-connect"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
-psql $PSQL_CRUDDUER_DB_URL
+# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
+
+CON_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
+psql $CON_URL
