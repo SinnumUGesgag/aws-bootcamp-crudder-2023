@@ -75,6 +75,7 @@ cognitoToken = CogitoTokenVerification(
   user_pool_client_id= os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"), 
   region= os.getenv("AWS_DEFAULT_REGION")
 )
+app.logger.info(cognitoToken)
 
 # <---
 
@@ -175,17 +176,26 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 #@aws_auth.authentication_required
 def data_home():
+  app.logger.info("-----------request.headers--------")
+  app.logger.info(request.headers)
   access_token = extract_access_token(request.headers)
+  app.logger.info("-----------access token--------")
+  app.logger.info(access_token)
   try:
       claims = CogitoTokenVerification.verify(access_token)
+      app.logger.info("-----------claims--------")
+      app.logger.info(claims)
+
       # authenticated request
       app.logger.info("Authenticated")
-      app.logger.info(claims)
+      
+      data = HomeActivites.run()
   except TokenVerifyError as e:
       # unauthenticated request
+      app.logger.info("-------------------ERROR----------------")
       app.logger.info(e)
       app.logger.info("Unauthenticated")
-  data = HomeActivites.run()
+      data = HomeActivites.run()
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
