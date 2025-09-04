@@ -16,7 +16,7 @@ from services.show_activity import *
 
 # Customized Token Verification Solution w/ Cognito --->
   # Referenced for ideas: https://github.com/cgauge/Flask-AWSCognito/blob/master/flask_awscognito/plugin.py
-from lib.cognitoToken import CogitoTokenVerification, extract_access_token, TokenVerifyError, FlaskAWSCognitoError
+from lib.cognitoToken import CogitoTokenVerification, TokenVerifyError, FlaskAWSCognitoError
 # <---
 
 # Honeycomb, Telemetry ------->
@@ -70,12 +70,13 @@ app = Flask(__name__)
 
 # Cognito --->
 
-cognitoToken = CogitoTokenVerification(
+jwt_service = CogitoTokenVerification(
   user_pool_id= os.getenv("AWS_COGNITO_USER_POOL_ID"),
   user_pool_client_id= os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"), 
   region= os.getenv("AWS_DEFAULT_REGION")
 )
-app.logger.info(cognitoToken)
+app.logger.debug(f"jwt_service : {jwt_service }")
+
 
 # <---
 
@@ -176,26 +177,19 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 #@aws_auth.authentication_required
 def data_home():
-  app.logger.info("-----------request.headers--------")
-  app.logger.info(request.headers)
-  access_token = extract_access_token(request.headers)
-  app.logger.info("-----------access token--------")
-  app.logger.info(access_token)
-  try:
-      claims = CogitoTokenVerification.verify(access_token)
-      app.logger.info("-----------claims--------")
-      app.logger.info(claims)
 
-      # authenticated request
-      app.logger.info("Authenticated")
-      
-      data = HomeActivites.run()
+  auth_header = request.headers.get("Authorization")
+
+  access_token = CogitoTokenVerification.extract_access_token(auth_header)
+  try:
+    claims = jwt_service.verify(access_token)
+    app.logger.debug(f"Authenticated")
+    app.logger.debug(f"Claims: {claims}")
+    data = HomeActivities.run(claims["username"])
   except TokenVerifyError as e:
-      # unauthenticated request
-      app.logger.info("-------------------ERROR----------------")
-      app.logger.info(e)
-      app.logger.info("Unauthenticated")
-      data = HomeActivites.run()
+    app.logger.debug(f"Unauthenticated")
+    data = HomeActivities.run(LOGGER)
+
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])

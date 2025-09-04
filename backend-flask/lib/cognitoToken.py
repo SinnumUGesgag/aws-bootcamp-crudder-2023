@@ -4,6 +4,9 @@ from jose import jwk, jwt
 from jose.exceptions import JOSEError
 from jose.utils import base64url_decode
 
+# Followed the Advice Given in the following Article:
+# https://binli.hashnode.dev/verify-cognito-jwt-in-a-flask-application
+
 
 class FlaskAWSCognitoError(Exception):
     pass
@@ -15,12 +18,12 @@ class TokenVerifyError(Exception):
 
 # additionally, I am seeing the use of "_" in the code that we copied from the Repo we're referencing in the video
 #   I have NO idea why they have that placeholder; I'll investigate Later on to learn more
-def extract_access_token(request_headers):
-    access_token = None
-    auth_header = request_headers.get("Authorization")
-    if auth_header and " " in auth_header:
-        _,access_token = auth_header.split()
-    return access_token
+# def extract_access_token(request_headers):
+#     access_token = None
+#     auth_header = request_headers.get("Authorization")
+#     if auth_header and " " in auth_header:
+#         _,access_token = auth_header.split()
+#     return access_token
 
 
 class CogitoTokenVerification:
@@ -36,6 +39,14 @@ class CogitoTokenVerification:
         else:
             self.request_client = request_client
         self._load_jwk_keys()
+
+    @classmethod
+    def extract_access_token(self, auth_header):
+        access_token = auth_header
+        if auth_header and " " in auth_header:
+            _, access_token = auth_header.split()
+        return access_token
+
 
     def _load_jwk_keys(self):
         keys_url = f"https://cognito-idp.{self.region}.amazonaws.com/{self.user_pool_id}/.well-known/jwks.json"

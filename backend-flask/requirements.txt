@@ -8,6 +8,7 @@ psycopg[pool]
 
 # Cognito --->
 Flask-AWSCognito
+python-jose
 # <---
 
 # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
