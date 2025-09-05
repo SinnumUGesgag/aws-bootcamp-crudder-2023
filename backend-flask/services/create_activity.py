@@ -1,10 +1,10 @@
-import uuid
+from uuid import uuid4
 from datetime import datetime, timedelta, timezone
 from lib.db import db
 from flask import current_app as app
 
 class CreateActivity:
-  def run(message, user_handle, ttl):
+  def run(message, handle, ttl):
     model = {
       'errors': None,
       'data': None
@@ -29,7 +29,7 @@ class CreateActivity:
     else:
       model['errors'] = ['ttl_blank']
 
-    if user_handle == None or len(user_handle) < 1:
+    if handle == None or len(handle) < 1:
       model['errors'] = ['user_handle_blank']
 
     if message == None or len(message) < 1:
@@ -39,25 +39,25 @@ class CreateActivity:
 
     if model['errors']:
       model['data'] = {
-        'handle':  user_handle,
+        'handle':  handle,
         'message': message
       }   
     else:
 
       expires_at = (now + ttl_offset).isoformat()
-      uuid = CreateActivity.create_activity(user_handle, message, expires_at)
+      entry_uuid = CreateActivity.create_activity(handle, message, expires_at)
 
-      app.logger.info(f"UUID returned {uuid}-------")
+      app.logger.info(f"UUID returned {entry_uuid}-------")
 
-      object_json = CreateActivity.query_object_activity(uuid)
+      object_json = CreateActivity.query_object_activity(entry_uuid)
 
       model['data'] = {
-        'uuid': uuid.uuid4(),
+        'entry_uuid': entry_uuid,
         'display_name': 'Andrew Brown',
-        'handle':  user_handle,
+        'handle':  handle,
         'message': message,
         'created_at': now.isoformat(),
-        'expires_at': (now + ttl_offset).isoformat()
+        'expires_at': expires_at
       }
     return model
 
@@ -72,7 +72,7 @@ class CreateActivity:
     })
 
   def query_object_activity(uuid):
-    sql = db.template('activities','create')
+    sql = db.template('activities','object')
     return db.query_json_object(sql,{
       'uuid': uuid
     })

@@ -1,5 +1,5 @@
 SELECT
-    activities.user_uuid,
+    activities.entry_uuid,
     users.display_name,
     users.handle,
     activities.message,
