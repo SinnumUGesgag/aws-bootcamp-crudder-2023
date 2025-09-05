@@ -2,8 +2,8 @@ flask
 flask-cors
 
 # Postgress RDS --->
-psycopg[binary]
-psycopg[pool]
+psycopg2-pool
+psycopg[pool, binary]
 # <---
 
 # Cognito --->

@@ -1,14 +1,90 @@
 from psycopg_pool import ConnectionPool
+import re
+import sys
 import os
+from flask import current_app as app
 
 class InteractSQLDB:
 	def __init__(self):
-		self.init_psycopgConnectionPool()
+		self.init_pool()
+	
+	def template(self, *args):
+		
+		# finds the root path listing it as the first entry, then the name of the folders where
+		# I've stored the SQL Tempplates; then it lists the args as individual entries
+
+		pathing = list((app.root_path,'db','sql',) + args)
+		# adding to the very end of the list ".sql" which is the file type for the SQL files we'll  be referrencing for our SQL Templates
+		pathing[-1] = pathing[-1] + ".sql"
+
+		# Joins each individual entry within the Pathing List while then navigating that path to find the file that we're going to read
+		template_path = os.path.join(*pathing)
+		# opens the file with reading privileges only
+		with open(template_path, 'r') as f:
+			# reads the file's contents and places them as a string into the template_content variable, to be returned for use as our SQL object that we're going to pass into functions that require an SQL input
+			template_content = f.read()
+		return template_content
+
 
 	# intializing the Psycopg Connnectino Pool to our SQL DB
-	def init_psycopgConnectionPool(self):
+	def init_pool(self):
 		connection_url = os.getenv("PSQL_CRUDDUER_DB_URL")
 		self.pool = ConnectionPool(connection_url)
+
+	# to INSERT into the SQL DB while utilizing a connection in our Psycopg Connection Pool 
+	def query_commit(self, sql, params={}):
+
+		app.logger.info(f"query_commit : params : {params} ----------")
+		app.logger.info(f"query_commit : sql : {sql} ------------")
+
+		# make sure to check for RETURNING in all uppercases
+		pattern = r"\bRETURNING\b"
+		is_returning_id = re.search(pattern, sql)
+
+		try:
+			with self.pool.connection() as conn:
+				cur = conn.cursor()
+				cur.execute(sql, params)
+				if is_returning_id:
+					returning_id = cur.fetchone()[0]
+				conn.commit()
+				if is_returning_id:
+						return returning_id
+		except Exception as errors:
+			print(errors)
+
+	# to query an array of json objects
+	def query_json_array(self, sql, params={}):
+		app.logger.info(f"query_json_array : params : {params} ----------")
+		app.logger.info(f"query_json_array : sql : {sql} ------------")
+
+		wrapped_sql = self.query_wrap_array(sql)	
+		with self.pool.connection() as conn:
+			with conn.cursor() as cur:
+				cur.execute(wrapped_sql, params)
+				# this will return a tuple
+				# the first field being the data
+				json = cur.fetchone()
+				return json[0]
+
+	# to query a json object from the DB
+	def query_json_object(self, sql, params={}):
+
+		app.logger.info(f"query_json_object : params : {params} ----------")
+		app.logger.info(f"query_json_object : sql : {sql} ------------")
+
+		wrapped_sql = self.query_wrap_object(sql)	
+		with self.pool.connection() as conn:
+			with conn.cursor() as cur:
+				cur.execute(wrapped_sql, params)
+				# this will return a tuple
+				# the first field being the data
+				json = cur.fetchone()
+				if json == None:
+					"{}"
+				else:
+					return json[0]
+
 
 	def query_wrap_object(self, template):
 		sql = f'''
@@ -26,54 +102,20 @@ class InteractSQLDB:
 		'''
 		return sql
 
-	def print_sql_errors(self, errors):
-		# get details about the exception
-		errors_type, errors_obj, traceback = sys.exc_info()
 
-		# get the line number when exception occured
-		line_num = traceback.tb_lineno
-
-		# print the connect() error
-		print ("\npsycopg ERROR:", errors, "on line number:", line_num)
-		print ("psycopg traceback:", traceback, "--- type:", err_type)
-
-		# psycopg2 extensions.Diagnostics object attribute
-		print ("\npsycopg.Diagnostics::", errors.diag)
-		
-		# print the pgcode and pg error exceptions
-		print ("pgerror:", errors.pgerror)
-		print ("pgcode:", errors.pgcode)
-
-	# to INSET into the SQL DB while utilizing a connection in our Psycopg Connection Pool 
-	def query_commit(self):
+	# to INSERT into the SQL BD & have it return the UUID of the new entry 
+	def query_commit_returning_id(self, sql, *kwargs):
+		app.logger.info(f"------  query_commit_returning_id  :  kwargs : {kwargs} ----------")
 		try:
 			conn = self.pool.connection()
 			cur = conn.cursor()
-			cur.execute(sql)
+			cur.execute(sql, kwargs)
+			returning_id = cur.fetchone()[0]
 			conn.commit()
+			return returning_id
 		except Exception as errors:
-			self.print_sql_err(errors)
-			#conn.rollback()
+			app.logger.info(f"----- errors: {errors}")
+		
 
-	# to query an array of json objects
-	def query_json_array(self, sql):
-		wrapped_sql = self.query_wrap_array(sql)	
-		with self.pool.connection() as conn:
-			with conn.cursor() as cur:
-				cur.execute(wrapped_sql)
-				# this will return a tuple
-				# the first field being the data
-				json = cur.fetchone()
-		return json[0]
+db = InteractSQLDB()
 
-
-	# to query a json object from the DB
-	def query_json_object(self, sql):
-		wrapped_sql = self.query_wrap_object(sql)	
-		with self.pool.connection() as conn:
-			with conn.cursor() as cur:
-				cur.execute(wrapped_sql)
-				# this will return a tuple
-				# the first field being the data
-				json = cur.fetchone()
-		return json[0]

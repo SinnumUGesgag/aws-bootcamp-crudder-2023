@@ -183,11 +183,11 @@ def data_home():
   access_token = CogitoTokenVerification.extract_access_token(auth_header)
   try:
     claims = jwt_service.verify(access_token)
-    app.logger.debug(f"Authenticated")
-    app.logger.debug(f"Claims: {claims}")
+    app.logger.info(f"--------------Authenticated---------")
+    app.logger.info(f"----------Claims: {claims} ------------")
     data = HomeActivities.run(claims["username"])
   except TokenVerifyError as e:
-    app.logger.debug(f"Unauthenticated")
+    app.logger.debug(f"--------------Unauthenticated----------")
     data = HomeActivities.run(LOGGER)
 
   return data, 200

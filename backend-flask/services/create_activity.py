@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timedelta, timezone
-
-#from lib.db import InteractSQLDB
+from lib.db import db
+from flask import current_app as app
 
 class CreateActivity:
   def run(message, user_handle, ttl):
@@ -43,6 +43,14 @@ class CreateActivity:
         'message': message
       }   
     else:
+
+      expires_at = (now + ttl_offset).isoformat()
+      uuid = CreateActivity.create_activity(user_handle, message, expires_at)
+
+      app.logger.info(f"UUID returned {uuid}-------")
+
+      object_json = CreateActivity.query_object_activity(uuid)
+
       model['data'] = {
         'uuid': uuid.uuid4(),
         'display_name': 'Andrew Brown',
@@ -55,20 +63,18 @@ class CreateActivity:
 
 
 
-  def create_activity(user_uuid, message, expires_at):
-    sql = f"""
-    INSERT INTO (
-      user_uuid,
-      message,
-      expires_at
-    )
-    VALUES(
-      "{user_uuid}",
-      "{message}",
-      "{expires_at}"
-    )
-    """
-    #query_commit(sql)
-    
+  def create_activity(handle, message, expires_at):
+    sql = db.template('activities','create')
+    return db.query_commit_returning_id(sql, {
+      'handle': handle,
+      'message': message,
+      'expires_at': expires_at
+    })
+
+  def query_object_activity(uuid):
+    sql = db.template('activities','create')
+    return db.query_json_object(sql,{
+      'uuid': uuid
+    })
+
       
-    

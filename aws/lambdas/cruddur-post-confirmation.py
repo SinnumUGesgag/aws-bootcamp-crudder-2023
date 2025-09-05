@@ -22,19 +22,28 @@ def lambda_handler(event, context):
 				cognito_user_id
 			) 
 			VALUES (
-				'{user_display_name}',
-				'{user_handle}',
-				'{user_email}',
-				'{user_cognito_id}'
+				%s,
+				%s,
+				%s,
+				%s
 			)
 		"""
+
+		parameters = [	
+			sql,
+			user_uuid,
+			message,
+			expires_at
+		]
+
 
 		print('----SQL----')
 		print(sql)
 
-		conn = psycopg2.connect(os.getenv('CONNECTION_URL'))
+		conn = psycopg2.connect(os.getenv('PSQL_CRUDDUER_DB_URL'))
 		cur = conn.cursor()
-		cur.execute(sql)
+		
+		cur.execute(sql, *parameters)
 		conn.commit()
 	
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -47,3 +56,4 @@ def lambda_handler(event, context):
 			print('Database connection closed.')
 	
 	return event
+	
