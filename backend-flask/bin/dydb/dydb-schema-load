@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+import boto3        # Reference :   https://boto3.amazonaws.com/v1/documentation/api/1.9.42/reference/services/dynamodb.html#DynamoDB.Client.create_table 
+import sys
+
+attributes = {
+    'endpoint_url': 'https://localhost:8000'
+}
+
+
+if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
+    if "prod" in sys.argv[1]:   # if first argument is prod
+        attributes = {}
+
+
+dyDBclient = boto3.client('dynamodb', **attributes)
+
+table_name = 'cruddur_message'
+
+
+
+response = dyDBclient.create_table(
+    TableName = table_name,
+    AttributeDefinitions=[
+        {
+            'AttributeName': 'pk',
+            'AttributeType': 'S'
+        },
+        {
+            'AttributeName': 'sk',
+            'AttributeType': 'S'
+        },
+    ],
+    KeySchema=[
+        {
+            'AttributeName': 'pk',
+            'KeyType': 'HASH'
+        },
+        {
+            'AttributeName': 'sk',
+            'KeyType': 'RANGE'
+        },
+    ],
+    #GlobalSecondaryIndexes=[],
+    BillingMode= 'PROVISIONED',
+    ProvisionedThroughput={
+        'ReadCapacityUnits': 5,
+        'WriteCapacityUnits': 5
+    }
+)
+
+print(response)

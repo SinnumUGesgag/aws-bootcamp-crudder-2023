@@ -3,6 +3,7 @@ flask-cors
 
 # AWS SKD for Python ; we're using it to communicate with DynamoDB --->
 boto3
+# Documentation on Boto3 : https://boto3.amazonaws.com/v1/documentation/api/1.9.42/index.html
 # <---
 
 # Postgress RDS --->
