@@ -2,24 +2,21 @@
 
 CYAN='\033[1;36m'
 NO_COLOR='\033[0m'
-LABEL="db-schema-load"
+LABEL="psql-seed"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
-schema_path="$(realpath .)/db/schema.sql"
+seed_path="$(realpath .)/db/sql/seed.sql"
 
-echo "db-schema-load"
-
-#psql $PSQL_CRUDDUER_DB_URL cruddur < $schema_path
+echo $seed_path
 
 
 if [ "$1" = "prod" ]; then
-	echo "Running in Production Mode"
-	CON_URL=$PROD_CONNECTION_URL
+	SEED_URL=$PROD_CONNECTION_URL
 else
 	# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
 
 	DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
-	CON_URL=$DB_URL
+	SEED_URL=$DB_URL
 fi
 
-psql $CON_URL cruddur < $schema_path
+psql $SEED_URL cruddur < $seed_path

@@ -1,6 +1,10 @@
 flask
 flask-cors
 
+# AWS SKD for Python ; we're using it to communicate with DynamoDB --->
+boto3
+# <---
+
 # Postgress RDS --->
 psycopg2-pool
 psycopg[pool, binary]

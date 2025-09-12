@@ -1,0 +1,17 @@
+#! /usr/bin/bash
+#-e # stop if it fails at any point
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="psql-setup"
+printf "${CYAN}==${LABEL}${NO_COLOR}\n"
+
+bin_path="$(realpath .)/bin/psql/"
+
+source $bin_path/"psql-drop"
+
+source $bin_path/"psql-create"
+
+source $bin_path/"psql-schema-load"
+
+source $bin_path/"psql-seed"

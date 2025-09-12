@@ -2,14 +2,10 @@
 
 CYAN='\033[1;36m'
 NO_COLOR='\033[0m'
-LABEL="db-drop"
+LABEL="psql-connect"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
-
-echo "db-drop"
 
 # I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
 
-DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
-NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<< "$DB_URL")
-
-psql $NO_DB_CONNECTION_URL -c "drop database cruddur;"
+CON_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
+psql $CON_URL

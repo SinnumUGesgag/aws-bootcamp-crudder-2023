@@ -2,21 +2,27 @@
 
 CYAN='\033[1;36m'
 NO_COLOR='\033[0m'
-LABEL="db-seed"
+LABEL="psql-sessions"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
-seed_path="$(realpath .)/db/seed.sql"
-
-echo $seed_path
-
-
 if [ "$1" = "prod" ]; then
-	SEED_URL=$PROD_CONNECTION_URL
+	CON_URL=$PROD_CONNECTION_URL
 else
 	# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
 
 	DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUER_DB_URL")
-	SEED_URL=$DB_URL
+	CON_URL=$DB_URL
 fi
 
-psql $SEED_URL cruddur < $seed_path
+psql $CON_URL cruddur < $schema_path
+
+NO_DB_URL=$(sed 's/\/cruddur//g' <<<"$CON_URL")
+
+psql $NO_DB_URL -c "select pid as process_id. \
+	username as user, \
+	dataname as db, \
+	client_addr, \
+	application_name as app, \
+	state \
+	
+from pg_stat_activity;"
