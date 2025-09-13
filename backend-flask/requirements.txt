@@ -7,7 +7,7 @@ boto3
 # <---
 
 # Postgress RDS --->
-psycopg2-pool
+#psycopg2-pool
 psycopg[pool, binary]
 # <---
 
