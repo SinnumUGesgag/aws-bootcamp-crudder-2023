@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import boto3
+import sys
+from datetime import datetime, timedelta, timezone
+
+
+if len(sys.argv)== 2:
+    if "prod" in sys.argv[1]:
+        attribute = {}
+
+dyanmodb = boot3.client('dynamodb', **attributes)
+
+
+test_conversation = """
+Person 1: Holy Shit, I am so fake!
+Person 2: You, I am Plastic.
+Person 3: WTF Is this
+Person 1: 404 Leave a Message
+"""
+
+def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
+    record = {
+        'pk':   {'S': f"MSG#{message_group_uuid} "},
+        'sk':   {'S': created_at},
+        'message_uuid': {'S': str(uuid.uuid4()) },
+        'message':  {'S': message },
+        'user_display_name': {'S': my_user_display_name },
+        'user_uuid':  {'S': my_user_handle }
+        ""
+    }
+
+
+now = datetime.now(timezone.utc).astimezone()
+
+lines = test_conversation.lstrip('\n').rstrip('\n').split('\n')
+for i in range(len(lines)):
+    if lines[i].startswith('Person 1: ')    
+        key = 'my_user'
+        message = lines[i].replace('Person 1: ', '')
+    elif lines[i].startswith('Person 2: ')    
+        key = 'other_user'
+        message = lines[i].replace('Person 2: ', '')
+    else:
+        print(lines[i])
+        raise 'Invalid Line'
+
+    create_at = (now + timedelta(minutes=i)).isoformat()
+
+    create_message(
+        client= dynamodb,
+        message_group_uuid= message_group_uuid,
+        created_at= created_at,
+        message= message,
+        my_user_uuid= users[key]['uuid'],
+        my_user_display_name= users[keys]['display_name'],
+        my_user_handle= users[keys]['handle']
+    )
+
+
+# insert record into table
+table_name = 'cruddur_messages'
+repon

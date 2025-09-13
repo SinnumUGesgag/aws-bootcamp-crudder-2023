@@ -4,7 +4,7 @@ import boto3        # Reference :   https://boto3.amazonaws.com/v1/documentation
 import sys
 
 attributes = {
-    'endpoint_url': 'https://localhost:8000'
+    'endpoint_url': 'http://localhost:8000'
 }
 
 
@@ -15,7 +15,7 @@ if len(sys.argv) == 2:          # pull the arguments being pull has a length of 
 
 dyDBclient = boto3.client('dynamodb', **attributes)
 
-table_name = 'cruddur_message'
+table_name = 'cruddur_messages'
 
 
 
