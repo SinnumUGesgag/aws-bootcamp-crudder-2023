@@ -3,7 +3,7 @@
 import boto3        # Reference :   https://boto3.amazonaws.com/v1/documentation/api/1.9.42/reference/services/dynamodb.html#DynamoDB.Client.create_table 
 import sys
 
-attributes = {
+attributes = {  # point boto3 client at the dynamoDB container we have running locally
     'endpoint_url': 'http://localhost:8000'
 }
 

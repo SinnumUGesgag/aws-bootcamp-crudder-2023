@@ -1,15 +1,47 @@
 #!/usr/bin/env python
-
+import uuid
+import os
 import boto3
 import sys
 from datetime import datetime, timedelta, timezone
 
+current_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(current_path, "..", ".."))
+sys.path.append(parent_path)
+from lib.db import db
 
-if len(sys.argv)== 2:
-    if "prod" in sys.argv[1]:
+
+attributes = {  # point boto3 client at the dynamoDB container we have running locally
+    'endpoint_url': 'http://localhost:8000'
+}
+
+
+if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
+    if "prod" in sys.argv[1]:   # if first argument is prod
         attribute = {}
 
 dyanmodb = boot3.client('dynamodb', **attributes)
+
+
+sql = """
+    SELECT
+        users.entry_uuid,
+        users.display_name,
+        users.handle
+    FROM users
+    WHERE
+        users.handle IN(
+            %(my_handle)s,
+            %(other_handle)s   
+        )
+"""
+
+
+users = db.query_array_json(sql,{
+    'my_handle': 'primeruser',
+    'other_handle': 'andrewbrown'
+})
+
 
 
 test_conversation = """
@@ -27,7 +59,6 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
         'message':  {'S': message },
         'user_display_name': {'S': my_user_display_name },
         'user_uuid':  {'S': my_user_handle }
-        ""
     }
 
 
@@ -35,10 +66,10 @@ now = datetime.now(timezone.utc).astimezone()
 
 lines = test_conversation.lstrip('\n').rstrip('\n').split('\n')
 for i in range(len(lines)):
-    if lines[i].startswith('Person 1: ')    
+    if lines[i].startswith('Person 1: '):
         key = 'my_user'
         message = lines[i].replace('Person 1: ', '')
-    elif lines[i].startswith('Person 2: ')    
+    elif lines[i].startswith('Person 2: '):
         key = 'other_user'
         message = lines[i].replace('Person 2: ', '')
     else:
