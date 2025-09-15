@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 import uuid
 import os
 import boto3
@@ -8,7 +9,8 @@ from datetime import datetime, timedelta, timezone
 current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(current_path, "..", ".."))
 sys.path.append(parent_path)
-from lib.db import db
+
+from lib.db import InteractSQLDB
 
 
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
@@ -20,10 +22,10 @@ if len(sys.argv) == 2:          # pull the arguments being pull has a length of 
     if "prod" in sys.argv[1]:   # if first argument is prod
         attribute = {}
 
-dyanmodb = boot3.client('dynamodb', **attributes)
+dyanmodb = boto3.client('dynamodb', **attributes)
 
 
-sql = """
+sql = f"""
     SELECT
         users.entry_uuid,
         users.display_name,
@@ -36,13 +38,22 @@ sql = """
         )
 """
 
+myMock_User_handle = 'primeruser'
+theirMock_User_handle = 'andrewbrown'
 
-users = db.query_array_json(sql,{
-    'my_handle': 'primeruser',
-    'other_handle': 'andrewbrown'
-})
+# print(f"""------dydb-seed : InteractSQLDB.-----""")
+# print("whatever error I am monitoring")
 
+default_params = {
+    'my_handle': myMock_User_handle,
+    'other_handle': theirMock_User_handle
+}
 
+users = InteractSQLDB().query_json_array(sql, default_params)
+
+print(f"""------After dydb-seed : InteractSQLDB.-----""")
+#print("whatever error I am monitoring")
+print(f"""{users}""")
 
 test_conversation = """
 Person 1: Holy Shit, I am so fake!
