@@ -1,6 +1,6 @@
 from uuid import uuid4
 from datetime import datetime, timedelta, timezone
-from lib.db import db
+from lib.db import InteractSQLDB
 from flask import current_app as app
 
 class CreateActivity:
@@ -64,16 +64,16 @@ class CreateActivity:
 
 
   def create_activity(handle, message, expires_at):
-    sql = db.template('activities','create')
-    return db.query_commit_returning_id(sql, {
+    sql = InteractSQLDB.template('activities','create')
+    return InteractSQLDB.query_commit_returning_id(sql, {
       'handle': handle,
       'message': message,
       'expires_at': expires_at
     })
 
   def query_object_activity(uuid):
-    sql = db.template('activities','object')
-    return db.query_json_object(sql,{
+    sql = InteractSQLDB.template('activities','object')
+    return InteractSQLDB.query_json_object(sql,{
       'uuid': uuid
     })
 

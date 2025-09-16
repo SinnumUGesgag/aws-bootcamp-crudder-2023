@@ -22,7 +22,7 @@ if len(sys.argv) == 2:          # pull the arguments being pull has a length of 
     if "prod" in sys.argv[1]:   # if first argument is prod
         attribute = {}
 
-dyanmodb = boto3.client('dynamodb', **attributes)
+dynamodb = boto3.client('dynamodb', **attributes)
 
 
 sql = f"""
