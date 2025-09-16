@@ -4,7 +4,7 @@ import boto3        # Reference :   https://boto3.amazonaws.com/v1/documentation
 import sys
 
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
-    'endpoint_url': 'http://localhost:8000'
+    'endpoint_url': 'http://dynamodb-local:8000'
 }
 
 
