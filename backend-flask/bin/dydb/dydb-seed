@@ -105,7 +105,7 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
         'user_handle': {'S': other_user_handle }
     }
 
-    table_name = 'cruddur-messages'
+    table_name = 'cruddur_messages'
     response = client.put_item(
         TableName=table_name,
         Item=record
@@ -114,7 +114,6 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
 
 
 def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
-    users = get_user_uuids()
     
     record = {
         'pk':   {'S': f"MSG#{message_group_uuid} "},
@@ -127,7 +126,7 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
     }
     
 
-    table_name = 'cruddur-messages'
+    table_name = 'cruddur_messages'
     response = client.put_item(
         TableName=table_name,
         Item=record
@@ -140,8 +139,8 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
     create_message_group(
     client=dynamodbClient,
     message_group_uuid=message_group_uuid,
-    my_user_uuid=users['my_user']['uuid'],
-    other_user_uuid=users['other_user']['uuid'],
+    my_user_uuid=users['my_user']['entry_uuid'],
+    other_user_uuid=users['other_user']['entry_uuid'],
     other_user_display_name=users['other_user']['display_name'],
     other_user_handle=users['other_user']['handle'],
     last_message_at=now.isoformat(),
@@ -151,8 +150,8 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
     create_message_group(
         client=dynamodbClient,
         message_group_uuid=message_group_uuid,
-        my_user_uuid=users['my_user']['uuid'],
-        other_user_uuid=users['other_user']['uuid'],
+        my_user_uuid=users['my_user']['entry_uuid'],
+        other_user_uuid=users['other_user']['entry_uuid'],
         other_user_display_name=users['other_user']['display_name'],
         other_user_handle=users['other_user']['handle'],
         last_message_at=now.isoformat(),
@@ -166,13 +165,15 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
 # --------------------------------------------------------------
 message_group_uuid = default_message_group_uuid
 
+users = get_user_uuids() 
+
 create_message(
     client=dynamodbClient,
     message_group_uuid=message_group_uuid,
     created_at=created_at,
     message=message,
-    my_user_uuid=users[key]['uuid'],
-    my_user_display_name=users[keys]['display_name'],
-    my_user_handle=users[keys]['handle']
+    my_user_uuid=users[key]['entry_uuid'],
+    my_user_display_name=users[key]['display_name'],
+    my_user_handle=users[key]['handle']
 )
 
