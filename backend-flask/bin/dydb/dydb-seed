@@ -12,14 +12,9 @@ sys.path.append(parent_path)
 
 from lib.db import InteractSQLDB
 
-default_message_group_uuid = str(uuid.uuid4())
-myMock_User_handle = 'primeruser'
-theirMock_User_handle = 'andrewbrown'
-default_params = {
-    'my_handle': myMock_User_handle,
-    'other_handle': theirMock_User_handle
-}
 
+
+# Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
     'endpoint_url': 'http://dynamodb-local:8000'
 }
@@ -29,7 +24,49 @@ if len(sys.argv) == 2:          # pull the arguments being pull has a length of 
     if "prod" in sys.argv[1]:   # if first argument is prod
         attribute = {}
 
-dynamodb = boto3.client('dynamodb', **attributes)
+dynamodbClient = boto3.client('dynamodb', **attributes)
+# < ----------------
+
+
+
+# setting our Test Messages'& Test 'Groups' Data ------------ >
+default_message_group_uuid = str(uuid.uuid4())
+myMock_User_handle = 'primeruser'
+theirMock_User_handle = 'andrewbrown'
+
+default_params = {
+    'my_handle': myMock_User_handle,
+    'other_handle': theirMock_User_handle
+}
+
+
+test_conversation = """
+Person 1: Holy Shit, I am so fake!
+Person 2: You, I am Plastic.
+Person 1: WTF Is this
+Person 2: 404 Leave a Message
+"""
+
+lines = test_conversation.lstrip('\n').rstrip('\n').split('\n')
+for i in range(len(lines)):
+    if lines[i].startswith('Person 1: '):
+        key = 'my_user'
+        message = lines[i].replace('Person 1: ', '')
+    elif lines[i].startswith('Person 2: '):
+        key = 'other_user'
+        message = lines[i].replace('Person 2: ', '')
+    else:
+        print(lines[i])
+        raise 'Invalid Line'
+
+now = datetime.now(timezone.utc).astimezone()
+created_at = (now + timedelta(minutes=i)).isoformat()
+# <  ------------ 
+
+
+
+# Defining Essential Functions to interact with our DyDB ------------
+#  ------------------------------------------------------------------
 
 def get_user_uuids():
     sql = f"""
@@ -45,11 +82,6 @@ def get_user_uuids():
             )
     """
 
-    # print(f"""------dydb-seed : InteractSQLDB.-----""")
-    # print("whatever error I am monitoring")
-
-
-
     users = InteractSQLDB().query_json_array(sql, default_params)
 
     my_user     =   next((item for item in users if item["handle"] == myMock_User_handle), None)
@@ -62,85 +94,85 @@ def get_user_uuids():
     return results
 
 
+def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
+    record = {
+        'pk':   {'S': f"GRP#{my_user_uuid}"},
+        'sk':   {'S': last_message_at},
+        'message_group_uuid': {'S': message_group_uuid },
+        'message':  {'S': message },
+        'user_uuid':  {'S': other_user_uuid },
+        'user_display_name': {'S': other_user_display_name },
+        'user_handle': {'S': other_user_handle }
+    }
 
-# print(f"""------After dydb-seed : InteractSQLDB.-----""")
-# print("whatever error I am monitoring")
-# print(f"""{users}""")
-
-create_message_group(
-    client=dynamodb,
-    message_group_uuid=message_group_uuid,
-    my_user_uuid=users['my_user']['uuid'],
-    other_user_uuid=users['other_user']['uuid'],
-    other_user_display_name=users['other_user']['display_name'],
-    other_user_handle=users['other_user']['handle'],
-    last_message_at=now.isoformat(),
-    message="------this is a test message-----"
+    table_name = 'cruddur-messages'
+    response = client.put_item(
+        TableName=table_name,
+        Item=record
     )
+    print(f"""<<<<  {response}  >>>>""")
 
-create_message_group(
-    client=dynamodb,
-    message_group_uuid=message_group_uuid,
-    my_user_uuid=users['my_user']['uuid'],
-    other_user_uuid=users['other_user']['uuid'],
-    other_user_display_name=users['other_user']['display_name'],
-    other_user_handle=users['other_user']['handle'],
-    last_message_at=now.isoformat(),
-    message="------this is a test message-----"
-)
-
-
-test_conversation = """
-Person 1: Holy Shit, I am so fake!
-Person 2: You, I am Plastic.
-Person 3: WTF Is this
-Person 1: 404 Leave a Message
-"""
 
 def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
+    users = get_user_uuids()
+    
     record = {
         'pk':   {'S': f"MSG#{message_group_uuid} "},
         'sk':   {'S': created_at},
         'message_uuid': {'S': str(uuid.uuid4()) },
         'message':  {'S': message },
+        'user_uuid': {'S': my_user_uuid },
         'user_display_name': {'S': my_user_display_name },
-        'user_uuid':  {'S': my_user_handle }
+        'user_handle':  {'S': my_user_handle }
     }
+    
 
+    table_name = 'cruddur-messages'
+    response = client.put_item(
+        TableName=table_name,
+        Item=record
+    )
+    print(f"""<<<<  {response}  >>>>""")
 
-    message_group_uuid = default_message_group_uuid
+    #create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None)
 
-    now = datetime.now(timezone.utc).astimezone()
-
-    users = get_user_uuids()
-
-    lines = test_conversation.lstrip('\n').rstrip('\n').split('\n')
-    for i in range(len(lines)):
-        if lines[i].startswith('Person 1: '):
-            key = 'my_user'
-            message = lines[i].replace('Person 1: ', '')
-        elif lines[i].startswith('Person 2: '):
-            key = 'other_user'
-            message = lines[i].replace('Person 2: ', '')
-        else:
-            print(lines[i])
-            raise 'Invalid Line'
-
-    created_at = (now + timedelta(minutes=i)).isoformat()
-
-    create_message(
-        client=dynamodb,
-        message_group_uuid=message_group_uuid,
-        created_at=created_at,
-        message=message,
-        my_user_uuid=users[key]['uuid'],
-        my_user_display_name=users[keys]['display_name'],
-        my_user_handle=users[keys]['handle']
+    # instead of create a normal message group we're going to create our test message groups  -------- >
+    create_message_group(
+    client=dynamodbClient,
+    message_group_uuid=message_group_uuid,
+    my_user_uuid=users['my_user']['uuid'],
+    other_user_uuid=users['other_user']['uuid'],
+    other_user_display_name=users['other_user']['display_name'],
+    other_user_handle=users['other_user']['handle'],
+    last_message_at=now.isoformat(),
+    message="------this is a test message-----"
     )
 
+    create_message_group(
+        client=dynamodbClient,
+        message_group_uuid=message_group_uuid,
+        my_user_uuid=users['my_user']['uuid'],
+        other_user_uuid=users['other_user']['uuid'],
+        other_user_display_name=users['other_user']['display_name'],
+        other_user_handle=users['other_user']['handle'],
+        last_message_at=now.isoformat(),
+        message="------this is a test message-----"
+    )
+    # < -------- 
 
-    # insert record into table
-    table_name = 'cruddur_messages'
-    repon
 
+
+# Manually created Test Messages & Message Groups --------------
+# --------------------------------------------------------------
+message_group_uuid = default_message_group_uuid
+
+create_message(
+    client=dynamodbClient,
+    message_group_uuid=message_group_uuid,
+    created_at=created_at,
+    message=message,
+    my_user_uuid=users[key]['uuid'],
+    my_user_display_name=users[keys]['display_name'],
+    my_user_handle=users[keys]['handle']
+)
 
