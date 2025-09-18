@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+import boto3
+import sys
+import json
+import os
+import uuid
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(current_path, "..", ".."))
+sys.path.append(parent_path)
+
+from lib.db import InteractSQLDB
+
+
+# Setting Essetinal Attributes for our Client ---------------- >
+attributes = {  # point boto3 client at the dynamoDB container we have running locally
+    'endpoint_url': 'http://dynamodb-local:8000'
+}
+
+
+if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
+    if "prod" in sys.argv[1]:   # if first argument is prod
+        attribute = {}
+
+dyDbClient = boto3.client('dynamodb', **attributes)
+
+myMock_User_handle = 'primeruser'
+table_name = 'cruddur_messages'
+
+#default_user_uuid = "2dfdf41d-03b5-44b2-a729-be69a49415c2" #copied it from the data just for testing this once
+
+def get_my_user_uuids():
+    #print(f""" My Handle: {my_handle}""")
+    sql = f"""
+        SELECT
+            users.entry_uuid,
+            users.handle
+        FROM users
+        WHERE
+            users.handle = %(handle)s  
+    """
+
+    uuid = InteractSQLDB().query_value(sql, {'handle': myMock_User_handle })
+
+    return uuid
+
+user_uuid = get_my_user_uuids()
+print(f"""MY USER UUID: {user_uuid}""")
+
+
+query_parameters = {
+    'TableName': table_name,
+    'ReturnConsumedCapacity': 'TOTAL',
+    'KeyConditionExpression': 'pk = :pkID',
+    'ExpressionAttributeValues': {
+        ':pkID': {'S': f"GRP#{user_uuid}"}
+    }
+}
+
+response = dyDbClient.query(**query_parameters)
+
+print(json.dumps(response, sort_keys=True, indent=2))
+

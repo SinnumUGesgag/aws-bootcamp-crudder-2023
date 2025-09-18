@@ -8,6 +8,7 @@ attributes = {  # point boto3 client at the dynamoDB container we have running l
 }
 
 
+
 if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
     if "prod" in sys.argv[1]:   # if first argument is prod
         attributes = {}
