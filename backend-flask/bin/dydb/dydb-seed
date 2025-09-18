@@ -12,7 +12,7 @@ sys.path.append(parent_path)
 
 from lib.db import InteractSQLDB
 
-
+k = 0
 
 # Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
@@ -24,13 +24,13 @@ if len(sys.argv) == 2:          # pull the arguments being pull has a length of 
     if "prod" in sys.argv[1]:   # if first argument is prod
         attribute = {}
 
-dynamodbClient = boto3.client('dynamodb', **attributes)
+dyDBclient = boto3.client('dynamodb', **attributes)
 # < ----------------
 
 
 
 # setting our Test Messages'& Test 'Groups' Data ------------ >
-default_message_group_uuid = str(uuid.uuid4())
+default_message_group_uuid = "a9b2c4d6-7e8f-4a1b-9c2d-3e5f6a7b8c9d" #str(uuid.uuid4())
 myMock_User_handle = 'primeruser'
 theirMock_User_handle = 'andrewbrown'
 
@@ -95,6 +95,10 @@ def get_user_uuids():
 
 
 def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
+    global k
+    k += 1
+  
+    print(f"""-----------  Message Group Created {k}  -----------""")
     record = {
         'pk':   {'S': f"GRP#{my_user_uuid}"},
         'sk':   {'S': last_message_at},
@@ -114,7 +118,7 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
 
 
 def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
-    
+    print(f"""-----------  Message Created  -----------""")
     record = {
         'pk':   {'S': f"MSG#{message_group_uuid} "},
         'sk':   {'S': created_at},
@@ -137,25 +141,25 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
 
     # instead of create a normal message group we're going to create our test message groups  -------- >
     create_message_group(
-    client=dynamodbClient,
-    message_group_uuid=message_group_uuid,
-    my_user_uuid=users['my_user']['entry_uuid'],
-    other_user_uuid=users['other_user']['entry_uuid'],
-    other_user_display_name=users['other_user']['display_name'],
-    other_user_handle=users['other_user']['handle'],
-    last_message_at=now.isoformat(),
-    message="------this is a test message-----"
-    )
-
-    create_message_group(
-        client=dynamodbClient,
+        client=dyDBclient,
         message_group_uuid=message_group_uuid,
         my_user_uuid=users['my_user']['entry_uuid'],
         other_user_uuid=users['other_user']['entry_uuid'],
         other_user_display_name=users['other_user']['display_name'],
         other_user_handle=users['other_user']['handle'],
         last_message_at=now.isoformat(),
-        message="------this is a test message-----"
+        message=message
+    )
+
+    create_message_group(
+        client=dyDBclient,
+        message_group_uuid=message_group_uuid,
+        my_user_uuid=users['my_user']['entry_uuid'],
+        other_user_uuid=users['other_user']['entry_uuid'],
+        other_user_display_name=users['other_user']['display_name'],
+        other_user_handle=users['other_user']['handle'],
+        last_message_at=now.isoformat(),
+        message=message
     )
     # < -------- 
 
@@ -168,7 +172,7 @@ message_group_uuid = default_message_group_uuid
 users = get_user_uuids() 
 
 create_message(
-    client=dynamodbClient,
+    client=dyDBclient,
     message_group_uuid=message_group_uuid,
     created_at=created_at,
     message=message,
