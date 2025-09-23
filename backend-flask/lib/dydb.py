@@ -4,7 +4,7 @@ from dataime import datatime, timedelta, timezone
 import uuid
 import os
 
-Class InteractDyDb:
+class InteractDyDb:
     def client():
         endpoint_url = os.getenv("AWS_ENDPOINT_URL")
         if endpoint_url:
@@ -18,7 +18,7 @@ Class InteractDyDb:
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            'KeyConditionExpression': 'pk = :pkID'
+            'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributeValues': {
@@ -49,7 +49,7 @@ Class InteractDyDb:
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            'KeyConditionExpression': 'pk = :pkID'
+            'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributesValues': {
