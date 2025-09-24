@@ -11,8 +11,7 @@ sys.path.append(parent_path)
 from lib.db import InteractSQLDB
 
 
-def update_cognito_user_ids(handle1, handle2, sub1, sub2):
-
+def update_users_with_cognito_user_ids(handle1, handle2, sub1, sub2):
     sql = """
         UPDATE public.users
         SET cognito_user_id = %(sub1)s
