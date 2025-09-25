@@ -1,6 +1,6 @@
 import boto3
 import sys
-from dataime import datatime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 import uuid
 import os
 

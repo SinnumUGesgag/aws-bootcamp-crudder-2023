@@ -52,6 +52,7 @@ print(f"""MY USER UUID: {user_uuid}""")
 query_parameters = {
     'TableName': table_name,
     'ReturnConsumedCapacity': 'TOTAL',
+    'ScanIndexForward': False,
     'KeyConditionExpression': 'pk = :pkID',
     'ExpressionAttributeValues': {
         ':pkID': {'S': f"GRP#{user_uuid}"}
