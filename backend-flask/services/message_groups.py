@@ -6,14 +6,14 @@ from lib.dydb import InteractDyDb
 
 
 class MessageGroups:
-  def run(cognito_user_i):
+  def run(cognito_user_id):
     model = {
       'errors': None,
       'data': None
     }
 
     sql = InteractSQLDB.template('users', 'uuid_from_cognito_user_ids')
-    my_user_uuid = InteractSQLDB.query_value(sql, {'cognito_user_i': cognito_user_i})
+    my_user_uuid = InteractSQLDB.query_value(sql, {'cognito_user_id': cognito_user_id})
 
     print(f"UUID: {my_user_uuid}")
 
