@@ -123,12 +123,12 @@ class InteractSQLDB:
 	# 	except Exception as errors:
 	# 		app.logger.info(f"----- errors: {errors}")
 
-	def template(self, *args):
+	def template(self, *end_path):
 		
 		# finds the root path listing it as the first entry, then the name of the folders where
 		# I've stored the SQL Tempplates; then it lists the args as individual entries
 
-		pathing = list((app.root_path,'db','sql',) + args)
+		pathing = list((app.root_path,'db','sql', end_path))
 		# adding to the very end of the list ".sql" which is the file type for the SQL files we'll  be referrencing for our SQL Templates
 		pathing[-1] = pathing[-1] + ".sql"
 
