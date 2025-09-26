@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import boto3
 import os
@@ -11,42 +11,34 @@ sys.path.append(parent_path)
 from lib.db import InteractSQLDB
 
 
-def update_users_with_cognito_user_ids(handle1, handle2, sub1, sub2):
-    sql = """
-        UPDATE public.users
-        SET cognito_user_id = %(sub1)s
-        WHERE
-            users.handle = %(handle1)s;
-        UPDATE public.users
-        SET cognito_user_id = %(sub2)s
-        WHERE
-            users.handle = %(handle2)s;
-    """
+def update_users_with_cognito_user_ids(handle, sub):
+	sql = """
+		UPDATE public.users
+		SET cognito_user_id = %(sub)s
+		WHERE
+			users.handle = %(handle)s;
+	"""
 
-	InteractSQLDB.query_commit(sql,{
-		'handle1' : handle1,
-		'handle2' : handle2,
-		'sub1' : sub1,
-		'sub2' : sub2
-	})
+	InteractSQLDB.query_commit(
+		sql, 
+		{'handle' : handle, 'sub' : sub}
+	)
 
-default_handle1 = 'primeruser'
-default_handle2 = 'andrewbrown'
 
-def get_cognito_user_ids(handle1, handle2)
+def get_cognito_user_ids(handle1, handle2):
 	userpool_id = os.getenv("MY_COGNITO_USER_POOL_ID")
 	client = boto3.client('cognito-idp')
-	
+
 	parameters = {
 		'UserPoolId': userpool_id,
 		'AttributesToGet': [
-			'preferred_username',
-            'sub'
-		] 
+		'preferred_username',
+		'sub'
+		]
 	}
-	
+
 	response = client.list_users(**parameters)
-	users = response['Users']:
+	users = response['Users']
 
 	dict_users = {}
 	for user in users:
@@ -58,16 +50,11 @@ def get_cognito_user_ids(handle1, handle2)
 	print(f"---- USERS: {json.dumps(dict_users, sort_keys=True, indent=2, default=str)} ||||")
 	return dict_users
 
-
 users = get_cognito_user_ids()
 
 for handle, sub in users.items():
-	print()
+	print(f"""---- Handle & Sub Being Passsed In: {handle} , {sub} ||||""")
 	update_users_with_cognito_user_ids(
-		handle1=default_handle1, 
-		handle2=default_handle2, 
-		sub1=sub1, 
-		sub2=sub2
+		handle=handle, 
+		sub=sub
 	)
-
-
