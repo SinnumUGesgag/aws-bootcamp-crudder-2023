@@ -65,8 +65,8 @@ class CreateActivity:
 
   def create_activity(handle, message, expires_at):
     end_path = tuple('activities','create')
-    sql = InteractSQLDB.template(end_path)
-    return InteractSQLDB.query_commit_returning_id(sql, {
+    sql = InteractSQLDB().template(end_path)
+    return InteractSQLDB().query_commit_returning_id(sql, {
       'handle': handle,
       'message': message,
       'expires_at': expires_at
@@ -74,8 +74,8 @@ class CreateActivity:
 
   def query_object_activity(uuid):
     end_path = tuple('activities','object')
-    sql = InteractSQLDB.template(end_path)
-    return InteractSQLDB.query_json_object(sql,{
+    sql = InteractSQLDB().template(end_path)
+    return InteractSQLDB().query_json_object(sql,{
       'uuid': uuid
     })
 

@@ -13,8 +13,8 @@ class MessageGroups:
     }
 
     end_path = tuple('users', 'uuid_from_cognito_user_ids')
-    sql = InteractSQLDB.template(end_path)
-    my_user_uuid = InteractSQLDB.query_value(sql, {'cognito_user_id': cognito_user_id})
+    sql = InteractSQLDB().template(end_path)
+    my_user_uuid = InteractSQLDB().query_value(sql, {'cognito_user_id': cognito_user_id})
 
     print(f"UUID: {my_user_uuid}")
 

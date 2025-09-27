@@ -16,38 +16,50 @@ class InteractSQLDB:
 		connection_url = os.getenv("PSQL_CRUDDUER_DB_URL")
 		self.pool = ConnectionPool(connection_url)
 		print(f"""------init_pool-----""")
-		print(type(self))
+		print(f"---- Self Type: {type(self)} ||||")
+		print(f"---- Connection URL: {connection_url} ||||")
+
+
+
+	def query_commit(self, sql, params={}):
+		try:
+			typeSelf = type(self)
+			print(f"--- self type : {typeSelf}")
+			with self.pool.connection() as conn:
+				cur = conn.cursor()
+				cur.execute(sql, params)
+				conn.commit()
+		except Exception as errors:
+			print(f"----- query_commit errors: {errors}")
+
+
 
 	# to INSERT into the SQL DB while utilizing a connection in our Psycopg Connection Pool 
+	# Also returns the User UUID
 	def query_commit_returning_id(self, sql, params={}):
 
-		# app.logger.info(f"query_commit_returning_id : params : {params} ----------")
-		# app.logger.info(f"query_commit_returning_id : sql : {sql} ------------")
+		# print(f"query_commit_returning_id : params : {params} ----------")
+		# print(f"query_commit_returning_id : sql : {sql} ------------")
 
 		# make sure to check for RETURNING in all uppercases
 		pattern = r"\bRETURNING\b"
 		is_returning_id = re.search(pattern, sql)
 
-		app.logger.info(f"------  query_commit_returning_id  :  is_returning_id : {is_returning_id} ----------")
+		print(f"------  query_commit_returning_id  :  is_returning_id : {is_returning_id} ----------")
 
 		try:
 			with self.pool.connection() as conn:
 				cur = conn.cursor()
 				cur.execute(sql, params)
-				if is_returning_id:
-					returning_id = cur.fetchone()[0]
 				conn.commit()
-				if is_returning_id:
-						return returning_id
 		except Exception as errors:
-			app.logger.info(f"----- errors: {errors}")
-		# print(f"""------query_commit_returning_id-----""")
-		# print("whatever error I am monitoring")
+			print(f"----- query_commit_returning_id errors: {errors}")
+			
 
 	# to query an array of json objects
 	def query_json_array(self, sql, params={}):
-		#app.logger.info(f"query_json_array : params : {params} ----------")
-		#app.logger.info(f"query_json_array : sql : {sql} ------------")
+		#print(f"query_json_array : params : {params} ----------")
+		#print(f"query_json_array : sql : {sql} ------------")
 
 		# print(f"""------query_json_array-----""")
 		# print("whatever error I am monitoring")
@@ -64,8 +76,8 @@ class InteractSQLDB:
 	# to query a json object from the DB
 	def query_json_object(self, sql, uuid):
 
-		# app.logger.info(f"query_json_object : uuid : {uuid} ----------")
-		# app.logger.info(f"query_json_object : sql : {sql} ------------")
+		# print(f"query_json_object : uuid : {uuid} ----------")
+		# print(f"query_json_object : sql : {sql} ------------")
 
 		wrapped_sql = self.query_wrap_object(sql)	
 		with self.pool.connection() as conn:
@@ -109,19 +121,6 @@ class InteractSQLDB:
 		# print("whatever error I am monitoring")
 		return new_sql
 
-
-	# # to INSERT into the SQL BD & have it return the UUID of the new entry 
-	# def query_commit_returning_id(self, sql, *kwargs):
-
-	# 	try:
-	# 		conn = self.pool.connection()
-	# 		cur = conn.cursor()
-	# 		cur.execute(sql, kwargs)
-	# 		returning_id = cur.fetchone()[0]
-	# 		conn.commit()
-	# 		return returning_id
-	# 	except Exception as errors:
-	# 		app.logger.info(f"----- errors: {errors}")
 
 	def template(self, *end_path):
 		
