@@ -3,15 +3,17 @@
 import boto3        # Reference :   https://boto3.amazonaws.com/v1/documentation/api/1.9.42/reference/services/dynamodb.html#DynamoDB.Client.create_table 
 import sys
 
-attributes = {  # point boto3 client at the dynamoDB container we have running locally
-    'endpoint_url': 'http://dynamodb-local:8000'
-}
-
-
 
 if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
     if "prod" in sys.argv[1]:   # if first argument is prod
-        attributes = {}
+        print(f"---- DyDb Schema Load: len(sys.argv) : PROD Output ----")
+        attributes = {
+            #endpoint_url= #the prod url
+        }
+else:
+    attributes = {  # point boto3 client at the dynamoDB container we have running locally
+        'endpoint_url': 'http://127.0.0.1:8000'
+    }
 
 
 dyDBclient = boto3.client('dynamodb', **attributes)

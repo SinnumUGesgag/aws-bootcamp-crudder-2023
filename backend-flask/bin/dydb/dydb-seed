@@ -16,7 +16,7 @@ k = 0
 
 # Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
-    'endpoint_url': 'http://dynamodb-local:8000'
+    'endpoint_url': 'http://127.0.0.1:8000'
 }
 
 

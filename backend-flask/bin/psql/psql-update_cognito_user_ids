@@ -4,11 +4,14 @@ import boto3
 import os
 import sys
 
+print(f"--- ERROR in backend-flask/bin/psql/psql-update_cognito_user_ids |||| ")
+
 current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(current_path, "..", ".."))
 sys.path.append(parent_path)
 
 from lib.db import InteractSQLDB
+
 
 
 def update_users_with_cognito_user_ids(handle, sub):

@@ -1,6 +1,7 @@
  import { Auth } from 'aws-amplify';
  
 const checkAuth = async (setUser) => {
+  
     Auth.currentAuthenticatedUser({
       //optional, by default is false.
       //if set to true, this call will send a 

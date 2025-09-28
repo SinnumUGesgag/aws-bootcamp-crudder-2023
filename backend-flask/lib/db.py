@@ -126,13 +126,17 @@ class InteractSQLDB:
 		
 		# finds the root path listing it as the first entry, then the name of the folders where
 		# I've stored the SQL Tempplates; then it lists the args as individual entries
+		root_i = str(app.root_path)
+		path_i = list('')
 
-		pathing = list((app.root_path,'db','sql', end_path))
-		# adding to the very end of the list ".sql" which is the file type for the SQL files we'll  be referrencing for our SQL Templates
-		pathing[-1] = pathing[-1] + ".sql"
+		path_i.extend(root_i)
+		path_i.extend(['/db','/sql'])
+		path_i.extend(end_path)
+		path_i.extend(".sql")
+		pathing = ''.join(path_i)
 
 		# Joins each individual entry within the Pathing List while then navigating that path to find the file that we're going to read
-		template_path = os.path.join(*pathing)
+		template_path = os.path.join(pathing)
 		# opens the file with reading privileges only
 		with open(template_path, 'r') as f:
 			# reads the file's contents and places them as a string into the template_content variable, to be returned for use as our SQL object that we're going to pass into functions that require an SQL input
