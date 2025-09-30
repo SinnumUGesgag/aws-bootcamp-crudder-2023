@@ -6,8 +6,9 @@ from lib.db import InteractSQLDB
 
 class HomeActivities:
   def run(cognito_user_id=None):
-    sql = InteractSQLDB().template('/activities','/home')
+    pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+    sql = InteractSQLDB(pSQLocalUrl).template('/activities','/home')
 
-    results = InteractSQLDB().query_json_array(sql)
+    results = InteractSQLDB(pSQLocalUrl).query_json_array(sql)
 
     return results

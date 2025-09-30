@@ -59,8 +59,8 @@ def get_user_uuids():
                 %(other_handle)s   
             )
     """
-
-    users = InteractSQLDB().query_json_array(sql, default_params)
+    pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+    users = InteractSQLDB(pSQLocalUrl).query_json_array(sql, default_params)
 
     my_user     =   next((item for item in users if item["handle"] == myMock_User_handle), None)
     other_user  =   next((item for item in users if item["handle"] == theirMock_User_handle), None)

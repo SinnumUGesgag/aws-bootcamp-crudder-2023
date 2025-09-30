@@ -1,24 +1,39 @@
 from psycopg_pool import ConnectionPool
+from flask import current_app as app
 import re
 import sys
 import os
 
-from flask import current_app as app
+# Add variable pSQLocalUrl for reasons N1 & N2
+#	N1 	:	At times the InteractSQLDB is invoked in scripts that are ran at setup  and do not 
+# 	have the same resources available as the Container; additionally...
+# 	N2	:	The Backend-Flask Container sees the PSQL Local Instance as "db:5342" where as the Gitpod container 
+# 	sees the PSQL Local Instance as LocalHost:5432 which means where this Class is invoked affects what URL is needed
 
 class InteractSQLDB:
-	def __init__(self):
-		self.init_pool()
+	def __init__(self, pSQLocalUrl):
+
+		valid_url_d = os.getenv("PSQL_CRUDDUER_DB_URL")
+		valid_url_l = 'postgresql://postgres:password@localhost:5432/cruddur'
+		
+		# small security measure to make sure the PSYCOPG pool isn't somehow manipulated incorrectly
+		if (pSQLocalUrl == valid_url_d):
+			pSQLocalUrl = valid_url_d
+		elif (pSQLocalUrl == valid_url_l):
+			pSQLocalUrl = valid_url_l
+		else:
+			pSQLocalUrl = None
+
+		self.init_pool(pSQLocalUrl)
 		# print(f"""------__init__-----""")
 		# print("whatever error I am monitoring")
 
 	# intializing the Psycopg Connnectino Pool to our SQL DB
-	def init_pool(self):
-		connection_url = os.getenv("PSQL_CRUDDUER_DB_URL")
-		self.pool = ConnectionPool(connection_url)
+	def init_pool(self, pSQLocalUrl):
+		self.pool = ConnectionPool(pSQLocalUrl)
 		print(f"""------init_pool-----""")
 		print(f"---- Self Type: {type(self)} ||||")
-		print(f"---- Connection URL: {connection_url} ||||")
-
+		print(f"---- Connection URL: {pSQLocalUrl} ||||")
 
 
 	def query_commit(self, sql, params={}):

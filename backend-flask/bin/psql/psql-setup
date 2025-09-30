@@ -16,8 +16,8 @@ source $bin_path/"psql-schema-load"
 
 source $bin_path/"psql-seed"
 
-# source $bin_path/"psql-update_cognito_user_ids"
-# update coginto user ids script is a python script that's 
-# importing OS, SYS, & BOTO3; yet Bash scripts do not import the same, so the fact that he has me importing 
-# and running this python script inside a bash script appears to be causing errors
-# for now I'll just run the script manually until either he purposes a solution in the course or if I find a solution
+#source $bin_path/"psql-update_cognito_user_ids"
+# still cannot get this to run from the PSQL-SETUP bash script
+# from my research it appears that when it's invoked it's being ran using BASH rather than using a PYTHON
+# interpreter, even though the script calls for Python
+# I will wait to see if Andrew Purposes a solution later on; otherwise I'll comeback to change / fix this myself

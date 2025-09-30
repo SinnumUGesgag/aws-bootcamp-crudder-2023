@@ -13,8 +13,9 @@ class MessageGroups:
     }
 
     end_path = tuple('users', 'uuid_from_cognito_user_ids')
-    sql = InteractSQLDB().template(end_path)
-    my_user_uuid = InteractSQLDB().query_value(sql, {'cognito_user_id': cognito_user_id})
+    pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+    sql = InteractSQLDB(pSQLocalUrl).template(end_path)
+    my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
 
     print(f"UUID: {my_user_uuid}")
 
