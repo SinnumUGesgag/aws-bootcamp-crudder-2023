@@ -13,7 +13,7 @@ class MessageGroups:
     }
 
     end_path = tuple('users', 'uuid_from_cognito_user_ids')
-    pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
     sql = InteractSQLDB(pSQLocalUrl).template(end_path)
     my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
 

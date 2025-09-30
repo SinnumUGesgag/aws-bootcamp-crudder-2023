@@ -40,7 +40,7 @@ def get_my_user_uuids():
         WHERE
             users.handle = %(handle)s  
     """
-    pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
     uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'handle': myMock_User_handle })
 
     return uuid

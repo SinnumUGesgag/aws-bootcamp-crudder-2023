@@ -20,7 +20,7 @@ def update_users_with_cognito_user_ids(handle, sub):
 			users.handle = %(handle)s;
 	"""
 
-	pSQLocalUrl = 'postgresql://postgres:password@localhost:5432/cruddur'
+	pSQLocalUrl = 'PSQL_CRUDDUER_LH_URL'
 	
 	InteractSQLDB(pSQLocalUrl).query_commit(sql,
 	{'handle': handle,'sub': sub}
