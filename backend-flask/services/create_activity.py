@@ -64,9 +64,8 @@ class CreateActivity:
 
 
   def create_activity(handle, message, expires_at):
-    end_path = tuple('activities','create')
     pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
-    sql = InteractSQLDB(pSQLocalUrl).template(end_path)
+    sql = InteractSQLDB(pSQLocalUrl).template('/activities','/create')
     return InteractSQLDB(pSQLocalUrl).query_commit_returning_id(sql, {
       'handle': handle,
       'message': message,
@@ -74,8 +73,7 @@ class CreateActivity:
     })
 
   def query_object_activity(uuid):
-    end_path = tuple('activities','object')
-    sql = InteractSQLDB(pSQLocalUrl).template(end_path)
+    sql = InteractSQLDB(pSQLocalUrl).template('/activities','/object')
     return InteractSQLDB(pSQLocalUrl).query_json_object(sql,{
       'uuid': uuid
     })
