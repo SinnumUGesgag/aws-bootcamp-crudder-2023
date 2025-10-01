@@ -16,14 +16,15 @@ class InteractDyDb:
         return dyanmoDB
     
     def list_message_groups(client, my_user_uuid):
+        current_year = datedtime.now().year
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            'KeyConditionExpression': 'pk = :pkID',
+            'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributeValues': {
-            #':year': {'S': "2025"},
+            ':year': {'S': f"{current_year}"},
             ':pkID': {'S': f"GRP#{my_user_uuid}"}
             }
         }
