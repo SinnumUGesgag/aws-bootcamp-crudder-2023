@@ -141,13 +141,17 @@ Cors = CORS(
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
+  app.logger.info(f"------- DATA MESSAGE GROUPS -------")
   auth_header = request.headers.get("Authorization")
 
   access_token = CogitoTokenVerification.extract_access_token(auth_header)
+  app.logger.info(f"------- Access Token: {access_token} ||||")
   try:
     claims = jwt_service.verify(access_token)
     cognito_user_id = claims['sub']
+    app.logger.info(f"---- DATA MGS : Cognito User ID : {cognito_user_id} ||||")
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
+    app.logger.info(f"---- DATA MGS : MODEL RETURNED : {model} ||||")
     if model['errors'] is not None:
       return model['errors'], 422
     else:

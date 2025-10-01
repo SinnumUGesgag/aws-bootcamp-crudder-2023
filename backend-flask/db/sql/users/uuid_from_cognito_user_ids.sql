@@ -1,5 +1,5 @@
-Run SQL
-SELECT users.uuid
+
+SELECT users.entry_uuid
 FROM public.users
-WHERE uesrs.cognito_user_id = %(cognito_user_id)s
+WHERE users.cognito_user_id = %(cognito_user_id)s
 LIMiT 1

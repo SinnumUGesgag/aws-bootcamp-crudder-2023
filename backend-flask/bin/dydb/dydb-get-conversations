@@ -28,7 +28,7 @@ print(f"""---------------MGP UUID--------------""")
 print(f"""{message_group_uuid}""")
 
 #pkval = f"MSG#{message_group_uuid}"
-current_year = datedtime.now().year
+current_year = datetime.now().year
 query_parameters = {
     'TableName': table_name,
     'ScanIndexForward': False,

@@ -12,11 +12,11 @@ class InteractDyDb:
             attributes = {'endpoint_url': endpoint_url}
         else:
             attributes = {}
-        dyanmoDB = boto3.client('dyanmodb', **attributes)
+        dyanmoDB = boto3.client('dynamodb', **attributes)
         return dyanmoDB
     
     def list_message_groups(client, my_user_uuid):
-        current_year = datedtime.now().year
+        current_year = datetime.now().year
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,

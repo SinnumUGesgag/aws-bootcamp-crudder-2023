@@ -12,18 +12,35 @@ class MessageGroups:
       'data': None
     }
 
+    data = None
+    errors = None
+
     pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+
     sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
     my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
 
-    print(f"UUID: {my_user_uuid}")
-
     dyDbClient = InteractDyDb.client()
     data = InteractDyDb.list_message_groups(dyDbClient, my_user_uuid)
-    print(f"-------- list_message_groups --------")
-    print(f"||||---- Data: {data} ||||")
 
+    if data == []:
+      errors = {
+        e,
+        (f"---- SQL Passed IN: {sql} ||||"),
+        (f"---- MY UUID: {my_user_uuid} ||||")
+      }
+
+
+    # app.logger.info(f"UUID: {my_user_uuid}")
+    # app.logger.info(f"-------- list_message_groups --------")
+    # app.logger.info(f"||||---- Data: {data} ||||")
 
     # #MomentoCounter.reset(f"msgs/{user_handle}"")
     # model[ 'data' ] = data
-    # return model
+
+    model = {
+      'errors': errors,
+      'data': data
+    }
+
+    return model
