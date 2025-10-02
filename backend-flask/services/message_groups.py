@@ -14,21 +14,29 @@ class MessageGroups:
 
     data = None
     errors = None
+    try:
+      pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
 
-    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+      sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
+      my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
 
-    sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
-    my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
+      dyDbClient = InteractDyDb.client()
+      data = InteractDyDb.list_message_groups(dyDbClient, my_user_uuid)
 
-    dyDbClient = InteractDyDb.client()
-    data = InteractDyDb.list_message_groups(dyDbClient, my_user_uuid)
-
-    if data == []:
+      if data == []:
+        errors = {
+          (f"!!!! No Data Returned From DyDb !!!!"),
+          (f"---- dyDbClient : {dyDbClient} ||||"),
+          (f"---- SQL Passed IN : {sql} ||||"),
+          (f"---- MY UUID Returned : {my_user_uuid} ||||")
+        }
+    except Exception as e:
       errors = {
         e,
         (f"---- SQL Passed IN: {sql} ||||"),
-        (f"---- MY UUID: {my_user_uuid} ||||")
+        (f"---- MY UUID Returned: {my_user_uuid} ||||")
       }
+
 
 
     # app.logger.info(f"UUID: {my_user_uuid}")

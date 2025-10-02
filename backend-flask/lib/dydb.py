@@ -20,17 +20,18 @@ class InteractDyDb:
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+            #'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+            'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributeValues': {
-            ':year': {'S': f"{current_year}"},
+            #':year': {'S': f"{current_year}"},
             ':pkID': {'S': f"GRP#{my_user_uuid}"}
             }
         }
-        print(f"-------- Query Inputs --------")
-        print(f"|||| ---- Query Parameters: {query_parameters} ||||")
-        print(f"|||| ---- With Client: {client} ||||")
+        # print(f"-------- Query Inputs --------")
+        # print(f"|||| ---- Query Parameters: {query_parameters} ||||")
+        # print(f"|||| ---- With Client: {client} ||||")
 
         response = client.query(**query_parameters)
         items = response['Items']

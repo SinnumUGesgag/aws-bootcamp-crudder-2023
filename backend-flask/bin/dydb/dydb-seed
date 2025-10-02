@@ -31,7 +31,7 @@ dyDBclient = boto3.client('dynamodb', **attributes)
 
 # setting our Test Messages'& Test 'Groups' Data ------------ >
 default_message_group_uuid = "a9b2c4d6-7e8f-4a1b-9c2d-3e5f6a7b8c9d" #str(uuid.uuid4())
-myMock_User_handle = 'primeruser'
+myMock_User_handle = 'Test_User'
 theirMock_User_handle = 'andrewbrown'
 message_group_uuid = default_message_group_uuid
 
@@ -59,7 +59,7 @@ def get_user_uuids():
                 %(other_handle)s   
             )
     """
-    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+    pSQLocalUrl = 'PSQL_CRUDDUER_LH_URL'
     users = InteractSQLDB(pSQLocalUrl).query_json_array(sql, default_params)
 
     my_user     =   next((item for item in users if item["handle"] == myMock_User_handle), None)
@@ -68,7 +68,7 @@ def get_user_uuids():
         'my_user': my_user,
         'other_user': other_user
     }
-    print(f'''--- get_user_uuids ---''')
+    print(f'''--- get_user_uuids Results : {results} ||||''')
     return results
 
 
@@ -118,9 +118,7 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
     )
     print(f"""<<<<  {response}  >>>>""")
 
-    #create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None)
-
-    # instead of create a normal message group we're going to create our test message groups  -------- >
+        # instead of create a normal message group we're going to create our test message groups  -------- >
     create_message_group(
         client=dyDBclient,
         message_group_uuid=message_group_uuid,
@@ -135,14 +133,15 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
     create_message_group(
         client=dyDBclient,
         message_group_uuid=message_group_uuid,
-        my_user_uuid=users['my_user']['entry_uuid'],
-        other_user_uuid=users['other_user']['entry_uuid'],
-        other_user_display_name=users['other_user']['display_name'],
-        other_user_handle=users['other_user']['handle'],
+        my_user_uuid=users['other_user']['entry_uuid'],
+        other_user_uuid=users['my_user']['entry_uuid'],
+        other_user_display_name=users['my_user']['display_name'],
+        other_user_handle=users['my_user']['handle'],
         last_message_at=now.isoformat(),
         message=message
     )
-    # < -------- 
+    
+
 
 
 
