@@ -80,6 +80,9 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
     k += 1
   
     print(f"""-----------  Message Group Created {k}  -----------""")
+    # how this record is put together is incorrect; either I messeed up or he's going to show a correction soon;
+    # the record should have my uuid to create the GRP# however the User Handle & Display Name should match the 
+    # person who entered the last message
     record = {
         'pk':   {'S': f"GRP#{my_user_uuid}"},
         'sk':   {'S': last_message_at},

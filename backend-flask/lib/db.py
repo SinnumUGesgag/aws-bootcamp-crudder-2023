@@ -109,7 +109,7 @@ class InteractSQLDB:
 		# print(f"""------query_json_object-----""")
 		# print("whatever error I am monitoring")
 
-	def query_value(self, sql, parameters={}):
+	def query_user_dict(self, sql, parameters={}):
 		wrapped_sql = self.query_wrap_object(sql)
 		with self.pool.connection() as conn:
 			with conn.cursor() as cur:

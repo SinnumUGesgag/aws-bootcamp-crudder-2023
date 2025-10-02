@@ -15,15 +15,18 @@ from lib.db import InteractSQLDB
 
 # Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
-    'endpoint_url': 'http://127.0.0.1:8000'
+    #'endpoint_url': 'http://127.0.0.1:8000'
+    'endpoint_url': 'http://dynamodb-local:8000'
 }
 
 
-if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
-    if "prod" in sys.argv[1]:   # if first argument is prod
-        attribute = {}
+# if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
+#     if "prod" in sys.argv[1]:   # if first argument is prod
+#         attributes = {}
 
+print(f"""---- Attributes Passed Into boto3.client() : {attributes}  ||||""")
 dyDbClient = boto3.client('dynamodb', **attributes)
+print(f"""---- Client Returned from boto3.client() : {dyDbClient}  ||||""")
 
 myMock_User_handle = 'Test_User'
 table_name = 'cruddur_messages'
@@ -40,13 +43,18 @@ def get_my_user_uuids():
         WHERE
             users.handle = %(handle)s  
     """
-    pSQLocalUrl = 'PSQL_CRUDDUER_LH_URL'
-    uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'handle': myMock_User_handle })
+    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+    user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'handle': myMock_User_handle })
 
-    return uuid
+    my_uuid = user_returned.get('entry_uuid')
+
+    print(f"""---- my_uuid's Type : {type(my_uuid)} ||||""")
+
+    print(f"""---- UUID Returned from InteractSQLDB().query_user_dict : {my_uuid}  ||||""")
+    return my_uuid
 
 user_uuid = get_my_user_uuids()
-print(f"""MY USER UUID: {user_uuid}""")
+print(f"""---- MY USER UUID being Passed into dyDbClient.query() : {user_uuid} ||||""")
 
 
 query_parameters = {
@@ -59,8 +67,11 @@ query_parameters = {
     }
 }
 
+
+print(f"""---- Query_Parameters being Passed into dyDbClient.query() : {query_parameters} ||||""")
 response = dyDbClient.query(**query_parameters)
+print(f"""---- Response from dyDbClient.query() : {response} ||||""")
 
 print(json.dumps(response, sort_keys=True, indent=2))
-print(f"----- RESPONSE : {response} ||||")
+
 

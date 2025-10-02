@@ -18,7 +18,9 @@ class MessageGroups:
       pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
 
       sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
-      my_user_uuid = InteractSQLDB(pSQLocalUrl).query_value(sql, {'cognito_user_id': cognito_user_id})
+      user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'cognito_user_id': cognito_user_id})
+
+      my_user_uuid = user_returned.get('entry_uuid')
 
       dyDbClient = InteractDyDb.client()
       data = InteractDyDb.list_message_groups(dyDbClient, my_user_uuid)
