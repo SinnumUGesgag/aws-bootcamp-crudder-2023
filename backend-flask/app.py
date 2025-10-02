@@ -163,17 +163,34 @@ def data_message_groups():
   #user_handle  = 'andrewbrown'
 
 
-@app.route("/api/messages/@<string:handle>", methods=['GET'])
-def data_messages(handle):
-  user_sender_handle = 'andrewbrown'
-  user_receiver_handle = request.args.get('user_reciever_handle')
+@app.route("/api/messages/<string:message_group_uuid>", methods=['GET'])
+def data_messages(message_group_uuid):
+  app.logger.info(f"------- DATA MESSAGES -------")
+  auth_header = request.headers.get("Authorization")
 
-  model = Messages.run(user_sender_handle=user_sender_handle, user_receiver_handle=user_receiver_handle)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
-  return
+  access_token = CogitoTokenVerification.extract_access_token(auth_header)
+
+  app.logger.info(f"------- Data_Messages : auth_header : {auth_header} ||||")
+  app.logger.info(f"-------  Data_Messages : Access Token: {access_token} ||||")
+
+  try:
+    claims = jwt_service.verify(access_token)
+
+    cognito_user_id = claims['sub']
+    app.logger.info(f"---- DATA Message : Cognito User ID : {cognito_user_id} ||||")
+    app.logger.info(f"---- DATA Message : MSG UUID : {message_group_uuid} ||||")
+
+    model = Messages.run(message_group_uuid=message_group_uuid,cognito_user_id=cognito_user_id)
+
+    app.logger.info(f"---- DATA MGS : MODEL RETURNED : {model} ||||")
+
+    if model['errors'] is not None:
+      return model['errors'], 422
+    else:
+      return model['data'], 200
+  except TokenVerifyError as e:
+    data = HomeActivities.run(LOGGER)
+    return {}, 401
 
 @app.route("/api/messages", methods=['POST','OPTIONS'])
 @cross_origin()

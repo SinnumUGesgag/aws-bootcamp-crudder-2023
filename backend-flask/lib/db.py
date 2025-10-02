@@ -13,12 +13,12 @@ import os
 class InteractSQLDB:
 	def __init__(self, pSQLocalUrl):
 
-		valid_d = 'PSQL_CRUDDUER_DB_URL'
-		valid_l = 'PSQL_CRUDDUER_LH_URL'
+		valid_d = 'PSQL_CRUDDUR_DB_URL'
+		valid_l = 'PSQL_CRUDDUR_LH_URL'
 		
 		# small security measure to make sure the PSYCOPG pool isn't somehow manipulated incorrectly
 		if (pSQLocalUrl == valid_d):
-			pSQLocalUrl = os.getenv("PSQL_CRUDDUER_DB_URL")
+			pSQLocalUrl = os.getenv("PSQL_CRUDDUR_DB_URL")
 		elif (pSQLocalUrl == valid_l):
 			pSQLocalUrl = 'postgresql://postgres:password@localhost:5432/cruddur'
 		else:

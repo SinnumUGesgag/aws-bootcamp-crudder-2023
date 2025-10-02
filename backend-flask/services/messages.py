@@ -1,27 +1,53 @@
 from datetime import datetime, timedelta, timezone
+from lib.db   import InteractSQLDB
+from lib.dydb import InteractDyDb
+# from lib.memento import MomentoCounter
+
 class Messages:
-  def run(user_sender_handle, user_receiver_handle):
+  def run(message_group_uuid,cognito_user_id):
     model = {
       'errors': None,
       'data': None
     }
 
-    now = datetime.now(timezone.utc).astimezone()
+    data = None
+    errors = None
+    try:
+      # need to use this to verify user is the correct
+      # user before showing them the messages of the group  ---->
+      pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
+      sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
+      user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'cognito_user_id': cognito_user_id})
+      my_user_uuid = user_returned.get('entry_uuid') 
+      # < ----
 
-    results = [
-      {
-        'uuid': '4e81c06a-db0f-4281-b4cc-98208537772a' ,
-        'display_name': 'Andrew Brown',
-        'handle':  'andrewbrown',
-        'message': 'Cloud is fun!',
-        'created_at': now.isoformat()
-      },
-      {
-        'uuid': '66e12864-8c26-4c3a-9658-95a10f8fea67',
-        'display_name': 'Andrew Brown',
-        'handle':  'andrewbrown',
-        'message': 'This platform is great!',
-        'created_at': now.isoformat()
-    }]
-    model['data'] = results
+      dyDbClient = InteractDyDb.client()
+      data = InteractDyDb.list_messages(dyDbClient, message_group_uuid)
+
+      if data == []:
+        errors = {
+          (f"!!!! No Data Returned From DyDb !!!!"),
+          (f"---- MY USER UUID Returned : {my_user_uuid} ||||"),
+          (f"---- dyDbClient : {dyDbClient} ||||"),
+          (f"---- MY MS Group UUID Passed into DyDb Client: {message_group_uuid} ||||"),
+          (f"||||^^^^ ERRORS ABOVE ^^^^||||")
+        }
+    except Exception as e:
+      errors = {
+        e,
+          (f"!!!! Verify Containers, Endpoints, & DyDbClient !!!!"),
+          (f"---- MY USER UUID Returned : {my_user_uuid} ||||"),
+          (f"---- dyDbClient : {dyDbClient} ||||"),
+          (f"---- MY MS Group UUID Passed into DyDb Client: {message_group_uuid} ||||"),
+          (f"||||^^^^ ERRORS ABOVE ^^^^||||")
+      }
+
+    # #MomentoCounter.reset(f"msgs/{user_handle}"")
+    # model[ 'data' ] = data
+
+    model = {
+      'errors': errors,
+      'data': data
+    }
+
     return model

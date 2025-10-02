@@ -15,7 +15,7 @@ class MessageGroups:
     data = None
     errors = None
     try:
-      pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+      pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
 
       sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
       user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'cognito_user_id': cognito_user_id})

@@ -64,7 +64,7 @@ class CreateActivity:
 
 
   def create_activity(handle, message, expires_at):
-    pSQLocalUrl = 'PSQL_CRUDDUER_DB_URL'
+    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
     sql = InteractSQLDB(pSQLocalUrl).template('/activities','/create')
     return InteractSQLDB(pSQLocalUrl).query_commit_returning_id(sql, {
       'handle': handle,

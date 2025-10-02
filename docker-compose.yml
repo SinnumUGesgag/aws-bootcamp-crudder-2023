@@ -29,7 +29,7 @@ services:
       AWS_COGNITO_REDIRECT_URL: "${AWS_COGNITO_REDIRECT_URL}"
       # <---
       # PSQL & AWS RDS --->
-      PSQL_CRUDDUER_DB_URL: "${PSQL_CRUDDUER_DB_URL}"
+      PSQL_CRUDDUR_DB_URL: "${PSQL_CRUDDUR_DB_URL}"
       #<---
     build: ./backend-flask
     ports:

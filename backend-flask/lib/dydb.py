@@ -20,12 +20,12 @@ class InteractDyDb:
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            #'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
-            'KeyConditionExpression': 'pk = :pkID',
+            'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+            #'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributeValues': {
-            #':year': {'S': f"{current_year}"},
+            ':year': {'S': f"{current_year}"},
             ':pkID': {'S': f"GRP#{my_user_uuid}"}
             }
         }
@@ -49,13 +49,16 @@ class InteractDyDb:
         return results
     
     def list_messages(client, message_group_uuid):
+        current_year = datetime.now().year
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            'KeyConditionExpression': 'pk = :pkID',
+            'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+            #'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributesValues': {
+                ':year': {'S': f"{current_year}"},
                 ':pkID': {'S', f"MSG#{message_group_uuid}"}
             }
         }

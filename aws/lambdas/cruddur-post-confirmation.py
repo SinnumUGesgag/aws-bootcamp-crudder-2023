@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 		print('----SQL----')
 		print(sql)
 
-		conn = psycopg2.connect(os.getenv('PSQL_CRUDDUER_DB_URL'))
+		conn = psycopg2.connect(os.getenv('PSQL_CRUDDUR_DB_URL'))
 		cur = conn.cursor()
 		
 		cur.execute(sql, *parameters)
