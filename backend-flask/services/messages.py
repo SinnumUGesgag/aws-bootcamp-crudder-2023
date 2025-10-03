@@ -29,7 +29,7 @@ class Messages:
           (f"!!!! No Data Returned From DyDb !!!!"),
           (f"---- MY USER UUID Returned : {my_user_uuid} ||||"),
           (f"---- dyDbClient : {dyDbClient} ||||"),
-          (f"---- MY MS Group UUID Passed into DyDb Client: {message_group_uuid} ||||"),
+          (f"---- MY Message Group UUID Passed into DyDb Client: {message_group_uuid} ||||"),
           (f"||||^^^^ ERRORS ABOVE ^^^^||||")
         }
     except Exception as e:

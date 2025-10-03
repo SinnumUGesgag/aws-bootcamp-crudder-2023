@@ -8,10 +8,10 @@ class InteractDyDb:
     def client():
         endpoint_url = os.getenv('AWS_DYDB_ENDPOINT_URL')
         #endpoint_url = "http://dynamodb-local:8000"
+        attributes = {}
         if endpoint_url:
             attributes = {'endpoint_url': endpoint_url}
-        else:
-            attributes = {}
+
         dyanmoDB = boto3.client('dynamodb', **attributes)
         return dyanmoDB
     
