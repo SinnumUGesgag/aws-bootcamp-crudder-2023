@@ -16,8 +16,8 @@ from lib.db import InteractSQLDB
 
 # Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
-    #'endpoint_url': 'http://127.0.0.1:8000'
-    'endpoint_url': 'http://dynamodb-local:8000'
+    'endpoint_url': 'http://127.0.0.1:8000'
+    #'endpoint_url': 'http://dynamodb-local:8000'
 }
 
 
@@ -44,7 +44,7 @@ def get_my_user_uuids():
         WHERE
             users.handle = %(handle)s  
     """
-    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
+    pSQLocalUrl = 'PSQL_CRUDDUR_LH_URL'
     user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'handle': myMock_User_handle })
 
     my_uuid = user_returned.get('entry_uuid')

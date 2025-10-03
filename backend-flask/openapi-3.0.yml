@@ -104,7 +104,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MessageGroup'
-  /api/messages/@{handle}:
+  /api/messages/{message_group_uuid}:
     get:
       description: 'Returns private communication between two users'
       tags:

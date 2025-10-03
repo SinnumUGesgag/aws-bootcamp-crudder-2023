@@ -57,9 +57,9 @@ class InteractDyDb:
             #'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
-            'ExpressionAttributesValues': {
+            'ExpressionAttributeValues': {
                 ':year': {'S': f"{current_year}"},
-                ':pkID': {'S', f"MSG#{message_group_uuid}"}
+                ':pkID': {'S': f"MSG#{message_group_uuid}"}
             }
         }
 
@@ -68,7 +68,7 @@ class InteractDyDb:
         results = []
 
         for item in items:
-            last_sent_at     = item['sk']['S']
+            created_at     = item['sk']['S']
             results.append({
                 'uuid': item['message_uuid']['S'],
                 'display_name': item['user_display_name']['S'],
