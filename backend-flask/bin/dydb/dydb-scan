@@ -4,7 +4,6 @@ import boto3
 import sys
 
 
-
 # Setting Essetinal Attributes for our Client ---------------- >
 attributes = {  # point boto3 client at the dynamoDB container we have running locally
     'endpoint_url': 'http://localhost:8000'
