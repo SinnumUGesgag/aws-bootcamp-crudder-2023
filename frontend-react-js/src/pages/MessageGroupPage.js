@@ -41,7 +41,8 @@ export default function MessageGroupPage() {
 
   const loadMessageGroupData = async () => {
     try {
-      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages/${params.message_group_uuid}`
+      const uuid = params.message_group_uuid;
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages/${uuid}`
       const res = await fetch(backend_url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`
@@ -68,7 +69,7 @@ export default function MessageGroupPage() {
     loadMessageGroupsData();
     loadMessageGroupData();
     checkAuth(setUser);
-  }, [])
+  }, [setUser])
   return (
     <article>
       <DesktopNavigation user={user} active={'home'} setPopped={setPopped} />
