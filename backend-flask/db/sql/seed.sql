@@ -1,9 +1,9 @@
 
 INSERT INTO public.users (display_name, handle, email, cognito_user_id) 
 VALUES
-	('Primer User', 'primeruser', 'primeruser@mock.com', 'MockA'),
-	('Mock User', 'mockuser', 'mockUser@mock.com', 'MockB'),
-	('Andrew Brown', 'andrewbrown', 'andrewbrown@mock.com', 'MockC'),
+	('Primer User', 'primeruser', 'primeruser@mock.com', 'MockPrime'),
+	('Mock User', 'mockuser', 'mockUser@mock.com', 'MockU'),
+	('Andrew Brown', 'andrewbrown', 'andrewbrown@mock.com', 'MockAndrew'),
 	('TestUser', 'Test_User','mich.shrader@gmail.com', 'e17b95c0-3021-7086-750b-c8644071bfe5');
 
 

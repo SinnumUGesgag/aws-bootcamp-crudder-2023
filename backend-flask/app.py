@@ -13,6 +13,7 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
+from services.users_short import *
 
 # Customized Token Verification Solution w/ Cognito --->
   # Referenced for ideas: https://github.com/cgauge/Flask-AWSCognito/blob/master/flask_awscognito/plugin.py
@@ -320,6 +321,10 @@ def data_activities_reply(activity_uuid):
 # 	return "Hello Rollbar!"
 # <---
 
+@app.route("/api/users/@<string:handle>/short", methods=['GET'])
+def data_users_short(handle):
+  data = UsersShort.run(handle)
+  return data, 200
 
 
 if __name__ == "__main__":

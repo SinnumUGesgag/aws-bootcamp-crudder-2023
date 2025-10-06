@@ -87,6 +87,8 @@ class CreateMessage:
        
       errors.update({'System Errors': model['errors']})
 
+      # following error hanlding is used to only test Errors for create_mesage.py       ---->
+      # will cause Errors for any other Script/Code that invokes CreateMessage.run()    ---->
       # if (model['errors'] == None):
       #   model['errors'] = {
       #     (f"----- INPUTS : ---- mode : {mode} ||||"),
@@ -100,5 +102,6 @@ class CreateMessage:
       #     (f"---- Responses : ---- other_user : {other_user} ||||"),
       #    (f"---- !!!! Responses : !!!! CRITICAL ERRORS : {errors} ||||")
       #   }
+      # <----------
 
     return model
