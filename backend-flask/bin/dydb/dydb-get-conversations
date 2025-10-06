@@ -64,6 +64,7 @@ print(f"""--------------- RESPONSE --------------""")
 print(f""" {response} """)
 
 items = response['Items']
+items.reverse()
 
 print(f"""--------------- ITEMS --------------""")
 print(f""" {items} """)

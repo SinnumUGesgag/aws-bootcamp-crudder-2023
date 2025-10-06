@@ -195,16 +195,42 @@ def data_messages(message_group_uuid):
 @app.route("/api/messages", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_create_message():
-  user_sender_handle = 'andrewbrown'
-  user_receiver_handle = request.json['user_receiver_handle']
-  message = request.json['message']
 
-  model = CreateMessage.run(message=message,user_sender_handle=user_sender_handle,user_receiver_handle=user_receiver_handle)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
-  return
+  user_receiver_handle = request.json['handle']
+  message_group_uuid = request.json['message_group_uuid']
+  message = request.json['message']
+ 
+  app.logger.info(f"------- DATA CREATE MESSAGES -------")
+  auth_header = request.headers.get("Authorization")
+
+  access_token = CogitoTokenVerification.extract_access_token(auth_header)
+
+  app.logger.info(f"------- data_create_message : auth_header : {auth_header} ||||")
+  app.logger.info(f"-------  data_create_message : Access Token: {access_token} ||||")
+
+  try:
+    claims = jwt_service.verify(access_token)
+
+    cognito_user_id = claims['sub']
+    app.logger.info(f"---- data_create_message : Cognito User ID : {cognito_user_id} ||||")
+    app.logger.info(f"---- data_create_message : MSG UUID : {message_group_uuid} ||||")
+
+    model = CreateMessage.run(
+      message=message,
+      cognito_user_id=cognito_user_id,
+      message_group_uuid=message_group_uuid,
+      user_receiver_handle=user_receiver_handle
+    )
+
+    app.logger.info(f"---- data_create_message : MODEL RETURNED : {model} ||||")
+
+    if model['errors'] is not None:
+      return model['errors'], 422
+    else:
+      return model['data'], 200
+  except TokenVerifyError as e:
+    data = HomeActivities.run(LOGGER)
+    return {}, 401
 
 @app.route("/api/activities/home", methods=['GET'])
 #@aws_auth.authentication_required

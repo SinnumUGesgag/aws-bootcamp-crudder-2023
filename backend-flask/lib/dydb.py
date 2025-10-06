@@ -65,6 +65,7 @@ class InteractDyDb:
 
         response = client.query(**query_parameters)
         items = response['Items']
+        items.reverse() # returns the items in a descending order instead of ascending order
         results = []
 
         for item in items:
@@ -134,7 +135,7 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
         print(f"---- Client Error: {e} ||||")
 
 
-def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
+def R(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
     now = datetime.now(timezone.utc).astimezone().isoformat()
     created_at = now
     message_uuid = str(uuid.uuid4())

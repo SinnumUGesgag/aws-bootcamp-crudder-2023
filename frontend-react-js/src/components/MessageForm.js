@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 // Cognito --->
 import checkAuth from '../lib/CheckAuth';
+import { json } from 'stream/consumers';
 // <---
 
 export default function ActivityForm(props) {
@@ -23,6 +24,15 @@ export default function ActivityForm(props) {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages`
       console.log('onsubmit payload', message)
+
+      json = {message: message}
+    
+      if(params.handle){
+        json.handle = params.handle
+      }else{
+        json.message_group_uuid = params.message_group_uuid
+      }
+
       const res = await fetch(backend_url, {
         method: "POST",
         headers: {
@@ -30,10 +40,7 @@ export default function ActivityForm(props) {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          message: message,
-          user_receiver_handle: params.handle
-        }),
+        body: JSON.stringify(json),
       });
       let data = await res.json();
       if (res.status === 200) {
