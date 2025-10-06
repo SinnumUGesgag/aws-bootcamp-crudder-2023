@@ -1,12 +1,7 @@
 import './MessageForm.css';
 import React from "react";
 import process from 'process';
-import { useParams } from 'react-router-dom';
-
-// Cognito --->
-import checkAuth from '../lib/CheckAuth';
-import { json } from 'stream/consumers';
-// <---
+import { json, useParams } from 'react-router-dom';
 
 export default function ActivityForm(props) {
   const [count, setCount] = React.useState(0);
@@ -25,7 +20,7 @@ export default function ActivityForm(props) {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages`
       console.log('onsubmit payload', message)
 
-      json = {message: message}
+      let json = {message: message}
     
       if(params.handle){
         json.handle = params.handle

@@ -196,10 +196,11 @@ def data_messages(message_group_uuid):
 @cross_origin()
 def data_create_message():
 
-  user_receiver_handle = request.json['handle']
-  message_group_uuid = request.json['message_group_uuid']
+  user_receiver_handle = request.json.get('handle',None)
+  message_group_uuid = request.json.get('message_group_uuid',None)
   message = request.json['message']
- 
+
+
   app.logger.info(f"------- DATA CREATE MESSAGES -------")
   auth_header = request.headers.get("Authorization")
 
@@ -215,12 +216,20 @@ def data_create_message():
     app.logger.info(f"---- data_create_message : Cognito User ID : {cognito_user_id} ||||")
     app.logger.info(f"---- data_create_message : MSG UUID : {message_group_uuid} ||||")
 
-    model = CreateMessage.run(
-      message=message,
-      cognito_user_id=cognito_user_id,
-      message_group_uuid=message_group_uuid,
-      user_receiver_handle=user_receiver_handle
-    )
+    if(message_group_uuid == None):
+      model = CreateMessage.run(
+        mode="Create",
+        message=message,
+        cognito_user_id=cognito_user_id,
+        user_receiver_hand=user_receiver_handle
+      )
+    else:
+      model = CreateMessage.run(
+        mode="Update",
+        message=message,
+        cognito_user_id=cognito_user_id,
+        message_group_uuid=message_group_uuid
+      )
 
     app.logger.info(f"---- data_create_message : MODEL RETURNED : {model} ||||")
 

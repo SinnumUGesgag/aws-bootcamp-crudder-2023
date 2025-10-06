@@ -79,92 +79,92 @@ class InteractDyDb:
             })
         return results
         
-def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
-    table_name = 'cruddur_messages'
+    def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
+        table_name = 'cruddur_messages'
 
-    message_group_uuid = str(uuid.uuid4())
-    message_uuid = str(uuid.uuid4())
-    now = datetime.now(timezone.utc).astimezone().isoformat()
-    last_message_at = now
-    create_at = now
+        message_group_uuid = str(uuid.uuid4())
+        message_uuid = str(uuid.uuid4())
+        now = datetime.now(timezone.utc).astimezone().isoformat()
+        last_message_at = now
+        create_at = now
 
-    message_group = {
-        'pk': {'S': f"GPR#{my_user_uuid}"},
-        'sk': {'S': last_message_at},
-        'message_group_uuid': {'S': message_group_uuid},
-        'message': {'S': message},
-        'user_uuid': {'S': other_user_uuid},
-        'user_display_name': {'S': other_user_display_name},
-        'user_handle': {'S': other_user_handle}
-    }
+        message_group = {
+            'pk': {'S': f"GPR#{my_user_uuid}"},
+            'sk': {'S': last_message_at},
+            'message_group_uuid': {'S': message_group_uuid},
+            'message': {'S': message},
+            'user_uuid': {'S': other_user_uuid},
+            'user_display_name': {'S': other_user_display_name},
+            'user_handle': {'S': other_user_handle}
+        }
 
-    message = {
-        'pk': {'S': f"MSG#{message_group_uuid}"},
-        'sk': {'S': created_at},
-        'message_uuid': {'S': message_group_uuid},
-        'message': {'S': message},
-        'user_uuid': {'S': user_uuid},
-        'user_display_name': {'S': user_display_name},
-        'user_handle': {'S': user_handle}
-    }
+        message = {
+            'pk': {'S': f"MSG#{message_group_uuid}"},
+            'sk': {'S': created_at},
+            'message_uuid': {'S': message_group_uuid},
+            'message': {'S': message},
+            'user_uuid': {'S': user_uuid},
+            'user_display_name': {'S': user_display_name},
+            'user_handle': {'S': user_handle}
+        }
 
-    items = {
-        table_name: [
-            {'Put': {'Item': message_group}},
-            {'Put': {'Item': message}}
-        ]
-    }
+        items = {
+            table_name: [
+                {'Put': {'Item': message_group}},
+                {'Put': {'Item': message}}
+            ]
+        }
 
-    return {
-        'message_group_uuid': message_group_uuid,
-        'uuid': my_user_uuid,
-        'display_name': my_user_display_name,
-        'handle': my_user_handle,
-        'message': message,
-        'created_at': created_at
-    }
+        return {
+            'message_group_uuid': message_group_uuid,
+            'uuid': my_user_uuid,
+            'display_name': my_user_display_name,
+            'handle': my_user_handle,
+            'message': message,
+            'created_at': created_at
+        }
 
-    try:
-        # Transaction - Attempting to Write to the DB
-        with dynamodb_resource.meta.client.transact_write_items(RequiredItems=items) as transaction:
-            print(f"|||||||| Transaction Started --------")
-            aaa
-            print(f"-------- Transaction Committed ||||||||")
-            print(f"---- Response: {response} ||||")
-    except ClientError as e:
-        print(f"---- Client Error: {e} ||||")
-
-
-def R(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
-    now = datetime.now(timezone.utc).astimezone().isoformat()
-    created_at = now
-    message_uuid = str(uuid.uuid4())
-
-    record = {
-        'pk': {'S': f"MSG#{message_group_uuid}"},
-        'sk': {'S': created_at},
-        'message_uuid': {'S': message_uuid},
-        'message': {'S': message},
-        'user_uuid': {'S': my_user_uuid},
-        'user_display_name': {'S': my_user_display_name},
-        'user_handle': {'S': my_user_handle}
-    }
-
-    # insert into table
-    table_name = 'cruddur_messages'
-    response = client.put_item(
-        TableName=table_name,
-        Item=record
-    )
+        try:
+            # Transaction - Attempting to Write to the DB
+            with dynamodb_resource.meta.client.transact_write_items(RequiredItems=items) as transaction:
+                print(f"|||||||| Transaction Started --------")
+                aaa
+                print(f"-------- Transaction Committed ||||||||")
+                print(f"---- Response: {response} ||||")
+        except ClientError as e:
+            print(f"---- Client Error: {e} ||||")
 
 
-    print(f"---- client Response: {response} ||||")
+    def create_message(client, message_group_uuid, message, my_user_uuid, my_user_display_name, my_user_handle):
+        now = datetime.now(timezone.utc).astimezone().isoformat()
+        created_at = now
+        message_uuid = str(uuid.uuid4())
 
-    return{
-        'message_group_uuid': message_group_uuid,
-        'uuid': my_user_uuid,
-        'display_name': my_user_display_name,
-        'handle': my_user_handle,
-        'message': message,
-        'created_at': created_at
-    }
+        record = {
+            'pk': {'S': f"MSG#{message_group_uuid}"},
+            'sk': {'S': created_at},
+            'message_uuid': {'S': message_uuid},
+            'message': {'S': message},
+            'user_uuid': {'S': my_user_uuid},
+            'user_display_name': {'S': my_user_display_name},
+            'user_handle': {'S': my_user_handle}
+        }
+
+        # insert into table
+        table_name = 'cruddur_messages'
+        response = client.put_item(
+            TableName=table_name,
+            Item=record
+        )
+
+
+        print(f"---- client Response: {response} ||||")
+
+        return{
+            'message_group_uuid': message_group_uuid,
+            'uuid': my_user_uuid,
+            'display_name': my_user_display_name,
+            'handle': my_user_handle,
+            'message': message,
+            'created_at': created_at
+        }
