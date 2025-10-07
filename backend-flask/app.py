@@ -197,8 +197,8 @@ def data_messages(message_group_uuid):
 @cross_origin()
 def data_create_message():
 
-  user_receiver_handle = request.json.get('handle',None)
-  message_group_uuid = request.json.get('message_group_uuid',None)
+  user_receiver_handle = request.json.get('user_receiver_handle')
+  message_group_uuid = request.json.get('message_group_uuid')
   message = request.json['message']
 
 
@@ -216,13 +216,15 @@ def data_create_message():
     cognito_user_id = claims['sub']
     app.logger.info(f"---- data_create_message : Cognito User ID : {cognito_user_id} ||||")
     app.logger.info(f"---- data_create_message : MSG UUID : {message_group_uuid} ||||")
+    app.logger.info(f"---- data_create_message : user_receiver_handle : {user_receiver_handle} ||||")
+    app.logger.info(f"---- data_create_message : message : {message} ||||")
 
     if(message_group_uuid == None):
       model = CreateMessage.run(
         mode="Create",
         message=message,
         cognito_user_id=cognito_user_id,
-        user_receiver_hand=user_receiver_handle
+        user_receiver_handle=user_receiver_handle
       )
     else:
       model = CreateMessage.run(

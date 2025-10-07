@@ -48,7 +48,7 @@ Amplify.configure( {
 });
 
 // You can get the current config object
-const currentConfig = Auth.configure();
+//const currentConfig = Auth.configure();
 
 // <---
 

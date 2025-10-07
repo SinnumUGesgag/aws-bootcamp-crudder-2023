@@ -20,13 +20,14 @@ export default function ActivityForm(props) {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages`
       console.log('onsubmit payload', message)
 
-      let json = {message: message}
-    
+      let json = {'message': message}
+
       if(params.handle){
-        json.handle = params.handle
+        json.user_receiver_handle = params.handle
       }else{
         json.message_group_uuid = params.message_group_uuid
       }
+      console.log("-------- MESSAGE FORMS : backend_url  :", backend_url)
 
       const res = await fetch(backend_url, {
         method: "POST",
@@ -39,7 +40,13 @@ export default function ActivityForm(props) {
       });
       let data = await res.json();
       if (res.status === 200) {
-        props.setMessages(current => [...current,data]);
+        console.log('data:',data)
+        if(data.message_group_uuid){
+          console.log('redirect to message group')
+          window.location.href = `/messages/${data.message_group_uuid}`
+        }else{
+          props.setMessages(current => [...current,data]);
+        }
       } else {
         console.log(res)
       }

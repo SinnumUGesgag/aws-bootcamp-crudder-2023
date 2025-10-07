@@ -36,7 +36,7 @@ class CreateMessage:
       # return what we provided
       model['data'] = {
         'display_name': 'Andrew Brown',
-        'handle':  user_sender_handle,
+        'handle':  user_receiver_handle,
         'message': message
       }
     else:
@@ -54,7 +54,7 @@ class CreateMessage:
       print(f"-------- CreateMessage : Returned by InteractSQLDB : {users} <<<<||||")
 
       my_user     =   next((item for item in users if item["kind"] == 'sender'), None)
-      other_user  =   next((item for item in users if item["kind"] == '????'), None)
+      other_user  =   next((item for item in users if item["kind"] == 'recv'), None)
 
       print(f"-------- CreateMesssage :: My User:{my_user} && Other User:{other_user} <<<<||||")
 
@@ -75,6 +75,7 @@ class CreateMessage:
         elif (mode == "Create"):
           model['data'] = InteractDyDb.create_message_group(
             client=dyDBclient,
+            message=message,
             my_user_uuid=my_user['entry_uuid'],
             my_user_display_name=my_user['display_name'],
             my_user_handle=my_user['handle'],

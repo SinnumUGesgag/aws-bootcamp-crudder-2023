@@ -1,4 +1,5 @@
 import boto3
+import botocore.exceptions
 import sys
 from datetime import datetime, timedelta, timezone
 import uuid
@@ -79,16 +80,16 @@ class InteractDyDb:
             })
         return results
         
-    def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
+    def create_message_group(client, my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
         table_name = 'cruddur_messages'
 
         message_group_uuid = str(uuid.uuid4())
         message_uuid = str(uuid.uuid4())
         now = datetime.now(timezone.utc).astimezone().isoformat()
         last_message_at = now
-        create_at = now
+        created_at = now
 
-        message_group = {
+        my_message_group = {
             'pk': {'S': f"GPR#{my_user_uuid}"},
             'sk': {'S': last_message_at},
             'message_group_uuid': {'S': message_group_uuid},
@@ -98,41 +99,56 @@ class InteractDyDb:
             'user_handle': {'S': other_user_handle}
         }
 
+        other_message_group = {
+            'pk': {'S': f"GPR#{other_user_uuid}"},
+            'sk': {'S': last_message_at},
+            'message_group_uuid': {'S': message_group_uuid},
+            'message': {'S': message},
+            'user_uuid': {'S': my_user_uuid},
+            'user_display_name': {'S': my_user_display_name},
+            'user_handle': {'S': my_user_handle}
+        }
+
         message = {
             'pk': {'S': f"MSG#{message_group_uuid}"},
             'sk': {'S': created_at},
             'message_uuid': {'S': message_group_uuid},
             'message': {'S': message},
-            'user_uuid': {'S': user_uuid},
-            'user_display_name': {'S': user_display_name},
-            'user_handle': {'S': user_handle}
+            'user_uuid': {'S': my_user_uuid},
+            'user_display_name': {'S': my_user_display_name},
+            'user_handle': {'S': my_user_handle}
         }
 
         items = {
             table_name: [
-                {'Put': {'Item': message_group}},
-                {'Put': {'Item': message}}
+                {'PutRequest': {'Item': my_message_group}},
+                {'PutRequest': {'Item': other_message_group}},
+                {'PutRequest': {'Item': message}}
             ]
         }
 
-        return {
-            'message_group_uuid': message_group_uuid,
-            'uuid': my_user_uuid,
-            'display_name': my_user_display_name,
-            'handle': my_user_handle,
-            'message': message,
-            'created_at': created_at
-        }
-
         try:
-            # Transaction - Attempting to Write to the DB
-            with dynamodb_resource.meta.client.transact_write_items(RequiredItems=items) as transaction:
-                print(f"|||||||| Transaction Started --------")
-                aaa
-                print(f"-------- Transaction Committed ||||||||")
-                print(f"---- Response: {response} ||||")
-        except ClientError as e:
-            print(f"---- Client Error: {e} ||||")
+            response = client.batch_write_item(RequestItems=items)
+            return {
+                'message_group_uuid': message_group_uuid,
+                # 'uuid': my_user_uuid,
+                # 'display_name': my_user_display_name,
+                # 'handle': my_user_handle,
+                # 'message': message,
+                # 'created_at': created_at
+            }
+        except botocore.exceptions.ClientError as e:
+            return(f"-------- DyDb : Create MEssage Groups ERRORs: {e} && CreatedAT: {created_at}")
+
+        # try:
+        #     # Transaction - Attempting to Write to the DB
+        #     with dynamodb_resource.meta.client.transact_write_items(RequiredItems=items) as transaction:
+        #         print(f"|||||||| Transaction Started --------")
+        #         aaa
+        #         print(f"-------- Transaction Committed ||||||||")
+        #         print(f"---- Response: {response} ||||")
+        # except ClientError as e:
+        #     print(f"---- Client Error: {e} ||||")
 
 
     def create_message(client, message_group_uuid, message, my_user_uuid, my_user_display_name, my_user_handle):

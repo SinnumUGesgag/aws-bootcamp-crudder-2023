@@ -11,7 +11,6 @@ import MessagesForm from '../components/MessageForm';
 import checkAuth from '../lib/CheckAuth';
 // <---
 
-//he named this MessageGroupPage() but it should be named after the js file, I think
 export default function MessageGroupPage() {
     const [otherUser, setOtherUser] = React.useState([]);
     const [messageGroups, setMessageGroups] = React.useState([]);
@@ -44,7 +43,7 @@ export default function MessageGroupPage() {
 
   const loadMessageGroupsData = async () => {
     try {
-      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messsage_groups`
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
       const res = await fetch(backend_url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`
@@ -67,7 +66,7 @@ export default function MessageGroupPage() {
     //prevents double call
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
-
+    
     loadMessageGroupsData();
     loadUserShortData();
     checkAuth(setUser);
