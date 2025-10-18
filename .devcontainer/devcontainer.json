@@ -24,26 +24,28 @@
 				"dsznajder.es7-react-js-snippets"
 			]
 		}
+	},
+	"onCreateCommand": {
+		"postgres": [
+			"sudo apt update",
+			"sudo apt install -y curl ca-certificates",
+			"sudo install -d /usr/share/postgresql-common/pgdg",
+			"sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc",
+			". /etc/os-release",
+			"sudo sh -c echo 'deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $VERSION_CODENAME-pgdg main' > /etc/apt/sources.list.d/pgdg.list",
+			"sudo apt update",
+			"sudo apt -y install postgresql libpq-dev"
+		],
+		"flask": [
+			"cd /workspace/backend-flask",
+			"pip install -r requirements.txt"
+		],
+		"react-js": [
+			"cd /workspace/frontend-react-js",
+			"npm i"
+		]
 	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Uncomment the next line if you want start specific services in your Docker Compose config.
-	// "runServices": [],
-
-	// Uncomment the next line if you want to keep your containers running after VS Code shuts down.
-	// "shutdownAction": "none",
-
-	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "cat /etc/os-release",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "devcontainer"
+	// "build": { 
+	// 	"dockerfile": "/workspaces/aws-bootcamp-crudder-2023/docker-compose.yml"
+	// }
 }
