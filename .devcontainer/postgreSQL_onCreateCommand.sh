@@ -1,5 +1,8 @@
 #! /bin/bash
-cd /workspaces/aws-bootcamp-crudder-2023/
+
+cd ..
+cd ..
+cd workspaces/aws-bootcamp-crudder-2023
 
 sudo apt install curl ca-certificates
 sudo install -d /usr/share/postgresql-common/pgdg
