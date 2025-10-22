@@ -28,9 +28,5 @@
 			]
 		}
 	},
-	"postCreateCommand": [
-		"bash .devcontainer/postgreSQL_onCreateCommand.sh",
-		"bash .devcontainer/flask_onCreateCommand.sh",
-		"bash .devcontainer/reactJS_onCreateCommand.sh"
-	]
+	"postCreateCommand": "bash .devcontainer/post_Create_CommandS.sh"
 }
