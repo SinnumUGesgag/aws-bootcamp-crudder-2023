@@ -28,5 +28,20 @@
 			]
 		}
 	},
-	"postCreateCommand": "bash .devcontainer/post_Create_CommandS.sh"
+	"postCreateCommand": "bash .devcontainer/post_Create_CommandS.sh",
+	"appPort": [3000, 4567, 5432, 8000],
+	"portsAttributes": {
+    	"3000": {
+			"label": "FRONTEND-React-JS"
+		},
+		"4567": {
+			"label": "BACKEND-Flask"
+		},
+		"5432": {
+			"label": "PostgreSQL"
+		},
+		"8000": {
+			"label": "Dynamodb-Local"
+		}
+    }
 }
