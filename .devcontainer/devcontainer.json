@@ -2,12 +2,14 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
 {
 	"name": "CRUDDUR Configuration in Codespaces",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"ghcr.io/devcontainers/features/aws-cli:1": {},
 		"ghcr.io/devcontainers/features/python:1": {},
 		"ghcr.io/devcontainers-extra/features/bash-command:1": {},
-		"ghcr.io/devcontainers-extra/features/node-asdf:0": {}
+		"ghcr.io/devcontainers-extra/features/node-asdf:0": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	"remoteEnv": {
 		"AWS_CLI_AUTO_PROMPT": "on-partial"
@@ -29,7 +31,7 @@
 		}
 	},
 	"postCreateCommand": "bash .devcontainer/post_Create_CommandS.sh",
-	"appPort": [3000, 4567, 5432, 8000],
+	"forwardPorts": [3000, 4567, 5432, 8000],
 	"portsAttributes": {
     	"3000": {
 			"label": "FRONTEND-React-JS"
