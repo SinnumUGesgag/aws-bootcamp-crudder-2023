@@ -3,12 +3,12 @@ version: "3.8"
 services:
   backend-flask:
     environment:
-      AWS_DYDB_ENDPOINT_URL: "http://dynamodb-local:8000" #commented this out because the Backend will fail to launch if the DyDb has no data for it to pull, YET if the Backend isn't up then no data can be updated to the DyDB; I am going to move forward with setting up DyDb then solve this problem later on
+      AWS_DYDB_ENDPOINT_URL: "${AWS_DYDB_ENDPOINT_URL}" #commented this out because the Backend will fail to launch if the DyDb has no data for it to pull, YET if the Backend isn't up then no data can be updated to the DyDB; I am going to move forward with setting up DyDb then solve this problem later on
       AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      FRONTEND_URL: "https://3000-${CODESPACE_NAME}.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
-      BACKEND_URL: "https://4567-${CODESPACE_NAME}.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+      FRONTEND_URL: "https://${CODESPACE_NAME}-3000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+      BACKEND_URL: "https://${CODESPACE_NAME}-4567.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
       # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
       OTEL_SERVICE_NAME: "backend-flask"
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
@@ -38,7 +38,7 @@ services:
       - ./backend-flask:/backend-flask
   frontend-react-js:
     environment:
-      REACT_APP_BACKEND_URL: "https://4567-${CODESPACE_NAME}.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+      REACT_APP_BACKEND_URL: "https://${CODESPACE_NAME}-4567.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
       # Cognito --->
       REACT_APP_AWS_PROJECT_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_COGNITO_REGION: "${AWS_DEFAULT_REGION}"
