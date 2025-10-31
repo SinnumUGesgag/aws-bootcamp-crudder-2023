@@ -63,7 +63,7 @@ response = dyDBclient.create_table(
 			'KeyType': 'RANGE'
 		}],
 		'Projection': {
-			'ProjectionType': 'All'
+			'ProjectionType': 'ALL'
 		},
 		'ProvisionedThroughput': {
 			'ReadCapacityUnits': 5,
