@@ -12,8 +12,19 @@ class CreateMessage:
 
     model = {
       'errors': None,
-      'data': None
+      'data': None,
+      'logging':[]
     }
+
+    inputs_received = {
+      'mode':mode,
+      'message':message,
+      'cognito_user_id':cognito_user_id,
+      'message_group_uuid':message_group_uuid,
+      'user_receiver_handle':user_receiver_handle
+    }
+
+    model['logging'].append(f"inputs_received': {inputs_received}")
 
     if(mode == "Update"):
       if message_group_uuid == None or len(message_group_uuid) < 1:
@@ -51,58 +62,65 @@ class CreateMessage:
         'user_receiver_handle': rev_handle
       })
 
-      print(f"-------- CreateMessage : Returned by InteractSQLDB : {users} <<<<||||")
-
       my_user     =   next((item for item in users if item["kind"] == 'sender'), None)
       other_user  =   next((item for item in users if item["kind"] == 'recv'), None)
+      
+      psql_data = {
+        'sql':sql,
+        'cognito_user_id':cognito_user_id,
+        'user_receiver_handle':user_receiver_handle,
+        'my_user':my_user,
+        'other_user':other_user
+      }
 
-      print(f"-------- CreateMesssage :: My User:{my_user} && Other User:{other_user} <<<<||||")
+      model['logging'].append(f"psql_data: {psql_data}")
+        
+      my_user_uuid=my_user['entry_uuid']
+      my_user_display_name=my_user['display_name']
+      my_user_handle=my_user['handle']
+
+      try:
+        other_uuid = other_user['entry_uuid']
+      except Exception as e:
+        model['logging'].append(f"---- {e}  ||||")
+        other_uuid=None
+
+
+      if  other_uuid == None:
+        other_user_uuid=None
+        other_user_display_name=None
+        other_user_handle=None
+      else:
+        other_user_uuid=other_user['entry_uuid']
+        other_user_display_name=other_user['display_name']
+        other_user_handle=other_user['handle']
 
       try:
         errors = {}
         dyDBclient = InteractDyDb.client()
         errors.update({'dyDBclient': dyDBclient})
 
-        if(mode == "Update"):
-          model['data'] = InteractDyDb.create_message(
-            client=dyDBclient,
-            message_group_uuid=message_group_uuid,
-            message=message,
-            my_user_uuid=my_user['entry_uuid'],
-            my_user_display_name=my_user['display_name'],
-            my_user_handle=my_user['handle']
-          )
-        elif (mode == "Create"):
-          model['data'] = InteractDyDb.create_message_group(
-            client=dyDBclient,
-            message=message,
-            my_user_uuid=my_user['entry_uuid'],
-            my_user_display_name=my_user['display_name'],
-            my_user_handle=my_user['handle'],
-            other_user_uuid=other_user['entry_uuid'],
-            other_user_display_name=other_user['display_name'],
-            other_user_handle=other_user['handle']
-          )
+        model['logging'].append(f"dyDBclient: {dyDBclient}")
+
+        dyDbResponse = InteractDyDb.create_message_N_update_groups(
+          client=dyDBclient,
+          message_group_uuid=message_group_uuid,
+          message=message,
+          my_user_uuid=my_user_uuid,
+          my_user_display_name=my_user_display_name,
+          my_user_handle=my_user_handle,
+          other_user_uuid=other_user_uuid,
+          other_user_display_name=other_user_display_name,
+          other_user_handle=other_user_handle
+        )
+
+        model['logging'].append(f"dyDbResponse: {dyDbResponse}")
+
+        model['data'] = dyDbResponse
+
       except Exception as e:
         errors.update({'InteractDyDb.create_ Exception': e})
        
       errors.update({'System Errors': model['errors']})
-
-      # following error hanlding is used to only test Errors for create_mesage.py       ---->
-      # will cause Errors for any other Script/Code that invokes CreateMessage.run()    ---->
-      # if (model['errors'] == None):
-      #   model['errors'] = {
-      #     (f"----- INPUTS : ---- mode : {mode} ||||"),
-      #     (f"----- INPUTS : ---- message : {message} ||||"),
-      #     (f"----- INPUTS : ---- cognito_user_id : {cognito_user_id} ||||"),
-      #     (f"----- INPUTS : ---- message_group_uuid : {message_group_uuid} ||||"),
-      #     (f"----- INPUTS : ---- user_receiver_handle : {user_receiver_handle} ||||"),
-      #     (f"---- Responses : ---- sql : {sql} ||||"),
-      #     (f"---- Responses : ---- users : {users} ||||"),
-      #     (f"---- Responses : ---- my_user : {my_user} ||||"),
-      #     (f"---- Responses : ---- other_user : {other_user} ||||"),
-      #    (f"---- !!!! Responses : !!!! CRITICAL ERRORS : {errors} ||||")
-      #   }
-      # <----------
 
     return model
