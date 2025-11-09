@@ -176,31 +176,44 @@ class InteractDyDb:
 
         last_message_at = now
         created_at = now
+        current_year = datetime.now().year
         
-        if message_group_uuid == None:
-            # When a New Message Group is being Created then I'll need to create the UUID for it
-            message_group_uuid = str(uuid.uuid4())
+        try:
+            if message_group_uuid == None:
+                # When a New Message Group is being Created then I'll need to create the UUID for it
+                message_group_uuid = str(uuid.uuid4())
 
-        if other_user_uuid == None:
-            # when Updating Message Groups after creating a Message I will need to query up the Other User's Data
-            query_parameters = {
-                'TableName': table_name,
-                'KeyConditionExpression': 'pk = :pkID AND message_group_uuid = :MSG_UUID',
-                'ScanIndexForward': False,
-                'Limit': 20,
-                'ExpressionAttributeValues': {
-                ':MSG_UUID': {'S': f"{message_group_uuid}"},
-                ':pkID': {'S': f"GRP#{my_user_uuid}"}
+            if other_user_uuid == None:
+                # when Updating Message Groups after creating a Message I will need to query up the Other User's Data
+                query_parameters = {
+                    'TableName': table_name,
+                    'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+                    # 'FilterExpression': 'message_group_uuid = :MSG_UUID',
+                    'ScanIndexForward': False,
+                    'Limit': 20,
+                    'ExpressionAttributeValues': {
+                        ':year': {'S': f"{current_year}"},
+                        #':MSG_UUID': {'S': f"{message_group_uuid}"},
+                        ':pkID': {'S': f"GRP#{my_user_uuid}"}
+                    }
                 }
-            }
 
-            response = client.query(**query_parameters)
-            item = response['Items']
-            other_user_uuid = item['user_uuid']
-            other_user_display_name = item['user_display_name']
-            other_user_handle = item['user_handle']
+                response = client.query(**query_parameters)
 
-            return (f"-----   Testing Failure Point : create_message_N_update_groups triggered  ||||")
+
+                items = response['Items']
+                # The Items is a Dict within a List, therefore if I am not using a For Loop to work through the list then I need to specify the 0th position within the list to pull the data within it
+                item = items[0]
+
+                other_user_uuid = item['user_uuid']['S']
+                other_user_display_name = item['user_display_name']['S']
+                other_user_handle = item['user_handle']['S']
+
+                #return (f"-----   Testing Failure Point : create_message_N_update_groups triggered : Successful DyDb's results: other_user_uuid:{other_user_uuid} ; other_user_display_name:{other_user_display_name} ; other_user_handle: {other_user_handle} && DyDb's response: {response}  ||||")
+
+        except Exception as e:
+            return (f"-----   Testing Failure Point : create_message_N_update_groups triggered : DyDb Searching For Other User : {e} && DyDb's Results: other_user_uuid:{other_user_uuid} ; other_user_display_name:{other_user_display_name} ; other_user_handle: {other_user_handle} && DyDb's response: {response} ||||")
+
 
         otherUser_data = {
             'response':response,
@@ -234,6 +247,8 @@ class InteractDyDb:
             'user_handle': {'S': other_user_handle}
         }
 
+        
+
         other_message_group = {
             'pk': {'S': f"GPR#{other_user_uuid}"},
             'sk': {'S': last_message_at},
@@ -259,7 +274,11 @@ class InteractDyDb:
 
         try:
             response = client.batch_write_item(RequestItems=items)
+            
+
             model['logging'].append(f"----  createMessage & Groups -- response from batch_write_item : {response}  ||||")
+            
+            return (f"---- Testing Failure Point : Create Message DyDb PY : batch_write_item items {items} && response {response}  ||||")
 
             return {
                 'message_group_uuid': message_group_uuid,
