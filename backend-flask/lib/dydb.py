@@ -87,7 +87,7 @@ class InteractDyDb:
         created_at = now
 
         my_message_group = {
-            'pk': {'S': f"GPR#{my_user_uuid}"},
+            'pk': {'S': f"GRP#{my_user_uuid}"},
             'sk': {'S': last_message_at},
             'message_group_uuid': {'S': message_group_uuid},
             'message': {'S': message},
@@ -97,7 +97,7 @@ class InteractDyDb:
         }
 
         other_message_group = {
-            'pk': {'S': f"GPR#{other_user_uuid}"},
+            'pk': {'S': f"GRP#{other_user_uuid}"},
             'sk': {'S': last_message_at},
             'message_group_uuid': {'S': message_group_uuid},
             'message': {'S': message},
@@ -186,14 +186,6 @@ class InteractDyDb:
 
                 items = response['Items']
                 # The Items is a Dict within a List, therefore if I am not using a For Loop to work through the list then I need to specify the 0th position within the list to pull the data within it
-                
-                #item = items[0]
-        
-                # oldMSG_pk = item['pk']['S'],
-                # oldMSG_sk = item['sk']['S'],
-                # other_user_uuid = item['user_uuid']['S'],
-                # other_user_display_name = item['user_display_name']['S'],
-                # other_user_handle = item['user_handle']['S']
 
                 results={}
                 for item in items:
@@ -210,7 +202,7 @@ class InteractDyDb:
                 other_user_display_name = results['other_user_display_name']
                 other_user_handle = results['other_user_handle']
 
-                #return (f"---- results : {results}  ||||")
+                #return (f"---- oldMSG_pk : {oldMSG_pk}  ||||")
 
                 #return (f"---- Checking Other User Info : oldMSG_pk: {oldMSG_pk} && oldMSG_sk: {oldMSG_sk} && other_user_uuid: {other_user_uuid} && other_user_display_name: {other_user_display_name} && other_user_handle: {other_user_handle}  ||||")
 
@@ -230,7 +222,7 @@ class InteractDyDb:
         # Even if I am just Updating an Exsisting Message Group after creating a Message I am still going to need to update the Groups
         # PutRequests in a Batch Write will overwrite the older entry of the same Message Groups
         my_message_group = {
-            'pk': {'S': f"GPR#{my_user_uuid}"},
+            'pk': {'S': f"GRP#{my_user_uuid}"},
             'sk': {'S': f"{created_at}"},
             'message_group_uuid': {'S': f"{message_group_uuid}"},
             'message': {'S': f"{message}"},
@@ -241,7 +233,7 @@ class InteractDyDb:
 
     
         other_message_group = {
-            'pk': {'S': f"GPR#{other_user_uuid}"},
+            'pk': {'S': f"GRP#{other_user_uuid}"},
             'sk': {'S': f"{created_at}"},
             'message_group_uuid': {'S': f"{message_group_uuid}"},
             'message': {'S': f"{message}"},
@@ -250,35 +242,40 @@ class InteractDyDb:
             'user_handle': {'S': f"{my_user_handle}"}
         }
 
-        # model['logging'].append(f"----  createMessage & Groups -- my_message : {my_message}  ||||")
-        # model['logging'].append(f"----  createMessage & Groups -- my_message_group : {my_message_group}  ||||")
-        # model['logging'].append(f"----  createMessage & Groups -- other_message_group : {other_message_group}  ||||")
-        
 
-        # items = {
-        #     table_name: [
-        #         {'PutRequest': {'Item': my_message_group}},
-        #         {'PutRequest': {'Item': other_message_group}},
-        #         {'PutRequest': {'Item': my_message}}
-        #     ]
-        # }
         try:
             #response = client.batch_write_item(RequestItems=items)
             #return (f"==== Troubleshooting Failure Point: My New Message Group : {my_message_group} ||||")
-        
+
+            response_Deleted_MyOldMSG = client.delete_item(
+                TableName=table_name,
+                Key={
+                    'pk': {'S': f"{oldMSG_pk}"},
+                    'sk': {'S': f"{oldMSG_sk}"}
+                }
+            )
+
             response_MyMSG = client.put_item(
                 TableName=table_name,
                 Item=my_message_group
             )
 
-            model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG}  ||||")
+            model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG} && response_Deleted_OMyOldMSG: {response_Deleted_MyOldMSG} ||||")
 
+            response_Deleted_OtherOldMSG = client.delete_item(
+                TableName=table_name,
+                Key={
+                    'pk': {'S': f"GRP#{other_user_uuid}"},
+                    'sk': {'S': f"{oldMSG_sk}"}
+                }
+            )
+        
             response_OtherMSG = client.put_item(
                 TableName=table_name,
                 Item=other_message_group
             )
 
-            model['logging'].append(f"----  createMessage & Groups -- response_OtherMSG : {response_OtherMSG} ||||")
+            model['logging'].append(f"----  createMessage & Groups -- response_OtherMSG : {response_OtherMSG} && response_Deleted_OtherOldMSG: {response_Deleted_OtherOldMSG} ||||")
 
             response_MyMessage = client.put_item(
                 TableName=table_name,
