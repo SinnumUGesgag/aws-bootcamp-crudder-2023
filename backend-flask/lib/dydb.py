@@ -156,25 +156,9 @@ class InteractDyDb:
             'logging':[]
         }
 
-        inputs_received = {
-            'client':client, 
-            'message':message, 
-            'my_user_uuid':my_user_uuid, 
-            'my_user_display_name':my_user_display_name, 
-            'my_user_handle':my_user_handle, 
-            'other_user_uuid':other_user_uuid, 
-            'other_user_display_name':other_user_display_name, 
-            'other_user_handle':other_user_handle, 
-            'message_group_uuid':message_group_uuid   
-        }
-
-        model['logging'].append(f"----  createMessage & Groups -- inputs_received : {inputs_received}  ||||")
-
         table_name = 'cruddur_messages'
         now = datetime.now(timezone.utc).astimezone().isoformat()
         message_uuid = str(uuid.uuid4())
-
-        last_message_at = now
         created_at = now
         current_year = datetime.now().year
         
@@ -197,91 +181,115 @@ class InteractDyDb:
                         ':pkID': {'S': f"GRP#{my_user_uuid}"}
                     }
                 }
-
+                
                 response = client.query(**query_parameters)
-
 
                 items = response['Items']
                 # The Items is a Dict within a List, therefore if I am not using a For Loop to work through the list then I need to specify the 0th position within the list to pull the data within it
-                item = items[0]
+                
+                #item = items[0]
+        
+                # oldMSG_pk = item['pk']['S'],
+                # oldMSG_sk = item['sk']['S'],
+                # other_user_uuid = item['user_uuid']['S'],
+                # other_user_display_name = item['user_display_name']['S'],
+                # other_user_handle = item['user_handle']['S']
 
-                other_user_uuid = item['user_uuid']['S']
-                other_user_display_name = item['user_display_name']['S']
-                other_user_handle = item['user_handle']['S']
+                results={}
+                for item in items:
+                    
+                    results['oldMSG_pk'] = item['pk']['S']
+                    results['oldMSG_sk'] = item['sk']['S']
+                    results['other_user_uuid'] = item['user_uuid']['S']
+                    results['other_user_display_name'] = item['user_display_name']['S']
+                    results['other_user_handle'] = item['user_handle']['S']
 
-                #return (f"-----   Testing Failure Point : create_message_N_update_groups triggered : Successful DyDb's results: other_user_uuid:{other_user_uuid} ; other_user_display_name:{other_user_display_name} ; other_user_handle: {other_user_handle} && DyDb's response: {response}  ||||")
+                oldMSG_pk = results['oldMSG_pk']
+                oldMSG_sk = results['oldMSG_sk']
+                other_user_uuid = results['other_user_uuid']
+                other_user_display_name = results['other_user_display_name']
+                other_user_handle = results['other_user_handle']
+
+                #return (f"---- results : {results}  ||||")
+
+                #return (f"---- Checking Other User Info : oldMSG_pk: {oldMSG_pk} && oldMSG_sk: {oldMSG_sk} && other_user_uuid: {other_user_uuid} && other_user_display_name: {other_user_display_name} && other_user_handle: {other_user_handle}  ||||")
 
         except Exception as e:
-            return (f"-----   Testing Failure Point : create_message_N_update_groups triggered : DyDb Searching For Other User : {e} && DyDb's Results: other_user_uuid:{other_user_uuid} ; other_user_display_name:{other_user_display_name} ; other_user_handle: {other_user_handle} && DyDb's response: {response} ||||")
-
-
-        otherUser_data = {
-            'response':response,
-            'item': item,
-            'other_user_uuid':other_user_uuid,
-            'other_user_display_name':other_user_display_name,
-            'other_user_handle':other_user_handle
-        }
-
-        model['logging'].append(f"----  createMessage & Groups -- otherUser_data : {otherUser_data}  ||||")
+            return (f"-----   Testing Failure Point : create_message_N_update_groups triggered : DyDb Searching For Other User : {e} && DyDb's Results: other_user_uuid:{other_user_uuid} ; other_user_display_name:{other_user_display_name} ; other_user_handle: {other_user_handle} && DyDb's||||")
 
         my_message = {
             'pk': {'S': f"MSG#{message_group_uuid}"},
-            'sk': {'S': created_at},
-            'message_uuid': {'S': message_uuid},
-            'message': {'S': message},
-            'user_uuid': {'S': my_user_uuid},
-            'user_display_name': {'S': my_user_display_name},
-            'user_handle': {'S': my_user_handle}
+            'sk': {'S': f"{created_at}"},
+            'message_uuid': {'S': f"{message_uuid}"},
+            'message': {'S': f"{message}"},
+            'user_uuid': {'S': f"{my_user_uuid}"},
+            'user_display_name': {'S': f"{my_user_display_name}"},
+            'user_handle': {'S': f"{my_user_handle}"}
         }
 
         # Even if I am just Updating an Exsisting Message Group after creating a Message I am still going to need to update the Groups
         # PutRequests in a Batch Write will overwrite the older entry of the same Message Groups
         my_message_group = {
             'pk': {'S': f"GPR#{my_user_uuid}"},
-            'sk': {'S': last_message_at},
-            'message_group_uuid': {'S': message_group_uuid},
-            'message': {'S': message},
-            'user_uuid': {'S': other_user_uuid},
-            'user_display_name': {'S': other_user_display_name},
-            'user_handle': {'S': other_user_handle}
+            'sk': {'S': f"{created_at}"},
+            'message_group_uuid': {'S': f"{message_group_uuid}"},
+            'message': {'S': f"{message}"},
+            'user_uuid': {'S': f"{other_user_uuid}"},
+            'user_display_name': {'S': f"{other_user_display_name}"},
+            'user_handle': {'S': f"{other_user_handle}"}
         }
 
-        
-
+    
         other_message_group = {
             'pk': {'S': f"GPR#{other_user_uuid}"},
-            'sk': {'S': last_message_at},
-            'message_group_uuid': {'S': message_group_uuid},
-            'message': {'S': message},
-            'user_uuid': {'S': my_user_uuid},
-            'user_display_name': {'S': my_user_display_name},
-            'user_handle': {'S': my_user_handle}
+            'sk': {'S': f"{created_at}"},
+            'message_group_uuid': {'S': f"{message_group_uuid}"},
+            'message': {'S': f"{message}"},
+            'user_uuid': {'S': f"{my_user_uuid}"},
+            'user_display_name': {'S': f"{my_user_display_name}"},
+            'user_handle': {'S': f"{my_user_handle}"}
         }
 
-        model['logging'].append(f"----  createMessage & Groups -- my_message : {my_message}  ||||")
-        model['logging'].append(f"----  createMessage & Groups -- my_message_group : {my_message_group}  ||||")
-        model['logging'].append(f"----  createMessage & Groups -- other_message_group : {other_message_group}  ||||")
+        # model['logging'].append(f"----  createMessage & Groups -- my_message : {my_message}  ||||")
+        # model['logging'].append(f"----  createMessage & Groups -- my_message_group : {my_message_group}  ||||")
+        # model['logging'].append(f"----  createMessage & Groups -- other_message_group : {other_message_group}  ||||")
         
 
-        items = {
-            table_name: [
-                {'PutRequest': {'Item': my_message_group}},
-                {'PutRequest': {'Item': other_message_group}},
-                {'PutRequest': {'Item': my_message}}
-            ]
-        }
-
+        # items = {
+        #     table_name: [
+        #         {'PutRequest': {'Item': my_message_group}},
+        #         {'PutRequest': {'Item': other_message_group}},
+        #         {'PutRequest': {'Item': my_message}}
+        #     ]
+        # }
         try:
-            response = client.batch_write_item(RequestItems=items)
-            
+            #response = client.batch_write_item(RequestItems=items)
+            #return (f"==== Troubleshooting Failure Point: My New Message Group : {my_message_group} ||||")
+        
+            response_MyMSG = client.put_item(
+                TableName=table_name,
+                Item=my_message_group
+            )
 
-            model['logging'].append(f"----  createMessage & Groups -- response from batch_write_item : {response}  ||||")
-            
-            return (f"---- Testing Failure Point : Create Message DyDb PY : batch_write_item items {items} && response {response}  ||||")
+            model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG}  ||||")
 
+            response_OtherMSG = client.put_item(
+                TableName=table_name,
+                Item=other_message_group
+            )
+
+            model['logging'].append(f"----  createMessage & Groups -- response_OtherMSG : {response_OtherMSG} ||||")
+
+            response_MyMessage = client.put_item(
+                TableName=table_name,
+                Item=my_message
+            )
+
+            model['logging'].append(f"----  createMessage & Groups -- response_MyMessage : {response_MyMessage}  ||||")
+            
             return {
-                'message_group_uuid': message_group_uuid,
+                #'model': model
+                'message_group_uuid': message_group_uuid
                 # 'uuid': my_user_uuid,
                 # 'display_name': my_user_display_name,
                 # 'handle': my_user_handle,
@@ -289,4 +297,4 @@ class InteractDyDb:
                 # 'created_at': created_at
             }
         except botocore.exceptions.ClientError as e:
-            return(f"-------- DyDb : Create MEssage Groups ERRORs: {e} && CreatedAT: {created_at}")
+            return(f"-------- DyDb : Create MEssage Groups ERRORs: {e} && model : {model}")
