@@ -148,7 +148,7 @@ class InteractDyDb:
         #     print(f"---- Client Error: {e} ||||")
 
 
-    def create_message_N_update_groups(client, message, my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid=None, other_user_display_name=None, other_user_handle=None, message_group_uuid=None):
+    def create_message_N_update_groups(client, mode, message, my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid=None, other_user_display_name=None, other_user_handle=None, message_group_uuid=None):
         
         model = {
             'errors': None,
@@ -163,10 +163,6 @@ class InteractDyDb:
         current_year = datetime.now().year
         
         try:
-            if message_group_uuid == None:
-                # When a New Message Group is being Created then I'll need to create the UUID for it
-                message_group_uuid = str(uuid.uuid4())
-
             if other_user_uuid == None:
                 # when Updating Message Groups after creating a Message I will need to query up the Other User's Data
                 query_parameters = {
@@ -246,14 +242,21 @@ class InteractDyDb:
         try:
             #response = client.batch_write_item(RequestItems=items)
             #return (f"==== Troubleshooting Failure Point: My New Message Group : {my_message_group} ||||")
-
-            response_Deleted_MyOldMSG = client.delete_item(
-                TableName=table_name,
-                Key={
-                    'pk': {'S': f"{oldMSG_pk}"},
-                    'sk': {'S': f"{oldMSG_sk}"}
-                }
-            )
+            if (mode == "Update"):
+                response_Deleted_MyOldMSG = client.delete_item(
+                    TableName=table_name,
+                    Key={
+                        'pk': {'S': f"{oldMSG_pk}"},
+                        'sk': {'S': f"{oldMSG_sk}"}
+                    }
+                )
+                response_Deleted_OtherOldMSG = client.delete_item(
+                    TableName=table_name,
+                    Key={
+                        'pk': {'S': f"GRP#{other_user_uuid}"},
+                        'sk': {'S': f"{oldMSG_sk}"}
+                    }
+                )
 
             response_MyMSG = client.put_item(
                 TableName=table_name,
@@ -261,14 +264,6 @@ class InteractDyDb:
             )
 
             model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG} && response_Deleted_OMyOldMSG: {response_Deleted_MyOldMSG} ||||")
-
-            response_Deleted_OtherOldMSG = client.delete_item(
-                TableName=table_name,
-                Key={
-                    'pk': {'S': f"GRP#{other_user_uuid}"},
-                    'sk': {'S': f"{oldMSG_sk}"}
-                }
-            )
         
             response_OtherMSG = client.put_item(
                 TableName=table_name,

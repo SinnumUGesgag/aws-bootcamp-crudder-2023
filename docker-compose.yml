@@ -3,7 +3,7 @@ version: "3.8"
 services:
   backend-flask:
     environment:
-      AWS_DYDB_ENDPOINT_URL: "${AWS_DYDB_ENDPOINT_URL}" #commented this out because the Backend will fail to launch if the DyDb has no data for it to pull, YET if the Backend isn't up then no data can be updated to the DyDB; I am going to move forward with setting up DyDb then solve this problem later on
+      #AWS_DYDB_ENDPOINT_URL: "${AWS_LOCAL_DYDB_ENDPOINT_URL}" #commented this out because the Backend will fail to launch if the DyDb has no data for it to pull, YET if the Backend isn't up then no data can be updated to the DyDB; I am going to move forward with setting up DyDb then solve this problem later on
       AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"

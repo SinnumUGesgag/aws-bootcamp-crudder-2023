@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+import os
+
+print(f"-------- PSQL Local DB SETUP --------")
+os.system("bash bin/psql/psql-setup")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- PSQL Update_Cognito_User_Ids --------")
+os.system("python bin/psql/psql-update_cognito_user_ids")
+
+print(f"<<<<  PSQL  |||||||| DYDB  >>>>")
+
+print(f"-------- DYDB SCAN TABLE BEFORE DROPPING IT--------")
+os.system("python bin/dydb/dydb-scan")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB DROP TABLE --------")
+os.system("bash bin/dydb/dydb-drop cruddur_messages")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB schema-load --------")
+os.system("python bin/dydb/dydb-schema-load")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB SEED TABLE --------")
+os.system("python bin/dydb/dydb-seed")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB SCAN TABLE --------")
+os.system("python bin/dydb/dydb-scan")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB Get-Conversations --------")
+os.system("python bin/dydb/dydb-get-conversations")
+
+print(f"<<<<||||||||>>>>")
+
+print(f"-------- DYDB List-Conversation --------")
+os.system("python bin/dydb/dydb-list-conversation")
+
+print(f"<<<<||||||||>>>>")

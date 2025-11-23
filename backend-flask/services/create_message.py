@@ -101,6 +101,10 @@ class CreateMessage:
         errors.update({'dyDBclient': dyDBclient})
 
         model['logging'].append(f"dyDBclient: {dyDBclient}")
+        
+        if message_group_uuid == None:
+            # When a New Message Group is being Created then I'll need to create the UUID for it
+            message_group_uuid = str(uuid.uuid4())
 
         dyDbResponse = InteractDyDb.create_message_N_update_groups(
           client=dyDBclient,
