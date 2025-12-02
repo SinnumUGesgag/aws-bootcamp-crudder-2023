@@ -107,6 +107,7 @@ class CreateMessage:
             message_group_uuid = str(uuid.uuid4())
 
         dyDbResponse = InteractDyDb.create_message_N_update_groups(
+          mode=mode,
           client=dyDBclient,
           message_group_uuid=message_group_uuid,
           message=message,

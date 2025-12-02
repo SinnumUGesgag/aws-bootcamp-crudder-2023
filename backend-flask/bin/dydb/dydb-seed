@@ -103,7 +103,7 @@ def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uu
     print(f"""<<<<  {response}  >>>>""")
 
 
-def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
+def create_message(client, message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle, other_user_handle):
     print(f"""-----------  Message Created  -----------""")
     record = {
         'pk':   {'S': f"MSG#{message_group_uuid}"},
@@ -112,7 +112,8 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
         'message':  {'S': message },
         'user_uuid': {'S': my_user_uuid },
         'user_display_name': {'S': my_user_display_name },
-        'user_handle':  {'S': my_user_handle }
+        'user_handle':  {'S': my_user_handle },
+        'other_user_handle': {'S': other_user_handle }
     }
     
 
@@ -182,7 +183,8 @@ for i in range(len(lines)):
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],
-            my_user_handle=users[key]['handle']
+            my_user_handle=users[key]['handle'],
+            other_user_handle=users['other_user']['handle']
         )
     elif lines[i].startswith('Person 2: '):
         key = 'other_user'
@@ -197,7 +199,8 @@ for i in range(len(lines)):
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],
-            my_user_handle=users[key]['handle']
+            my_user_handle=users[key]['handle'],
+            other_user_handle=users['my_user']['handle']
         )
     else:
         print(lines[i])

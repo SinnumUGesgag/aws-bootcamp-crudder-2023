@@ -22,12 +22,11 @@ export default function ActivityForm(props) {
 
       let json = {'message': message}
 
-      if(params.handle){
-        json.user_receiver_handle = params.handle
-      }else{
-        json.message_group_uuid = params.message_group_uuid
-      }
-      console.log("-------- MESSAGE FORMS : backend_url  :", backend_url)
+      json.user_receiver_handle = params.handle
+      json.message_group_uuid = params.message_group_uuid
+
+      console.log("-------- MESSAGE FORMS : handle  :", json.user_receiver_handle)
+      console.log("-------- MESSAGE FORMS : message_group_uuid  :", json.user_receiver_handle)
 
       const res = await fetch(backend_url, {
         method: "POST",

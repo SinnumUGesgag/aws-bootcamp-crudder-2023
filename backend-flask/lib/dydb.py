@@ -113,7 +113,8 @@ class InteractDyDb:
             'message': {'S': message},
             'user_uuid': {'S': my_user_uuid},
             'user_display_name': {'S': my_user_display_name},
-            'user_handle': {'S': my_user_handle}
+            'user_handle': {'S': my_user_handle},
+            'user_receiver_handle':other_user_handle
         }
 
         items = {
