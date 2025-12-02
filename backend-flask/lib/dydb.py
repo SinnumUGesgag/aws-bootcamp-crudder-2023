@@ -114,7 +114,7 @@ class InteractDyDb:
             'user_uuid': {'S': my_user_uuid},
             'user_display_name': {'S': my_user_display_name},
             'user_handle': {'S': my_user_handle},
-            'user_receiver_handle':other_user_handle
+            'other_user_handle': {'S': other_user_handle}
         }
 
         items = {
@@ -149,7 +149,7 @@ class InteractDyDb:
         #     print(f"---- Client Error: {e} ||||")
 
 
-    def create_message_N_update_groups(client, mode, message, my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid=None, other_user_display_name=None, other_user_handle=None, message_group_uuid=None):
+    def create_message_N_update_groups(client, mode, message, my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid, other_user_display_name, other_user_handle, message_group_uuid=None):
         
         model = {
             'errors': None,
@@ -213,7 +213,8 @@ class InteractDyDb:
             'message': {'S': f"{message}"},
             'user_uuid': {'S': f"{my_user_uuid}"},
             'user_display_name': {'S': f"{my_user_display_name}"},
-            'user_handle': {'S': f"{my_user_handle}"}
+            'user_handle': {'S': f"{my_user_handle}"},
+            'other_user_handle': {'S': f"{other_user_handle}"}
         }
 
         # Even if I am just Updating an Exsisting Message Group after creating a Message I am still going to need to update the Groups
@@ -251,6 +252,8 @@ class InteractDyDb:
                         'sk': {'S': f"{oldMSG_sk}"}
                     }
                 )
+                model['logging'].append(f"----  createMessage & Groups -- response_Deleted_OMyOldMSG: {response_Deleted_MyOldMSG} ||||")
+                                        
                 response_Deleted_OtherOldMSG = client.delete_item(
                     TableName=table_name,
                     Key={
@@ -258,20 +261,22 @@ class InteractDyDb:
                         'sk': {'S': f"{oldMSG_sk}"}
                     }
                 )
+                model['logging'].append(f"----  createMessage & Groups -- response_Deleted_OtherOldMSG: {response_Deleted_OtherOldMSG} ||||")
+
 
             response_MyMSG = client.put_item(
                 TableName=table_name,
                 Item=my_message_group
             )
 
-            model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG} && response_Deleted_OMyOldMSG: {response_Deleted_MyOldMSG} ||||")
+            model['logging'].append(f"----  createMessage & Groups -- response_MyMSG : {response_MyMSG} ||||")
         
             response_OtherMSG = client.put_item(
                 TableName=table_name,
                 Item=other_message_group
             )
 
-            model['logging'].append(f"----  createMessage & Groups -- response_OtherMSG : {response_OtherMSG} && response_Deleted_OtherOldMSG: {response_Deleted_OtherOldMSG} ||||")
+            model['logging'].append(f"----  createMessage & Groups -- response_OtherMSG : {response_OtherMSG} ||||")
 
             response_MyMessage = client.put_item(
                 TableName=table_name,

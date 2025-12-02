@@ -231,6 +231,7 @@ def data_create_message():
         mode="Update",
         message=message,
         cognito_user_id=cognito_user_id,
+        user_receiver_handle=user_receiver_handle,
         message_group_uuid=message_group_uuid
       )
 
