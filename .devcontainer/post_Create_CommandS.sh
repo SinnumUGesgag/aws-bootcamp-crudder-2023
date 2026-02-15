@@ -21,4 +21,11 @@ pip install -r requirements.txt
 cd ..
 cd frontend-react-js
 npm i
+cd ..
 # <----------
+
+# RDS ------> 
+sudo "./backend-flask/bin/rds/rds-upgrade-sg-rule"
+
+sudo echo "rds-upgrade-sg-rule UPDATED"
+# <---------

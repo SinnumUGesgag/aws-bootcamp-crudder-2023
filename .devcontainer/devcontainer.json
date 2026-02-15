@@ -11,8 +11,26 @@
 		"ghcr.io/devcontainers-extra/features/node-asdf:0": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
-	"remoteEnv": {
-		"AWS_CLI_AUTO_PROMPT": "on-partial"
+	"containerEnv": {
+		"AWS_CLI_AUTO_PROMPT": "on-partial",
+		"AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+		"AWS_ACCOUNT_ID": "${localEnv:AWS_ACCOUNT_ID}",
+		"AWS_COGNITO_DOMAIN": "${localEnv:AWS_COGNITO_DOMAIN}",
+		"AWS_COGNITO_REDIRECT_URL": "${localEnv:AWS_COGNITO_REDIRECT_URL}",
+		"AWS_DEFAULT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+		"AWS_LOCAL_DYDB_ENDPOINT_URL": "${localEnv:AWS_LOCAL_DYDB_ENDPOINT_URL}",
+		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
+		"HONEYCOMB_API_KEY": "${localEnv:HONEYCOMB_API_KEY}",
+		"MY_COGNITO_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}",
+		"MY_COGNITO_USER_POOL_ID": "${localEnv:MY_COGNITO_USER_POOL_ID}",
+		"PROD_CONNECTION_URL": "${localEnv:PROD_CONNECTION_URL}",
+		"PSQL_CRUDDUR_DB_URL": "${localEnv:PSQL_CRUDDUR_DB_URL}",
+		"RDS_POSTGRESQL_SG_ID": "${localEnv:RDS_POSTGRESQL_SG_ID}",
+		"RDS_POSTGRESQL_SG_RULE_ID": "${localEnv:RDS_POSTGRESQL_SG_RULE_ID}",
+		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}"
+
+
+
 	},
 	"customizations": {
 		"vscode": {
