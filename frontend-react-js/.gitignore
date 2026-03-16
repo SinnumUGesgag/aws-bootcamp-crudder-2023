@@ -1,3 +1,7 @@
+# For Building frontend For the ECS Cluster
+docker/**/*
+frontend-react-js/build/*
+
 # Logs
 logs
 *.log
@@ -128,3 +132,4 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+

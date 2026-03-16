@@ -1,16 +1,11 @@
 #! /usr/bin/bash
 
-if [ -z "$1" ]; then
-	echo "No TASK_ID supplied"
-	exit 1
-fi
-	TASK_ID=$1
+CONTAINER_NAME=frontend-react-js
 
-if [ -z "$2" ]; then
-	echo "No CONTAINER_NAME supplied"
-	exit 1
-fi
-	CONTAINER_NAME=$2
+
+TASK_ARN=$(aws ecs list-tasks --cluster cruddur --service-name $CONTAINER_NAME --query 'taskArns[0]' --output text)
+
+TASK_ID=${TASK_ARN##*/}
 
 echo "TASK ID : $TASK_ID"
 echo "CONTAINER NAME : $CONTAINER_NAME"
@@ -20,6 +15,6 @@ aws ecs execute-command \
 	--cluster cruddur \
 	--task $TASK_ID \
 	--container $CONTAINER_NAME \
-	--command "/bin/bash" \
+	--command "/bin/sh" \
 	--interactive
 

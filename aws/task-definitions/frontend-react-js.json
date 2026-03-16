@@ -1,8 +1,7 @@
-'
 {
 	"family": "frontend-react-js",
-	"executionRoleArn": "{CruddurServiceExecutionRole ARN}",
-	"taskRoleArn": "{CruddurTaskRole ARN}",
+	"executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID---Replace}:role/CruddurServiceExecutionRole",
+	"taskRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID---Replace}:role/CruddurTaskRole",
 	"networkMode": "awsvpc",
 	"cpu": "256",
 	"memory": "512",
@@ -12,7 +11,7 @@
 	"containerDefinitions":[
 		{
 			"name": "frontend-react-js",
-			"image": "{ecr image path.amazonaws.com/frontend-react-js",
+			"image": "${AWS_ACCOUNT_ID---Replace}.dkr.ecr.${AWS_DEFAULT_REGION---Replace}.amazonaws.com/frontend-react-js",
 			"essential": true,
 			"portMappings": [
 				{
@@ -22,16 +21,14 @@
 					"appProtocol": "http"
 				}
 			],
-			
 			"logConfiguration": {
 				"logDriver": "awslogs",
 				"options": {
-					"awslogs-group": "cruddur",
-					"awslogs-region": "{my region}",
+					"awslogs-group": "/Cruddur/Fargate-Cluster",
+					"awslogs-region": "${AWS_DEFAULT_REGION---Replace}",
 					"awslogs-stream-prefix": "frontend-react-js"
 				}
 			}
 		}
 	]
 }
-'

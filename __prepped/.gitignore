@@ -1,4 +1,0 @@
-#belongs in frontend-react-js
-
-docker/**/*
-frontend-react-js/build/*

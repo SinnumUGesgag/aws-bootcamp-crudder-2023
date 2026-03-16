@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
 {
-	"name": "CRUDDUR Configuration in Codespaces",
+	// "name": "CRUDDUR Configuration in Codespaces",
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
@@ -27,10 +27,10 @@
 		"PSQL_CRUDDUR_DB_URL": "${localEnv:PSQL_CRUDDUR_DB_URL}",
 		"RDS_POSTGRESQL_SG_ID": "${localEnv:RDS_POSTGRESQL_SG_ID}",
 		"RDS_POSTGRESQL_SG_RULE_ID": "${localEnv:RDS_POSTGRESQL_SG_RULE_ID}",
-		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}"
-
-
-
+		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}",
+		"ECR_PYTHON_URL": "${localEnv:ECR_PYTHON_URL}",
+		"ECR_BACKEND_FLASK_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
+		"ECR_FRONTEND_REACT_URL": "${localEnv:ECR_FRONTEND_REACT_URL}"
 	},
 	"customizations": {
 		"vscode": {
@@ -63,5 +63,6 @@
 		"8000": {
 			"label": "Dynamodb-Local"
 		}
-    }
+    },
+	"postStartCommand": "bash .devcontainer/post_Start_Command.sh"
 }

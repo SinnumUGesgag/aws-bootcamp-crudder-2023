@@ -17,3 +17,4 @@ except psycopg.Error as e:
 finally:
 	conn.close()
 
+

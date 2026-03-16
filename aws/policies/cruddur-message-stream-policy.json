@@ -13,8 +13,8 @@
 				"dynamodb:UpdateItem"
 			],
 			"Resource": [
-				"arn:aws:dynamodb:us-east-2:423798276560:table/cruddur_messages",
-				"arn:aws:dynamodb:us-east-2:423798276560:table/cruddur_messages/message-group-sk-index"
+				"arn:aws:dynamodb:${AWS_DEFAULT_REGION}:${AWS_ACCOUNT_ID}:table/cruddur_messages",
+				"arn:aws:dynamodb:${AWS_DEFAULT_REGION}:${AWS_ACCOUNT_ID}:table/cruddur_messages/message-group-sk-index"
 			]
 		}
 	]
