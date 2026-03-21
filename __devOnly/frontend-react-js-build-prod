@@ -1,0 +1,20 @@
+!# /usr/bin/bash
+
+
+docker build \
+--build-arg REACT_APP_BACKEND_URL="http://api.cruddurclone.com" \
+--build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
+--build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
+--build-arg REACT_APP_AWS_USER_POOLS_ID="$MY_COGNITO_USER_POOL_ID" \
+--build-arg REACT_APP_CLIENT_ID="$MY_COGNITO_CLIENT_ID" \
+-t frontend-react-js \
+-f Dockerfile.prod \
+.
+
+
+docker tag frontend-react-js:latest $ECR_FRONTEND_REACT_URL:latest
+
+docker push $ECR_FRONTEND_REACT_URL:latest
+
+aws ecs register-task-definition \
+--cli-input-json "file://aws/task-definitions/frontend-react-js.json"

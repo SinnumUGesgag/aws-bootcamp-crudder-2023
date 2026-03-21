@@ -26,7 +26,7 @@ cd ..
 # <-----------------------------------------------------------
 
 # RDS -----------------------------------------------------------> 
-sudo "./backend-flask/bin/rds/rds-upgrade-sg-rule"
+sudo "./bin/rds/rds-upgrade-sg-rule"
 
 sudo echo "rds-upgrade-sg-rule UPDATED"
 # -----------------------------------------------------------

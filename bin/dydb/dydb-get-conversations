@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+import boto3
+import sys
+import json
+from datetime import datetime
+
+# Setting Essetinal Attributes for our Client ---------------- >
+attributes = {    # point boto3 client at the dynamoDB container we have running locally
+    'endpoint_url': 'http://127.0.0.1:8000'
+    #'endpoint_url': 'http://dynamodb-local:8000'
+}
+
+
+if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
+    if "prod" in sys.argv[1]:   # if first argument is prod
+        attribute = {}
+
+dyDbClient = boto3.client('dynamodb', **attributes)
+
+# < ----------------
+
+table_name = 'cruddur_messages'
+default_message_group_uuid = "a9b2c4d6-7e8f-4a1b-9c2d-3e5f6a7b8c9d"
+message_group_uuid = default_message_group_uuid
+
+print(f"""---------------MGP UUID--------------""")
+print(f"""{message_group_uuid}""")
+
+#pkval = f"MSG#{message_group_uuid}"
+current_year = datetime.now().year
+query_parameters = {
+    'TableName': table_name,
+    'ScanIndexForward': False,
+    'Limit': 20,
+    'ReturnConsumedCapacity': 'TOTAL',
+    'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+    #'KeyConditionExpression': 'pk = :pkID',
+    'ExpressionAttributeValues': {
+        ':year': {'S': f"{current_year}"},
+        ':pkID': {'S': f"MSG#{message_group_uuid}"}
+    }
+}
+
+
+
+response = dyDbClient.query(**query_parameters)
+
+print(f"""---------------QUERY PARAMETERS--------------""")
+print(f"""{query_parameters}""")
+
+print(f"""---------------RESPONSE--------------""")
+print(f"""{response}""")
+
+# Json items found in the table
+print(f"""---------------JSON DUMP : TABLE--------------""")
+print(json.dumps(response, sort_keys=True, indent=2))
+
+# Consumed Capcity is??
+print(f"""---------------JSON DUMP : CONSUMED CAPACITY--------------""")
+print(json.dumps(response['ConsumedCapacity'], sort_keys=True, indent=2))
+
+print(f"""--------------- RESPONSE --------------""")
+print(f""" {response} """)
+
+items = response['Items']
+items.reverse()
+
+print(f"""--------------- ITEMS --------------""")
+print(f""" {items} """)
+
+for item in items:
+    sender_handle   = item['user_handle']['S']
+    message         = item['message']['S']
+    timestamp       = item['sk']['S']
+    dt_object       = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
+    formatted_datatime  = dt_object.strftime('%Y-%m-%d %I:%M %p')
+    #print(f"""---------------Formatted Messages Output--------------""")
+    print(f'{sender_handle: <16}{formatted_datatime: <22}{message[:40]}...')
+
