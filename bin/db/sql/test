@@ -4,7 +4,7 @@ import psycopg
 import os
 import sys
 
-connection_url = os.getenv("PSQL_CRUDDUR_DB_URL")
+connection_url = os.getenv("CONNECTION_URL")
 
 conn = None
 
@@ -16,5 +16,3 @@ except psycopg.Error as e:
 	print("Unable to connect to the database:", e)
 finally:
 	conn.close()
-
-

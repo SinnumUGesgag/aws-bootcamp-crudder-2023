@@ -5,12 +5,13 @@ NO_COLOR='\033[0m'
 LABEL="psql-seed"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
-seed_path="$(realpath .)/db/sql/seed.sql"
+seed_path="$(realpath .)/bin/db/sql/seed.sql"
 
 echo $seed_path
 
 
 if [ "$1" = "prod" ]; then
+	echo "Running in Production Mode"
 	SEED_URL=$PROD_CONNECTION_URL
 else
 	# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container

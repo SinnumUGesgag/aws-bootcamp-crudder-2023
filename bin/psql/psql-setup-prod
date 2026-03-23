@@ -1,0 +1,23 @@
+#! /usr/bin/bash
+#-e # stop if it fails at any point
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="psql-setup"
+printf "${CYAN}==${LABEL}${NO_COLOR}\n"
+
+bin_path="$(realpath .)/bin/psql"
+
+source $bin_path/"psql-drop" prod
+
+source $bin_path/"psql-create" prod
+
+source $bin_path/"psql-schema-load" prod
+
+source $bin_path/"psql-seed" prod
+
+#source $bin_path/"psql-update_cognito_user_ids"
+# still cannot get this to run from the PSQL-SETUP bash script
+# from my research it appears that when it's invoked it's being ran using BASH rather than using a PYTHON
+# interpreter, even though the script calls for Python
+# I will wait to see if Andrew Purposes a solution later on; otherwise I'll comeback to change / fix this myself

@@ -8,7 +8,7 @@ import MessagesFeed from '../components/MessageFeed';
 import MessagesForm from '../components/MessageForm';
 
 // Cognito --->
-import checkAuth from '../lib/CheckAuth';
+import {checkAuth, getAccessToken} from '../lib/CheckAuth';
 // <---
 
 export default function MessageGroupPage() {
@@ -23,9 +23,11 @@ export default function MessageGroupPage() {
   const loadUserShortData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/users/@${params.handle}/short`
+      await getAccessToken(access_token)
+      console.log('access_token',access_token)
       const res = await fetch(backend_url, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+          Authorization: `Bearer ${access_token}`
         },
         method: "GET"
       });
@@ -44,9 +46,11 @@ export default function MessageGroupPage() {
   const loadMessageGroupsData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
+      await getAccessToken(access_token)
+      console.log('access_token',access_token)
       const res = await fetch(backend_url, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+          Authorization: `Bearer ${access_token}`
         },
         method: "GET"
       });

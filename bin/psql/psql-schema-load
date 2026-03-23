@@ -5,7 +5,7 @@ NO_COLOR='\033[0m'
 LABEL="psql-schema-load"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
-schema_path="$(realpath .)/db/sql/schema.sql"
+schema_path="$(realpath .)/bin/db/sql/schema.sql"
 
 echo "psql-schema-load"
 

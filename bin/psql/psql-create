@@ -7,9 +7,14 @@ printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
 echo "psql-create"
 
-# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
+if [ "$1" = "prod" ]; then
+	echo "Running in Production Mode"
+	CON_URL=$PROD_CONNECTION_URL
+else
 
-DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUR_DB_URL")
-NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<< "$DB_URL")
+    DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUR_DB_URL") # I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
+    CON_URL=$(sed 's/\/cruddur//g' <<< "$DB_URL")
+fi
 
-psql $NO_DB_CONNECTION_URL -c "create database cruddur;"
+psql $CON_URL -c "create database cruddur;"
+

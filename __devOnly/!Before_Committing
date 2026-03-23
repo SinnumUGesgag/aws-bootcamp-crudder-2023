@@ -1,0 +1,8 @@
+List of things I need to check prior to committing
+
+
+aws/json/service-backend-flask.json
+
+aws/task-definitions/backend-flask.json
+
+backend-flask/Dockerfile.prod

@@ -47,7 +47,7 @@ class InteractSQLDB:
 				conn.commit()
 		except Exception as errors:
 			print(f"----- query_commit errors: {errors}")
-
+			return errors
 
 
 	# to INSERT into the SQL DB while utilizing a connection in our Psycopg Connection Pool 
@@ -68,8 +68,10 @@ class InteractSQLDB:
 				cur = conn.cursor()
 				cur.execute(sql, params)
 				conn.commit()
+			return is_returning_id
 		except Exception as errors:
 			print(f"----- query_commit_returning_id errors: {errors}")
+			return errors
 			
 
 	# to query an array of json objects
@@ -103,7 +105,7 @@ class InteractSQLDB:
 				# the first field being the data
 				json = cur.fetchone()
 				if json == None:
-					"{}"
+					return "{}"
 				else:
 					return json[0]
 		# print(f"""------query_json_object-----""")
@@ -140,28 +142,30 @@ class InteractSQLDB:
 
 
 	def template(self, *end_path):
-		
-		# finds the root path listing it as the first entry, then the name of the folders where
-		# I've stored the SQL Tempplates; then it lists the args as individual entries
-		root_i = str(app.root_path)
-		path_i = list('')
+		try:
+			# finds the root path listing it as the first entry, then the name of the folders where
+			# I've stored the SQL Tempplates; then it lists the args as individual entries
+			root_i = str(app.root_path)
+			path_i = list('')
 
-		path_i.extend(root_i)
-		path_i.extend(['/db','/sql'])
-		path_i.extend(end_path)
-		path_i.extend(".sql")
-		pathing = ''.join(path_i)
+			path_i.extend(root_i)
+			path_i.extend(['/db','/sql'])
+			path_i.extend(end_path)
+			path_i.extend(".sql")
+			pathing = ''.join(path_i)
 
-		# Joins each individual entry within the Pathing List while then navigating that path to find the file that we're going to read
-		template_path = os.path.join(pathing)
-		# opens the file with reading privileges only
-		with open(template_path, 'r') as f:
-			# reads the file's contents and places them as a string into the template_content variable, to be returned for use as our SQL object that we're going to pass into functions that require an SQL input
-			template_content = f.read()
-		
-		# print(f"""------template-----""")
-		# print("whatever error I am monitoring")
-		return template_content
+			# Joins each individual entry within the Pathing List while then navigating that path to find the file that we're going to read
+			template_path = os.path.join(pathing)
+			# opens the file with reading privileges only
+			with open(template_path, 'r') as f:
+				# reads the file's contents and places them as a string into the template_content variable, to be returned for use as our SQL object that we're going to pass into functions that require an SQL input
+				template_content = f.read()
+			
+			# print(f"""------template-----""")
+			# print("whatever error I am monitoring")
+			return template_content
+		except Exception as e:
+			return e
 
 
 
