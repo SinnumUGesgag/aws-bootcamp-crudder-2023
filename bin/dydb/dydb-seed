@@ -74,7 +74,7 @@ def get_user_uuids():
     return results
 
 
-users = get_user_uuids() 
+users = get_user_uuids()
 
 
 def create_message_group(client, message_group_uuid, my_user_uuid, other_user_uuid, other_user_display_name, other_user_handle, last_message_at=None, message=None):
@@ -153,7 +153,7 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
 
 # Manually created Test Messages & Message Groups --------------
 # --------------------------------------------------------------
-now = datetime.now(timezone.utc).astimezone()
+now = datetime.now()
 
 test_conversation = """
 Person 1: Holy Shit I am so fake
@@ -175,11 +175,11 @@ for i in range(len(lines)):
         message = lines[i].replace('Person 1: ', '')
         print(f'''------- Line {i} Has Been Processed for Person 1; Resulting Message: ------''')
         print(f'''{message}''')
-        created_at = (now + timedelta(minutes=i)).isoformat()
+        created_at = (now - timedelta(days=i) + timedelta(minutes=i))
         create_message(
             client=dyDBclient,
             message_group_uuid=message_group_uuid,
-            created_at=created_at,
+            created_at=created_at.isoformat(),
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],
@@ -191,11 +191,11 @@ for i in range(len(lines)):
         message = lines[i].replace('Person 2: ', '')
         print(f'''------- Line {i} Has Been Processed for Person 2; Resulting Message: ------''')
         print(f'''{message}''')
-        created_at = (now + timedelta(minutes=i)).isoformat()
+        created_at = (now - timedelta(days=i) + timedelta(minutes=i))
         create_message(
             client=dyDBclient,
             message_group_uuid=message_group_uuid,
-            created_at=created_at,
+            created_at=created_at.isoformat(),
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],
