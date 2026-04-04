@@ -1,0 +1,54 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.03",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "A1B2C3D4E5F6G7EXAMPLE",
+        "arn": "arn:aws:iam::111122223333:user/myUserName",
+        "accountId": "111122223333",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+        "userName": "myUserName"
+      },
+      "eventTime": "2015-03-18T19:03:36Z",
+      "eventSource": "lambda.amazonaws.com",
+      "eventName": "GetFunction",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "127.0.0.1",
+      "userAgent": "Python-httplib2/0.8 (gzip)",
+      "errorCode": "AccessDenied",
+      "errorMessage": "User: arn:aws:iam::111122223333:user/myUserName is not authorized to perform: lambda:GetFunction on resource: arn:aws:lambda:us-west-2:111122223333:function:other-acct-function",
+      "requestParameters": null,
+      "responseElements": null,
+      "requestID": "7aebcd0f-cda1-11e4-aaa2-e356da31e4ff",
+      "eventID": "e92a3e85-8ecd-4d23-8074-843aabfe89bf",
+      "eventType": "AwsApiCall",
+      "recipientAccountId": "111122223333"
+    },
+    {
+      "eventVersion": "1.03",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "A1B2C3D4E5F6G7EXAMPLE",
+        "arn": "arn:aws:iam::111122223333:user/myUserName",
+        "accountId": "111122223333",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+        "userName": "myUserName"
+      },
+      "eventTime": "2015-03-18T19:04:42Z",
+      "eventSource": "lambda.amazonaws.com",
+      "eventName": "DeleteFunction20150331",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "127.0.0.1",
+      "userAgent": "Python-httplib2/0.8 (gzip)",
+      "requestParameters": {
+        "functionName": "basic-node-task"
+      },
+      "responseElements": null,
+      "requestID": "a2198ecc-cda1-11e4-aaa2-e356da31e4ff",
+      "eventID": "20b84ce5-730f-482e-b2b2-e8fcc87ceb22",
+      "eventType": "AwsApiCall",
+      "recipientAccountId": "111122223333"
+    }
+  ]
+}
