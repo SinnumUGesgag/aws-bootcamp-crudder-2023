@@ -1,0 +1,4 @@
+#! /usr/bin/bash
+
+aws s3 ls "/$THUMBING_BUCKET_NAME/$THUMBING_S3_FOLDER_INPUT"
+

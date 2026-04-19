@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import * as cdk from 'aws-cdk-lib/core';
 import { ThumbingServlessCdkStack } from '../lib/thumbing-servless-cdk-stack';
 

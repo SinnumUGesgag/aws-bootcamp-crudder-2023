@@ -1,0 +1,4 @@
+#! /usr/bin/bash
+
+aws s3 rm "/$THUMBING_BUCKET_NAME/$THUMBING_S3_FOLDER_INPUT/data.jpg"
+aws s3 rm "/$THUMBING_BUCKET_NAME/$THUMBING_S3_FOLDER_OUTPUT/data.jpeg"

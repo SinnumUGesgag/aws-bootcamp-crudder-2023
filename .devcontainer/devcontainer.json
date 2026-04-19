@@ -30,7 +30,16 @@
 		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}",
 		"ECR_PYTHON_URL": "${localEnv:ECR_PYTHON_URL}",
 		"ECR_BACKEND_FLASK_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
-		"ECR_FRONTEND_REACT_URL": "${localEnv:ECR_FRONTEND_REACT_URL}"
+		"ECR_FRONTEND_REACT_URL": "${localEnv:ECR_FRONTEND_REACT_URL}",
+		"CRUDDUR_DOMAIN_NAME": "${localEnv:CRUDDUR_DOMAIN_NAME}",
+		"ASSETS_BUCKET_NAME":"${localEnv:CRUDDUR_UUID}.assets.${localEnv:CRUDDUR_DOMAIN_NAME}",
+		"PERSCOMMS_BUCKET_NAME":"${localEnv:CRUDDUR_UUID}.convo.${localEnv:CRUDDUR_DOMAIN_NAME}",
+		"POSTS_BUCKET_NAME":"${localEnv:CRUDDUR_UUID}.posts.${localEnv:CRUDDUR_DOMAIN_NAME}",
+		"THUMBING_S3_FOLDER_INPUT": "${localEnv:CRUDDUR_UUID}/avatar/original",
+		"THUMBING_S3_FOLDER_OUTPUT": "${localEnv:CRUDDUR_UUID}/avatar/processed",
+		"THUMBING_WEBHOOK_URL": "https://api.${localEnv:CRUDDUR_DOMAIN_NAME}/${localEnv:CRUDDUR_UUID}/webhooks/avatar",
+		"THUMBING_TOPIC_NAME": "cruddur-assets",
+		"THUMBING_FUNCTION_PATH": "/workspaces/aws-bootcamp-crudder-2023/aws/lambdas/process-images"
 	},
 	"customizations": {
 		"vscode": {

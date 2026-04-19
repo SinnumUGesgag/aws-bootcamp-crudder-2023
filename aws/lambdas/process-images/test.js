@@ -5,7 +5,7 @@ async function main(){
     const srcBucket = 'cruddur-thumbs'
     const srcKey = 'avatar/original/data.jpg'
     const dstBucket = 'cruddur-thumbs'
-    const dstKey = 'avatar/processed/data.png'
+    const dstKey = 'avatar/processed/data.jpeg'
     const width = 256
     const height = 256
 

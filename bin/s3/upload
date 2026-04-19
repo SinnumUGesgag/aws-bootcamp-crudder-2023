@@ -1,0 +1,10 @@
+#! /usr/bin/bash
+
+aws s3 cp "/workspaces/aws-bootcamp-crudder-2023/bin/s3/files/107546-Brown-Squirrel-400x300.jpg" "s3://$THUMBING_BUCKET_NAME/$THUMBING_S3_FOLDER_INPUT/107546-Brown-Squirrel-400x300.jpeg"
+
+
+
+aws s3 cp "s3://3b1efd9e-8b4d.assets.cruddurclone.com/original/107546-Brown-Squirrel-400x300.jpg" "s3://$THUMBING_BUCKET_NAME/$THUMBING_S3_FOLDER_INPUT/107546-Brown-Squirrel-400x300.jpeg"
+
+
+aws s3 cp "s3://3b1efd9e-8b4d.assets.cruddurclone.com/original/107546-Brown-Squirrel-400x300.jpg" "s3://3b1efd9e-8b4d.assets.cruddurclone.com/processed/107546-Brown-Squirrel-400x300.jpeg"
