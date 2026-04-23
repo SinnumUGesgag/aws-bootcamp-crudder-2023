@@ -13,6 +13,7 @@ import { subscribe } from 'diagnostics_channel';
 
 dotenv.config();
 
+
 export class ThumbingServlessCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);

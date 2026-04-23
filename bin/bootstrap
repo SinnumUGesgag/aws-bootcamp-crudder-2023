@@ -1,0 +1,15 @@
+#! /usr/bin/bash
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="bootstrap"
+printf "${CYAN}==${LABEL}${NO_COLOR}\n"
+
+# I don't believe I will need this with how devcontianer.json can be used to preload anything if I provision it to do so ; however, in the Tutorial he is using this, so I've added this so I can update it if necessary
+
+#   He is preloading : RDS Setup , DYDB Schema-load & Seed
+#   He added logging into ECR, but I already have that in my .devcontainer/post_Start_Command.sh
+#   a
+#   a
+#   a
+
