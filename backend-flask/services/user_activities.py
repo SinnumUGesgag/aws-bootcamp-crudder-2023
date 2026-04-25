@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta, timezone
+from lib.db   import InteractSQLDB
+# from lib.memento import MomentoCounter
+
 # Xray -->
 # from aws_xray_sdk.core import xray_recorder
 # <---
+
 class UserActivities:
   def run(user_handle):
     model = {
@@ -14,6 +18,7 @@ class UserActivities:
     if user_handle == None or len(user_handle) < 1:
       model['errors'] = ['blank_user_handle']
     else:
+      pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
       sql = InteractSQLDB(pSQLocalUrl).template('/users','/show')
       results = InteractSQLDB(pSQLocalUrl).query_json_object(sql,{'handle': user_handle})
 

@@ -7,3 +7,7 @@ Now I'll instead create new files that are utilized through out the tutorial and
 copied code will at times just be formated as .md files ; I'll modify them then troubleshoot them when they are actually needed
 
 Additionally, if I am running scripts that are only utilized in my development enviroment for testing, building images, pushing images, etc, then I'll also put them here
+
+04/25
+Note to self:
+update 'python.analysis.typeCheckingMode' settings when needing to check my work

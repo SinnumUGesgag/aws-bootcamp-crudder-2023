@@ -73,6 +73,7 @@ class CreateActivity:
     })
 
   def query_object_activity(uuid):
+    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
     sql = InteractSQLDB(pSQLocalUrl).template('/activities','/object')
     return InteractSQLDB(pSQLocalUrl).query_json_object(sql,{
       'uuid': uuid

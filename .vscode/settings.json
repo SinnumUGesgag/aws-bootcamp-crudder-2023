@@ -2,5 +2,6 @@
     "aws.telemetry": false,
     "telemetry.feedback.enabled": false,
     "telemetry.editStats.enabled": false,
-    "database-client.telemetry.usesOnlineServices": false
+    "database-client.telemetry.usesOnlineServices": false,
+    "python.terminal.useEnvFile": true
 }

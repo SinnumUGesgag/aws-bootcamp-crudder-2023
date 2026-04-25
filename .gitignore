@@ -1,3 +1,9 @@
 docker/**/*
 node_modules
-/aws-bootcamp-crudder-2023/thumbing-servless-cdk/.env
+thumbing-servless-cdk/.env
+session-manager-plugin.deb
+
+
+__devOnly/__devOnly.md
+__devOnly/*
+
