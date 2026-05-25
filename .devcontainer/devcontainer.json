@@ -9,7 +9,7 @@
 		"ghcr.io/devcontainers/features/python:1": {},
 		"ghcr.io/devcontainers-extra/features/bash-command:1": {},
 		"ghcr.io/devcontainers-extra/features/node-asdf:0": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:3": {}
 	},
 	"containerEnv": {
 		"AWS_CLI_AUTO_PROMPT": "on-partial",
