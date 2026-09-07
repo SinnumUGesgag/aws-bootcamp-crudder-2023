@@ -1,7 +1,7 @@
 {
 	"family": "backend-flask",
-	"executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID---Replace}:role/CruddurServiceExecutionRole",
-	"taskRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID---Replace}:role/CruddurTaskRole",
+	"executionRoleArn": "ARN__EXECUTIONROLEARN",
+	"taskRoleArn": "ARN__TASKROLEARN",
 	"networkMode": "awsvpc",
 	"cpu": "256",
 	"memory": "512",
@@ -11,7 +11,7 @@
 	"containerDefinitions": [
 		{
 			"name": "backend-flask",
-			"image": "${AWS_ACCOUNT_ID---Replace}.dkr.ecr.us-east-2.amazonaws.com/backend-flask",
+			"image": "ARN__BACKEND_FLASK_IMAGE",
 			"essential": true,
 			"healthCheck": {
 				"command": [
@@ -35,7 +35,7 @@
 				"logDriver": "awslogs",
 				"options": {
 					"awslogs-group": "/Cruddur/Fargate-Cluster",
-					"awslogs-region": "us-east-2",
+					"awslogs-region": "AWS_DEFAULT_REGION",
 					"awslogs-stream-prefix": "backend-flask"
 				}
 			},
@@ -43,18 +43,18 @@
 				{"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
 				{"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
 				{"name": "OTEL_EXPORTER_OTLP_PROTOCOL", "value": "http/protobuf"},
-				{"name": "AWS_COGNITO_USER_POOL_ID", "value": "${MY_COGNITO_USER_POOL_ID---Replace}"},
-				{"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "${MY_COGNITO_CLIENT_ID---Replace}"},
+				{"name": "AWS_COGNITO_USER_POOL_ID", "value": "MY_COGNITO_USER_POOL_ID"},
+				{"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "MY_COGNITO_USER_POOL_ID"},
 				{"name": "FRONTEND_URL", "value": "https://cruddurclone.com"},
 				{"name": "BACKEND_URL", "value": "https://api.cruddurclone.com"},
-				{"name": "AWS_DEFAULT_REGION", "value": "us-east-2"}
+				{"name": "AWS_DEFAULT_REGION", "value": "AWS_DEFAULT_REGION"}
 			],
 			"secrets": [
-				{"name": "AWS_ACCESS_KEY_ID", "valueFrom": "arn:aws:ssm:us-east-2:${AWS_ACCOUNT_ID---Replace}:parameter/cruddur/app/backend-flask/AWS_ACCESS_KEY_ID"},
-				{"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:us-east-2:${AWS_ACCOUNT_ID---Replace}:parameter/cruddur/app/backend-flask/AWS_SECRET_ACCESS_KEY"},
-				{"name": "PSQL_CRUDDUR_DB_URL", "valueFrom": "arn:aws:ssm:us-east-2:${AWS_ACCOUNT_ID---Replace}:parameter/cruddur/app/backend-flask/PSQL_CRUDDUR_DB_URL"},
-				{"name": "ROLLBAR_ACCESS_TOKEN", "valueFrom": "arn:aws:ssm:us-east-2:${AWS_ACCOUNT_ID---Replace}:parameter/cruddur/app/backend-flask/ROLLBAR_ACCESS_TOKEN"},
-				{"name": "OTEL_EXPORTER_OTLP_HEADERS", "valueFrom": "arn:aws:ssm:us-east-2:${AWS_ACCOUNT_ID---Replace}:parameter/cruddur/app/backend-flask/OTEL_EXPORTER_OTLP_HEADERS"}	
+				{"name": "AWS_ACCESS_KEY_ID", "valueFrom": "ARN__AWS_ACCESS_KEY_ID"},
+				{"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "ARN__AWS_SECRET_ACCESS_KEY"},
+				{"name": "PSQL_CRUDDUR_DB_URL", "valueFrom": "ARN__PSQL_CRUDDUR_DB_URL"},
+				{"name": "ROLLBAR_ACCESS_TOKEN", "valueFrom": "ARN__ROLLBAR_ACCESS_TOKEN"},
+				{"name": "OTEL_EXPORTER_OTLP_HEADERS", "valueFrom": "ARN__OTEL_EXPORTER_OTLP_HEADERS"}	
 			]
 		}
 	]

@@ -39,7 +39,25 @@
 		"THUMBING_S3_FOLDER_OUTPUT": "${localEnv:CRUDDUR_UUID}/avatar/processed",
 		"THUMBING_WEBHOOK_URL": "https://api.${localEnv:CRUDDUR_DOMAIN_NAME}/${localEnv:CRUDDUR_UUID}/webhooks/avatar",
 		"THUMBING_TOPIC_NAME": "cruddur-assets",
-		"THUMBING_FUNCTION_PATH": "/workspaces/aws-bootcamp-crudder-2023/aws/lambdas/process-images"
+		"THUMBING_FUNCTION_PATH": "/workspaces/aws-bootcamp-crudder-2023/aws/lambdas/process-images",
+		"ARN__AWS_ACCESS_KEY_ID": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:AWS_ACCESS_KEY_ID}",
+		"ARN__AWS_SECRET_ACCESS_KEY": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:AWS_SECRET_ACCESS_KEY}",
+		"ARN__PSQL_CRUDDUR_DB_URL": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:PSQL_CRUDDUR_DB_URL}",
+		"ARN__ROLLBAR_ACCESS_TOKEN": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:ROLLBAR_ACCESS_TOKEN}",
+		"ARN__OTEL_EXPORTER_OTLP_HEADERS": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:OTEL_EXPORTER_OTLP_HEADERS}",
+		"ARN__BACKEND_FLASK_IMAGE": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.us-east-2.amazonaws.com/backend-flask",
+		"ARN__FRONTEND_REACT_JS_IMAGE": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.us-east-2.amazonaws.com/frontend-react-js",
+		"ARN__EXECUTIONROLEARN": "arn:aws:iam::${localEnv:AWS_ACCOUNT_ID}:role/CruddurServiceExecutionRole",
+		"ARN__TASKROLEARN": "arn:aws:iam::${localEnv:AWS_ACCOUNT_ID}:role/CruddurTaskRole",
+		"ARN__FRONTEND_TARGETGROUPARN": "arn:aws:elasticloadbalancing:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:targetgroup/cruddur-frontend-react-js-trg/a4301713d8c33b1f",
+        "ARN__BACKEND_TARGETGROUPARN": "arn:aws:elasticloadbalancing:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:targetgroup/cruddur-backend-flask-tg/8fefa9d4333c1e0e",
+		"DYNAMODB_URL": "http://dynamodb.${localEnv:AWS_DEFAULT_REGION}.amazonaws.com",
+		"DOCKER_SLIMBUSTER": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.${localEnv:AWS_DEFAULT_REGION}.amazonaws.com/cruddur-python:3.10-slim-buster",
+		"AWS_SECURITYGROUP": "sg-04c2f931adb37f269",
+		"AWS_SG_SUBNET_1": "subnet-07b014a09b1219a92",
+		"AWS_SG_SUBNET_2": "subnet-02625ce277f20029b",
+		"AWS_SG_SUBNET_3": "subnet-0acd25acbbaaf9c11"
+		
 	},
 	"customizations": {
 		"vscode": {

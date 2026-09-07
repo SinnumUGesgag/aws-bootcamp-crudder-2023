@@ -1,11 +1,12 @@
 import json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+import os
 
 dynamodb = boto3.resource(
 	'dynamodb',
-	region_name='${AWS_DEFAULT_REGION---Replace}',
-	endpoint_url="http://dynamodb.${AWS_DEFAULT_REGION---Replace}.amazonaws.com"
+	region_name= os.getenv("AWS_DEFAULT_REGION"),
+	endpoint_url= os.getenv("DYNAMODB_URL"),
 )
 
 def lambda_handler(event, context):

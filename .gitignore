@@ -2,13 +2,6 @@ node_modules
 
 __devOnly/*
 
-aws/task-definitions/*
-aws/lambdas/cruddur-messaging-stream.py
-aws/json/*
-
-backend-flask/dockerfile
-backend-flask/Dockerfile.prod
-
 docker/**/*
 
 thumbing-servless-cdk/.env
