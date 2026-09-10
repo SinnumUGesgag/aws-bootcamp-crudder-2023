@@ -22,7 +22,7 @@ export default function MessageGroupPage() {
   const loadMessageGroupsData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
-      await getAccessToken(access_token)
+      const access_token = await getAccessToken();
       console.log('access_token',access_token)
       const res = await fetch(backend_url, {
         headers: {
@@ -45,7 +45,7 @@ export default function MessageGroupPage() {
     try {
       const uuid = params.message_group_uuid;
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages/${uuid}`
-      await getAccessToken(access_token)
+      const access_token = await getAccessToken();
       console.log('access_token',access_token)
       const res = await fetch(backend_url, {
         headers: {

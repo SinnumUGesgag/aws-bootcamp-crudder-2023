@@ -1,12 +1,16 @@
 import { Auth } from 'aws-amplify';
 
-export async function getAccessToken(access_token){
-  Auth.currentSession().then((cognito_user_session)=>{
-      console.log('cognito_user_session', cognito_user_session);
-      localStorage.setItem("access_token", cognito_user_session.accessToken.jwtToken);
-      access_token(cognito_user_session.accessToken.jwtToken)
-  }).catch((err) => console.log(err));
-};
+export async function getAccessToken() {
+  try {
+    const cognito_user_session = await Auth.currentSession();
+    const access_token = cognito_user_session.accessToken.jwtToken;
+    localStorage.setItem("access_token", access_token);
+    return access_token;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
 
 
 export async function checkAuth(setUser){

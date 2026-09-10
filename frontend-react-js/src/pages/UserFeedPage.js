@@ -15,6 +15,7 @@ export default function UserFeedPage() {
   const [activities, setActivities] = React.useState([]);
   const [popped, setPopped] = React.useState([]);
   const [poppedProfile, setPoppedProfile] = React.useState([])
+  const [profile, setProfile] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const dataFetchedRef = React.useRef(false);
 
@@ -24,7 +25,7 @@ export default function UserFeedPage() {
   const loadData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/@${params.handle}`
-      await getAccessToken(access_token)
+      const access_token = await getAccessToken();
       console.log('access_token',access_token)
 
       const res = await fetch(backend_url, {

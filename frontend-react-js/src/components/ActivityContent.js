@@ -1,7 +1,7 @@
 import './ActivityContent.css';
 
 import { Link } from "react-router-dom";
-import { format_datetime, message_time_ago, time_ago } from '../lib/DateTimeFormats';
+import { format_datetime, message_time_age, time_ago } from '../lib/DateTimeFormats';
 import {ReactComponent as BombIcon} from './svg/bomb.svg';
 
 export default function ActivityContent(props) {

@@ -56,8 +56,14 @@
 		"AWS_SECURITYGROUP": "sg-04c2f931adb37f269",
 		"AWS_SG_SUBNET_1": "subnet-07b014a09b1219a92",
 		"AWS_SG_SUBNET_2": "subnet-02625ce277f20029b",
-		"AWS_SG_SUBNET_3": "subnet-0acd25acbbaaf9c11"
+		"AWS_SG_SUBNET_3": "subnet-0acd25acbbaaf9c11",
+		"REACT_APP_BACKEND_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
+		"REACT_APP_AWS_PROJECT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+		"REACT_APP_AWS_COGNITO_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+		"REACT_APP_AWS_USER_POOLS_ID": "${localEnv:MY_COGNITO_USER_POOL_ID}",
+		"REACT_APP_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}"
 		
+
 	},
 	"customizations": {
 		"vscode": {
