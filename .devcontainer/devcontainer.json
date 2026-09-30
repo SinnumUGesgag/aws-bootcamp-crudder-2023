@@ -28,9 +28,6 @@
 		"RDS_POSTGRESQL_SG_ID": "${localEnv:RDS_POSTGRESQL_SG_ID}",
 		"RDS_POSTGRESQL_SG_RULE_ID": "${localEnv:RDS_POSTGRESQL_SG_RULE_ID}",
 		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}",
-		"ECR_PYTHON_URL": "${localEnv:ECR_PYTHON_URL}",
-		"ECR_BACKEND_FLASK_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
-		"ECR_FRONTEND_REACT_URL": "${localEnv:ECR_FRONTEND_REACT_URL}",
 		"CRUDDUR_DOMAIN_NAME": "${localEnv:CRUDDUR_DOMAIN_NAME}",
 		"ASSETS_BUCKET_NAME":"${localEnv:CRUDDUR_UUID}.assets.${localEnv:CRUDDUR_DOMAIN_NAME}",
 		"PERSCOMMS_BUCKET_NAME":"${localEnv:CRUDDUR_UUID}.convo.${localEnv:CRUDDUR_DOMAIN_NAME}",
@@ -52,7 +49,9 @@
 		"ARN__FRONTEND_TARGETGROUPARN": "arn:aws:elasticloadbalancing:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:targetgroup/cruddur-frontend-react-js-trg/a4301713d8c33b1f",
         "ARN__BACKEND_TARGETGROUPARN": "arn:aws:elasticloadbalancing:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:targetgroup/cruddur-backend-flask-tg/8fefa9d4333c1e0e",
 		"DYNAMODB_URL": "http://dynamodb.${localEnv:AWS_DEFAULT_REGION}.amazonaws.com",
-		"DOCKER_SLIMBUSTER": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.${localEnv:AWS_DEFAULT_REGION}.amazonaws.com/cruddur-python:3.10-slim-buster",
+		"ECR_PYTHON_SLIMBUSTER": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.${localEnv:AWS_DEFAULT_REGION}.amazonaws.com/cruddur-python:3.10-slim-buster",
+		"ECR_BACKEND_FLASK_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
+		"ECR_FRONTEND_REACT_URL": "${localEnv:ECR_FRONTEND_REACT_URL}",
 		"AWS_SECURITYGROUP": "sg-04c2f931adb37f269",
 		"AWS_SG_SUBNET_1": "subnet-07b014a09b1219a92",
 		"AWS_SG_SUBNET_2": "subnet-02625ce277f20029b",
@@ -62,8 +61,6 @@
 		"REACT_APP_AWS_COGNITO_REGION": "${localEnv:AWS_DEFAULT_REGION}",
 		"REACT_APP_AWS_USER_POOLS_ID": "${localEnv:MY_COGNITO_USER_POOL_ID}",
 		"REACT_APP_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}"
-		
-
 	},
 	"customizations": {
 		"vscode": {

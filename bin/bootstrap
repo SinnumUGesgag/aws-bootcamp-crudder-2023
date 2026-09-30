@@ -6,6 +6,7 @@ LABEL="bootstrap"
 printf "${CYAN}==${LABEL}${NO_COLOR}\n"
 
 # I don't believe I will need this with how devcontianer.json can be used to preload anything if I provision it to do so ; however, in the Tutorial he is using this, so I've added this so I can update it if necessary
+# Additionally, he uses this script to run other scripts for setting up local instances of the build; I have elected to not go this route; I have 'setup' scripts I'll run if I want to run the local version, instead I'm testing our changes with the AWS Cloud Production version 
 
 #   He is preloading : RDS Setup , DYDB Schema-load & Seed
 #   He added logging into ECR, but I already have that in my .devcontainer/post_Start_Command.sh
