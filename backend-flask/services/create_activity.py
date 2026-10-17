@@ -64,18 +64,16 @@ class CreateActivity:
 
 
   def create_activity(handle, message, expires_at):
-    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
-    sql = InteractSQLDB(pSQLocalUrl).template('/activities','/create')
-    return InteractSQLDB(pSQLocalUrl).query_commit_returning_id(sql, {
+    sql = InteractSQLDB().template('/activities','/create')
+    return InteractSQLDB().query_commit_returning_id(sql, {
       'handle': handle,
       'message': message,
       'expires_at': expires_at
     })
 
   def query_object_activity(uuid):
-    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
-    sql = InteractSQLDB(pSQLocalUrl).template('/activities','/object')
-    return InteractSQLDB(pSQLocalUrl).query_json_object(sql,{
+    sql = InteractSQLDB().template('/activities','/object')
+    return InteractSQLDB().query_json_object(sql,{
       'uuid': uuid
     })
 

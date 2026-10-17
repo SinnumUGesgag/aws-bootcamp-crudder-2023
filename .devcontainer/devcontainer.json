@@ -24,7 +24,9 @@
 		"MY_COGNITO_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}",
 		"MY_COGNITO_USER_POOL_ID": "${localEnv:MY_COGNITO_USER_POOL_ID}",
 		"PROD_CONNECTION_URL": "${localEnv:PROD_CONNECTION_URL}",
+		"PSQL_CRUDDUR_LOCAL_URL": "${localEnv:PSQL_CRUDDUR_LOCAL_URL}",
 		"PSQL_CRUDDUR_DB_URL": "${localEnv:PSQL_CRUDDUR_DB_URL}",
+		"PSQL_DB_URL": "${localEnv:PSQL_CRUDDUR_LOCAL_URL}",
 		"RDS_POSTGRESQL_SG_ID": "${localEnv:RDS_POSTGRESQL_SG_ID}",
 		"RDS_POSTGRESQL_SG_RULE_ID": "${localEnv:RDS_POSTGRESQL_SG_RULE_ID}",
 		"ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}",
@@ -39,7 +41,7 @@
 		"THUMBING_FUNCTION_PATH": "/workspaces/aws-bootcamp-crudder-2023/aws/lambdas/process-images",
 		"ARN__AWS_ACCESS_KEY_ID": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:AWS_ACCESS_KEY_ID}",
 		"ARN__AWS_SECRET_ACCESS_KEY": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:AWS_SECRET_ACCESS_KEY}",
-		"ARN__PSQL_CRUDDUR_DB_URL": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:PSQL_CRUDDUR_DB_URL}",
+		"ARN__PSQL_CRUDDUR_DB_URL": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:PROD_CONNECTION_URL}",
 		"ARN__ROLLBAR_ACCESS_TOKEN": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:ROLLBAR_ACCESS_TOKEN}",
 		"ARN__OTEL_EXPORTER_OTLP_HEADERS": "arn:aws:ssm:${localEnv:AWS_DEFAULT_REGION}:${localEnv:AWS_ACCOUNT_ID}:parameter/cruddur/app/backend-flask/${localEnv:OTEL_EXPORTER_OTLP_HEADERS}",
 		"ARN__BACKEND_FLASK_IMAGE": "${localEnv:AWS_ACCOUNT_ID}.dkr.ecr.us-east-2.amazonaws.com/backend-flask",
@@ -56,11 +58,12 @@
 		"AWS_SG_SUBNET_1": "subnet-07b014a09b1219a92",
 		"AWS_SG_SUBNET_2": "subnet-02625ce277f20029b",
 		"AWS_SG_SUBNET_3": "subnet-0acd25acbbaaf9c11",
-		"REACT_APP_BACKEND_URL": "${localEnv:ECR_BACKEND_FLASK_URL}",
 		"REACT_APP_AWS_PROJECT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
 		"REACT_APP_AWS_COGNITO_REGION": "${localEnv:AWS_DEFAULT_REGION}",
 		"REACT_APP_AWS_USER_POOLS_ID": "${localEnv:MY_COGNITO_USER_POOL_ID}",
-		"REACT_APP_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}"
+		"REACT_APP_CLIENT_ID": "${localEnv:MY_COGNITO_CLIENT_ID}",
+		"FRONTEND_URL": "https://${localEnv:CODESPACE_NAME}-3000.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
+		"BACKEND_URL": "https://${localEnv:CODESPACE_NAME}-4567.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
 	},
 	"customizations": {
 		"vscode": {

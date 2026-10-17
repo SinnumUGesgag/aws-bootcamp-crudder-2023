@@ -9,16 +9,14 @@ schema_path="$(realpath .)/bin/db/sql/schema.sql"
 
 echo "psql-schema-load"
 
-#psql $PSQL_CRUDDUR_DB_URL cruddur < $schema_path
+#psql $PSQL_DB_URL cruddur < $schema_path
 
 
 if [ "$1" = "prod" ]; then
 	echo "Running in Production Mode"
 	CON_URL=$PROD_CONNECTION_URL
 else
-	# I have to remove db then replace it with localhost, since Bash commands are being executed into the PostgreSQL; yet Backend-Flask needs to look at the Service Name when it follows the URL to find it's path to the PostgreSQL Container
-
-	DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_CRUDDUR_DB_URL")
+	DB_URL=$(sed 's/\db/localhost/g' <<<"$PSQL_DB_URL")
 	CON_URL=$DB_URL
 fi
 

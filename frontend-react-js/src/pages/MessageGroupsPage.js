@@ -17,8 +17,11 @@ export default function MessageGroupsPage() {
   const loadData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
-      const access_token = await getAccessToken();
+      await getAccessToken()
+      const access_token = localStorage.getItem("access_token")
+
       console.log('access_token',access_token)
+
       const res = await fetch(backend_url, {
         headers: {
           Authorization: `Bearer ${access_token}`

@@ -52,7 +52,7 @@
 			"secrets": [
 				{"name": "AWS_ACCESS_KEY_ID", "valueFrom": "ARN__AWS_ACCESS_KEY_ID"},
 				{"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "ARN__AWS_SECRET_ACCESS_KEY"},
-				{"name": "PSQL_CRUDDUR_DB_URL", "valueFrom": "ARN__PSQL_CRUDDUR_DB_URL"},
+				{"name": "PSQL_DB_URL", "valueFrom": "ARN__PSQL_CRUDDUR_DB_URL"},
 				{"name": "ROLLBAR_ACCESS_TOKEN", "valueFrom": "ARN__ROLLBAR_ACCESS_TOKEN"},
 				{"name": "OTEL_EXPORTER_OTLP_HEADERS", "valueFrom": "ARN__OTEL_EXPORTER_OTLP_HEADERS"}	
 			]

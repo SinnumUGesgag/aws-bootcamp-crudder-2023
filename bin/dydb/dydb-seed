@@ -10,8 +10,8 @@ current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(current_path, "..", ".."))
 sys.path.append(parent_path)
 
-from lib.db import InteractSQLDB
-
+from bin.db.db_copy import InteractSQLDB
+now = datetime.now(timezone.utc)
 k = 0
 
 if len(sys.argv) == 2:          # pull the arguments being pull has a length of 2, meaning 2 arguments
@@ -61,8 +61,7 @@ def get_user_uuids():
                 %(other_handle)s   
             )
     """
-    pSQLocalUrl = 'PSQL_CRUDDUR_LH_URL'
-    users = InteractSQLDB(pSQLocalUrl).query_json_array(sql, default_params)
+    users = InteractSQLDB().query_json_array(sql, default_params)
 
     my_user     =   next((item for item in users if item["handle"] == myMock_User_handle), None)
     other_user  =   next((item for item in users if item["handle"] == theirMock_User_handle), None)
@@ -153,7 +152,7 @@ def create_message(client, message_group_uuid, created_at, message, my_user_uuid
 
 # Manually created Test Messages & Message Groups --------------
 # --------------------------------------------------------------
-now = datetime.now()
+
 
 test_conversation = """
 Person 1: Holy Shit I am so fake
@@ -175,11 +174,11 @@ for i in range(len(lines)):
         message = lines[i].replace('Person 1: ', '')
         print(f'''------- Line {i} Has Been Processed for Person 1; Resulting Message: ------''')
         print(f'''{message}''')
-        created_at = (now - timedelta(days=i) + timedelta(minutes=i))
+        created_at = (now + timedelta(minutes=i)).isoformat()
         create_message(
             client=dyDBclient,
             message_group_uuid=message_group_uuid,
-            created_at=created_at.isoformat(),
+            created_at=created_at,
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],
@@ -191,11 +190,11 @@ for i in range(len(lines)):
         message = lines[i].replace('Person 2: ', '')
         print(f'''------- Line {i} Has Been Processed for Person 2; Resulting Message: ------''')
         print(f'''{message}''')
-        created_at = (now - timedelta(days=i) + timedelta(minutes=i))
+        created_at = (now + timedelta(minutes=i)).isoformat()
         create_message(
             client=dyDBclient,
             message_group_uuid=message_group_uuid,
-            created_at=created_at.isoformat(),
+            created_at=created_at,
             message=message,
             my_user_uuid=users[key]['entry_uuid'],
             my_user_display_name=users[key]['display_name'],

@@ -22,14 +22,19 @@ export default function HomeFeedPage() {
   const loadData = async () => {
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/home`
+      console.log(backend_url);
       const access_token = await getAccessToken();
       console.log('access_token',access_token)
+
       const res = await fetch(backend_url, {
         headers: {
           Authorization: `Bearer ${access_token}`
         },
         method: "GET"
       });
+      
+      console.log(res);
+
       let resJson = await res.json();
       if (res.status === 200) {
         setActivities(resJson)

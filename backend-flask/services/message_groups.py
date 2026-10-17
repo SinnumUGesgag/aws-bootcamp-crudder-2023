@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from lib.db   import InteractSQLDB
+from lib.db import InteractSQLDB
 from lib.dydb import InteractDyDb
 # from lib.memento import MomentoCounter
 
@@ -15,10 +15,8 @@ class MessageGroups:
     data = None
     errors = None
     try:
-      pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
-
-      sql = InteractSQLDB(pSQLocalUrl).template('/users', '/uuid_from_cognito_user_ids')
-      user_returned = InteractSQLDB(pSQLocalUrl).query_user_dict(sql, {'cognito_user_id': cognito_user_id})
+      sql = InteractSQLDB().template('/users', '/uuid_from_cognito_user_ids')
+      user_returned = InteractSQLDB().query_user_dict(sql, {'cognito_user_id': cognito_user_id})
 
       my_user_uuid = user_returned.get('entry_uuid')
 

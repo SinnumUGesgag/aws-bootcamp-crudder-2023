@@ -8,9 +8,8 @@ services:
       AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-
-      FRONTEND_URL: "https://${CODESPACE_NAME}-3000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
-      BACKEND_URL: "https://${CODESPACE_NAME}-4567.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+      FRONTEND_URL: "${FRONTEND_URL}"
+      BACKEND_URL: "${BACKEND_URL}"
       # OTEL packages for Honeycomb ; I've commented it out for now, since I am not sending OTEL traffic --->
       OTEL_SERVICE_NAME: "backend-flask"
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
@@ -31,7 +30,7 @@ services:
       AWS_COGNITO_REDIRECT_URL: "${AWS_COGNITO_REDIRECT_URL}"
       # <---
       # PSQL & AWS RDS --->
-      PSQL_CRUDDUR_DB_URL: "${PSQL_CRUDDUR_DB_URL}"
+      PSQL_DB_URL: "${PSQL_CRUDDUR_DB_URL}"
       #<---
     build: 
       context: ./backend-flask
@@ -43,13 +42,13 @@ services:
       - ./backend-flask:/backend-flask
   frontend-react-js:
     environment:
-      REACT_APP_BACKEND_URL: "https://${CODESPACE_NAME}-4567.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
-      # Cognito --->
+      REACT_APP_BACKEND_URL: "${BACKEND_URL}"
+      # Cognito ------------------------>
       REACT_APP_AWS_PROJECT_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_COGNITO_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_USER_POOLS_ID: "${MY_COGNITO_USER_POOL_ID}"
       REACT_APP_CLIENT_ID: "${MY_COGNITO_CLIENT_ID}"
-      # <---
+      # <---------------------------------
     build: ./frontend-react-js
     ports:
       - "3000:3000"

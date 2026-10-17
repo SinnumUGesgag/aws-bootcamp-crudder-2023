@@ -1,5 +1,5 @@
 import uuid
-from lib.db   import InteractSQLDB
+from lib.db import InteractSQLDB
 from lib.dydb import InteractDyDb
 
 from datetime import datetime, timedelta, timezone
@@ -7,8 +7,6 @@ from datetime import datetime, timedelta, timezone
 
 class CreateMessage:
   def run(mode,message,cognito_user_id,message_group_uuid=None,user_receiver_handle=None):
-
-    pSQLocalUrl = 'PSQL_CRUDDUR_DB_URL'
 
     model = {
       'errors': None,
@@ -51,13 +49,13 @@ class CreateMessage:
         'message': message
       }
     else:
-      sql = InteractSQLDB(pSQLocalUrl).template('/users','/create_message_users')
+      sql = InteractSQLDB().template('/users','/create_message_users')
       if user_receiver_handle == None:
         rev_handle = ''
       else:
         rev_handle = user_receiver_handle
     
-      users = InteractSQLDB(pSQLocalUrl).query_json_array(sql,{
+      users = InteractSQLDB().query_json_array(sql,{
         'cognito_user_id': cognito_user_id,
         'user_receiver_handle': rev_handle
       })
