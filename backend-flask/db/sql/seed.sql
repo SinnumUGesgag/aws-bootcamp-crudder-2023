@@ -1,5 +1,5 @@
 
-INSERT INTO public.users (display_name, handle, email, cognito_user_id) 
+INSERT INTO public.users (display_name, handle, email, cognito_user_id)
 VALUES
 	('Primer User', 'primeruser', 'primeruser@mock.com', 'MockPrime'),
 	('Mock User', 'mockuser', 'mockUser@mock.com', 'MockU'),

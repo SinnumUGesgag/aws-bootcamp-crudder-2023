@@ -24,18 +24,18 @@ class MessageGroups:
       data = InteractDyDb.list_message_groups(dyDbClient, my_user_uuid)
 
       if data == []:
-        errors = {
+        errors = [
           (f"!!!! No Data Returned From DyDb !!!!"),
           (f"---- dyDbClient : {dyDbClient} ||||"),
           (f"---- SQL Passed IN : {sql} ||||"),
           (f"---- MY UUID Returned : {my_user_uuid} ||||")
-        }
+        ]
     except Exception as e:
-      errors = {
+      errors = [
         e,
         (f"---- SQL Passed IN: {sql} ||||"),
         (f"---- MY UUID Returned: {my_user_uuid} ||||")
-      }
+      ]
 
 
 

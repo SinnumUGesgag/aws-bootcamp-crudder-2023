@@ -9,6 +9,7 @@ class InteractDyDb:
     def client():
         endpoint_url = os.getenv('AWS_DYDB_ENDPOINT_URL')
         #endpoint_url = "http://dynamodb-local:8000"
+        #endpoint_url = 'http://127.0.0.1:8000'
         attributes = {}
         if endpoint_url:
             attributes = {'endpoint_url': endpoint_url}
@@ -17,16 +18,16 @@ class InteractDyDb:
         return dyanmoDB
     
     def list_message_groups(client, my_user_uuid):
-        #current_year = datetime.now().year
+        current_year = str(datetime.now().year)
         table_name = 'cruddur_messages'
         query_parameters = {
             'TableName': table_name,
-            #'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
-            'KeyConditionExpression': 'pk = :pkID',
+            'KeyConditionExpression': 'pk = :pkID AND begins_with(sk,:year)',
+            #'KeyConditionExpression': 'pk = :pkID',
             'ScanIndexForward': False,
             'Limit': 20,
             'ExpressionAttributeValues': {
-            #':year': {'S': f"{current_year}"},
+            ':year': {'S': f"{current_year}"},
             ':pkID': {'S': f"GRP#{my_user_uuid}"}
             }
         }
@@ -35,15 +36,20 @@ class InteractDyDb:
         items = response['Items']
         results = []
 
-        for item in items:
-            last_sent_at     = item['sk']['S']
-            results.append({
-                'uuid': item['message_group_uuid']['S'],
-                'display_name': item['user_display_name']['S'],
-                'handle': item['user_handle']['S'],
-                'message': item['message']['S'],
-                'created_at': last_sent_at
-            })
+        if response and items is not None:
+            for item in items:
+                last_sent_at     = item['sk']['S']
+                results.append({
+                    'uuid': item['message_group_uuid']['S'],
+                    'display_name': item['user_display_name']['S'],
+                    'handle': item['user_handle']['S'],
+                    'message': item['message']['S'],
+                    'created_at': last_sent_at
+                })
+        else:
+            results = ["!!! No Response From Query !!!", f"ITEMS: {items}"]
+            
+        #results = [f"RESPONSE: {response}", f"ITEMS: {items}"]
         return results
     
     def list_messages(client, message_group_uuid):

@@ -189,8 +189,9 @@ for i in range(len(lines)):
         key = 'other_user'
         message = lines[i].replace('Person 2: ', '')
         print(f'''------- Line {i} Has Been Processed for Person 2; Resulting Message: ------''')
-        print(f'''{message}''')
+       
         created_at = (now + timedelta(minutes=i)).isoformat()
+        print(f'''{created_at} >> {message}''')
         create_message(
             client=dyDBclient,
             message_group_uuid=message_group_uuid,

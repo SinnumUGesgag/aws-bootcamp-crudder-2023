@@ -60,7 +60,7 @@ class InteractSQLDB:
 			
 
 	# to query an array of json objects
-	def query_json_array(self, sql, params={}):
+	def query_json_array(self, sql, params={},verbose=True):
 		#print(f"query_json_array : params : {params} ----------")
 		#print(f"query_json_array : sql : {sql} ------------")
 
@@ -79,8 +79,8 @@ class InteractSQLDB:
 	# to query a json object from the DB
 	def query_json_object(self, sql, uuid):
 
-		# print(f"query_json_object : uuid : {uuid} ----------")
-		# print(f"query_json_object : sql : {sql} ------------")
+		print(f"query_json_object : uuid : {uuid} ----------")
+		print(f"query_json_object : sql : {sql} ------------")
 
 		wrapped_sql = self.query_wrap_object(sql)	
 		with self.pool.connection() as conn:
@@ -93,7 +93,7 @@ class InteractSQLDB:
 					return "{}"
 				else:
 					return json[0]
-		# print(f"""------query_json_object-----""")
+		print(f"""------query_json_object : {query_json_object} -----""")
 		# print("whatever error I am monitoring")
 
 	def query_user_dict(self, sql, parameters={}):
